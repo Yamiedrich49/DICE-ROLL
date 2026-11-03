@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f6f8fb" />
+<title>DICE ROUTE — 数字で転がす立体パズル</title>
+<style>
+:root{color-scheme:light;--ink:#182b39;--muted:#7b8d9b;--cyan:#00abc4;--deep:#007e99;--line:#e0e8ee;--paper:#fff;--bg:#f6f8fb;--red:#ef6665;--green:#20aa90}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #74d8e8;outline-offset:3px}button:disabled{cursor:default;opacity:.42}
+.shell{max-width:570px;min-height:100dvh;margin:auto;display:flex;flex-direction:column;padding:25px 23px max(22px,env(safe-area-inset-bottom));gap:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:11px;letter-spacing:.17em;font-size:13px;font-weight:900;color:#1b3442}
+.mark{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;border:1.5px solid #aec9d0;color:#008ca3;transform:rotate(-6deg);font-size:21px;line-height:1;background:#fff}
+.top-actions{display:flex;align-items:center;gap:7px}
+.iconbtn{width:35px;height:35px;border:1px solid var(--line);background:rgba(255,255,255,.82);border-radius:12px;color:#506573;font-size:19px;display:grid;place-items:center;transition:background .2s}
+.iconbtn:hover{background:#fff}
+.stage-head{margin-top:36px;display:flex;justify-content:space-between;align-items:end;gap:10px}
+.eyebrow{font-size:10px;letter-spacing:.2em;font-weight:800;color:#7e929e;margin:0 0 9px}
+h1{font-size:clamp(27px,6vw,34px);margin:0;font-weight:850;letter-spacing:-.045em;line-height:1.2}
+.sub{margin:10px 0 0;color:#738895;font-size:12.5px;line-height:1.75}
+.count{text-align:right;white-space:nowrap;color:#92a4ae;font-weight:600;font-size:12px;padding-bottom:5px;font-variant-numeric:tabular-nums}
+.count strong{font-size:27px;color:#263f4e;font-weight:750;letter-spacing:-.05em}
+.progress{height:3px;background:#e2eaf0;border-radius:5px;margin:22px 0 8px;overflow:hidden}
+.progress > div{height:100%;background:linear-gradient(90deg,#00b6c8,#46c8d2);transition:width .3s}
+.board-wrap{position:relative;width:100%;margin-top:2px;display:flex;justify-content:center;align-items:center;min-height:290px;aspect-ratio:1.49;isolation:isolate}
+.board-wrap::before{content:"";position:absolute;z-index:-1;inset:12% -3% 0;background:radial-gradient(ellipse at 50% 53%,rgba(183,218,230,.35) 0%,rgba(241,247,249,.13) 57%,transparent 80%);pointer-events:none}
+#scene{width:100%;height:100%;display:block;overflow:visible;user-select:none}
+.board-caption{display:flex;justify-content:center;gap:12px;align-items:center;color:#80939d;font-size:10.5px;margin-top:-7px;letter-spacing:.02em}
+.dot{width:5px;height:5px;border-radius:50%;background:#98c5ce}
+.input-panel{margin-top:28px}
+.input-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.input-head h2{margin:0;font-size:14px;letter-spacing:.005em;font-weight:750}
+.small{font-size:11px;color:#8fa1ac;font-variant-numeric:tabular-nums}
+.slots{display:flex;gap:6px;margin-top:13px;padding:2px 1px 5px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#d8e5e9 transparent;min-height:65px}
+.slot{height:54px;min-width:0;flex:1 0 0;max-width:60px;border:1.5px solid #dce6ec;border-radius:13px;background:#fff;color:#273e4b;font-weight:780;font-size:21px;box-shadow:0 3px 10px rgba(42,68,83,.025);transition:border-color .12s,background .12s,transform .12s}
+.slot.selected{border-color:#19aec4;box-shadow:0 0 0 3px rgba(37,183,204,.09)}
+.slot.filled{border-color:#cbdce4}
+.slot.correct{border-color:#56bba8;background:#f0fcf8}
+.slot.wrong{border-color:#ed9994;background:#fff1f0;color:#db5f5b}
+.slot:active,.num:active{transform:translateY(1px)}
+.dial{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:12px}
+.num{height:56px;border:1px solid #dbe6ed;border-bottom-color:#c9d9e3;border-radius:14px;background:#fff;color:#263f4f;font-size:23px;font-weight:800;box-shadow:0 3px 5px rgba(33,62,79,.045);transition:transform .12s,border-color .12s,background .12s}
+.num:hover{border-color:#8ed8e3;background:#f9feff}.num:disabled{opacity:.38}
+.controls{display:flex;gap:9px;margin-top:17px}
+.ghost{height:52px;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 15px;border-radius:14px;border:1px solid #dae5eb;background:transparent;color:#667d8a;font-size:12px;font-weight:750}
+.go{height:52px;flex:1;border:0;border-radius:14px;background:#08a8bf;color:#fff;font-size:14px;font-weight:800;letter-spacing:.07em;box-shadow:0 9px 20px rgba(6,157,180,.18);transition:background .2s,transform .12s}
+.go:not(:disabled):hover{background:#008aa5}.go:active{transform:translateY(1px)}.go:disabled{background:#d5e3e8;color:#91a7b2;box-shadow:none;opacity:1}
+.status{min-height:36px;padding:13px 2px 0;color:#788c98;text-align:center;font-size:11.5px;line-height:1.5}
+.status.error{color:#e36d66}.status.success{color:#009880;font-weight:700}
+.levels{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:auto;padding-top:21px}
+.lvl{width:26px;height:26px;border:1px solid transparent;border-radius:50%;background:transparent;color:#a3b4be;font-size:10px;font-weight:750}
+.lvl.active{background:#e3f6f8;border-color:#bde9ed;color:#008da4}.lvl.completed:not(.active){color:#13ad9e}.lvl:hover{background:#e7eff3}
+.footer{margin-top:18px;text-align:center;font-size:9px;letter-spacing:.19em;color:#b1c0c8}
+.modal-cover{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(29,50,62,.29);backdrop-filter:blur(8px);z-index:30;padding:20px}
+.modal-cover.show{display:flex}.modal{background:white;border-radius:23px;max-width:415px;width:100%;padding:27px;box-shadow:0 22px 85px rgba(18,41,52,.15)}
+.modal h2{margin:0 0 16px;font-size:19px}.modal p{font-size:13px;color:#607884;line-height:1.85;margin:9px 0}.modal .example{display:inline-block;padding:3px 9px;border:1px solid #e0eaee;border-radius:8px;font-weight:800;color:#0a8ea4;background:#f4fdfe}
+.modal button{margin-top:15px;width:100%;border:0;border-radius:12px;padding:14px;background:#09a8c0;color:white;font-weight:800}
+@media(min-width:720px){.shell{min-height:min(930px,100dvh);padding-top:36px}.board-wrap{margin-top:15px}.input-panel{margin-top:17px}}
+@media(max-width:390px){.shell{padding-left:15px;padding-right:15px;padding-top:16px}.stage-head{margin-top:24px}.board-wrap{min-height:245px}.input-panel{margin-top:15px}.slot{height:48px;font-size:19px}.slots{min-height:55px}.num{height:49px;font-size:20px}.controls{margin-top:12px}.ghost,.go{height:48px}.progress{margin-top:17px}}
+@media(max-height:730px){.stage-head{margin-top:20px}.sub{margin-top:4px}.board-wrap{aspect-ratio:1.49;min-height:245px}.input-panel{margin-top:10px}.num{height:48px}.slot{height:46px}.slots{min-height:53px}.controls{margin-top:10px}.levels{padding-top:10px}.footer{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){.slot,.num,.go,.progress>div{transition:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <div class="brand"><span class="mark" aria-hidden="true">◆</span><span>DICE ROUTE</span></div>
+    <div class="top-actions"><button class="iconbtn" id="reset" type="button" title="入力を消去" aria-label="リセット">↺</button><button class="iconbtn" id="help" type="button" title="あそびかた" aria-label="あそびかた">?</button></div>
+  </header>
+  <section class="stage-head"><div><div class="eyebrow" id="stage-tag">SPATIAL PUZZLE / LEVEL 01</div><h1 id="stage-name">数字で、転がせ。</h1><p class="sub" id="stage-desc">接地する面の数字を、順番に入力。</p></div><div class="count"><strong id="stage-num">01</strong> / 10</div></section>
+  <div class="progress" aria-label="ステージ進捗"><div id="progress-bar" style="width:10%"></div></div>
+  <section class="board-wrap" aria-label="斜め上から見たサイコロの盤面"><svg id="scene" viewBox="100 70 700 460" role="img" aria-label="盤面と現在のサイコロ" preserveAspectRatio="xMidYMid meet"></svg></section>
+  <div class="board-caption"><span>START <b style="color:#638596">A</b></span><span class="dot"></span><span id="steps-label">6 ROLLS</span><span class="dot"></span><span>GOAL <b style="color:#00a2bc">B</b></span></div>
+  <section class="input-panel">
+    <div class="input-head"><h2>接地する数字を入力</h2><span class="small" id="input-count">0 / 6</span></div>
+    <div class="slots" id="slots" aria-label="数字の入力欄"></div>
+    <div class="dial" id="dial"><button class="num" data-digit="1">1</button><button class="num" data-digit="2">2</button><button class="num" data-digit="3">3</button><button class="num" data-digit="4">4</button><button class="num" data-digit="5">5</button><button class="num" data-digit="6">6</button></div>
+    <div class="controls"><button class="ghost" id="undo" title="一文字取り消し">⌫ <span>取り消し</span></button><button class="go" id="run" disabled>数字を入れる</button></div>
+    <div class="status" id="status" aria-live="polite">一度に入力してから、動きを確かめよう。</div>
+  </section>
+  <nav class="levels" id="levels" aria-label="ステージ選択"></nav>
+  <footer class="footer">A LITTLE GAME ABOUT THINKING IN 3D</footer>
+</main>
+<div class="modal-cover" id="modal-cover" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal"><h2 id="modal-title">あそびかた</h2><p>サイコロを <strong>A → B</strong> の水色のコースに沿って転がします。</p><p>矢印ではなく、<strong>次に地面につく面の数字</strong>を入力してください。例えば、右に転がすには今の「右面」の数字を選びます。</p><p>サイコロは転がるたびに向きが変わります。<strong>全手数の数字を先に入力</strong>してから、まとめて実行します。</p><p>向かい合う面の合計は <span class="example">7</span>。見えない面の推理にも使えます。</p><button id="close-help">はじめる</button></div></div>
+<script>
+'use strict';
+// Single-file, offline-compatible puzzle. No external fonts, scripts or assets.
+const SVG_NS='http://www.w3.org/2000/svg';
+const el=id=>document.getElementById(id);
+const scene=el('scene');
+const INITIAL={top:1,bottom:6,north:5,south:2,east:3,west:4};
+const DIRS={E:[1,0],W:[-1,0],S:[0,1],N:[0,-1]};
+const SIDE={E:'east',W:'west',S:'south',N:'north'};
+const routes=[
+  {name:'はじめの一歩', start:[0,2], path:'EENN',label:'STRAIGHT & TURN'},
+  {name:'角を曲がる', start:[0,0], path:'EESSE',label:'TWO CORNERS'},
+  {name:'ジグザグ', start:[0,3], path:'EENEN',label:'ZIGZAG'},
+  {name:'折り返し', start:[0,1], path:'EESWSE',label:'TURN BACK'},
+  {name:'遠回り', start:[1,3], path:'NNEESW',label:'LONG WAY'},
+  {name:'小さな螺旋', start:[0,0], path:'EEESSW',label:'SPIRAL'},
+  {name:'交差する道', start:[3,1], path:'WWSSEEN',label:'SEVEN ROLLS'},
+  {name:'深いカーブ', start:[0,3], path:'ENNEESS',label:'THREE TURNS'},
+  {name:'折り重なる', start:[3,3], path:'WWNNESEN',label:'EIGHT ROLLS'},
+  {name:'ラストルート', start:[0,2], path:'EENNWWSE',label:'FINAL ROUTE'}
+];
+function verifyRoute(raw){
+  let [x,y]=raw.start;const cells=[[x,y]];
+  for(const key of raw.path){x+=DIRS[key][0];y+=DIRS[key][1];if(x<0||x>3||y<0||y>3)throw Error('Stage out of bounds: '+raw.name);cells.push([x,y])}
+  return {...raw,cells,steps:raw.path.length};
+}
+const STAGES=routes.map(verifyRoute);
+function rollFaces(f,d){
+  switch(d){
+    case'E':return {...f,top:f.west,bottom:f.east,east:f.top,west:f.bottom};
+    case'W':return {...f,top:f.east,bottom:f.west,east:f.bottom,west:f.top};
+    case'S':return {...f,top:f.north,bottom:f.south,south:f.top,north:f.bottom};
+    case'N':return {...f,top:f.south,bottom:f.north,south:f.bottom,north:f.top};
+  }
+}
+function intendedDirection(f,digit){return Object.keys(SIDE).find(key=>f[SIDE[key]]===digit)||null}
+function solutionFor(stage){let f={...INITIAL};return [...stage.path].map(dir=>{const digit=f[SIDE[dir]];f=rollFaces(f,dir);return digit})}
+// Each of the 24 orientations remains consistent between the logical state and the renderer.
+const identity=()=>[[1,0,0],[0,1,0],[0,0,1]];
+const mv=(m,v)=>m.map(r=>r[0]*v[0]+r[1]*v[1]+r[2]*v[2]);
+const mm=(a,b)=>a.map(r=>[0,1,2].map(j=>r[0]*b[0][j]+r[1]*b[1][j]+r[2]*b[2][j]));
+const rv=(axis,angle,v)=>{const [x,y,z]=axis;const co=Math.cos(angle),si=Math.sin(angle),dot=x*v[0]+y*v[1]+z*v[2];return [v[0]*co+(y*v[2]-z*v[1])*si+x*dot*(1-co),v[1]*co+(z*v[0]-x*v[2])*si+y*dot*(1-co),v[2]*co+(x*v[1]-y*v[0])*si+z*dot*(1-co)]};
+const rm=(axis,angle)=>[[1,0,0],[0,1,0],[0,0,1]].map((_,i)=>[0,1,2].map(j=>rv(axis,angle,[+(j===0),+(j===1),+(j===2)])[i]));
+function rollAxis(key){return {E:[0,1,0],W:[0,-1,0],S:[-1,0,0],N:[1,0,0]}[key]}
+function canonicalLabelByNormal(v){if(v[2]>.9)return INITIAL.top;if(v[2]<-.9)return INITIAL.bottom;if(v[1]>.9)return INITIAL.south;if(v[1]<-.9)return INITIAL.north;if(v[0]>.9)return INITIAL.east;return INITIAL.west}
+const FACES=[
+  {label:INITIAL.top,n:[0,0,1],u:[1,0,0],v:[0,1,0]},
+  {label:INITIAL.bottom,n:[0,0,-1],u:[1,0,0],v:[0,-1,0]},
+  {label:INITIAL.east,n:[1,0,0],u:[0,-1,0],v:[0,0,-1]},
+  {label:INITIAL.west,n:[-1,0,0],u:[0,1,0],v:[0,0,-1]},
+  {label:INITIAL.south,n:[0,1,0],u:[1,0,0],v:[0,0,-1]},
+  {label:INITIAL.north,n:[0,-1,0],u:[-1,0,0],v:[0,0,-1]}
+];
+let currentStage=0,answers=[],selected=0,playing=false,result=null,completed=new Set(),renderState=null;
+const proj=([x,y,z])=>[450+(x-y)*71,133+(x+y)*36-z*102];
+const pos=(x,y,z=0)=>proj([x,y,z]);
+const pts=arr=>arr.map(v=>v.map(t=>Math.round(t*10)/10).join(',')).join(' ');
+function svg(tag,attrs={},parent=scene){const n=document.createElementNS(SVG_NS,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));parent.append(n);return n}
+function polygon(points,fill,extra={},parent=scene){return svg('polygon',{points:pts(points),fill,...extra},parent)}
+function textSvg(x,y,str,extra={},parent=scene){const n=svg('text',{x,y,'text-anchor':'middle','dominant-baseline':'central',...extra},parent);n.textContent=str;return n}
+const interp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+function diamond(x,y,z=0,inset=.035){return [[x+inset,y+inset],[x+1-inset,y+inset],[x+1-inset,y+1-inset],[x+inset,y+1-inset]].map(v=>pos(v[0],v[1],z))}
+function lerpColor(a,b,t){const parse=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const v=parse(a),w=parse(b);return '#'+v.map((c,i)=>Math.round(c*(1-t)+w[i]*t).toString(16).padStart(2,'0')).join('')}
+function renderBoard(state){
+  scene.replaceChildren();
+  const defs=svg('defs');
+  const filter=svg('filter',{id:'shadow',x:'-30%',y:'-30%',width:'170%',height:'190%'},defs);
+  svg('feGaussianBlur',{stdDeviation:'17'},filter);
+  const gradient=svg('linearGradient',{id:'edge',x1:'0%',y1:'0%',x2:'0%',y2:'100%'},defs);
+  svg('stop',{offset:'0%', 'stop-color':'#e2e9ee'},gradient);svg('stop',{offset:'100%','stop-color':'#bccbd5'},gradient);
+  svg('ellipse',{cx:450,cy:400,rx:310,ry:82,fill:'#95b2c0',opacity:.17,filter:'url(#shadow)'});
+  polygon([[0,0],[4,0],[4,4],[0,4]].map(v=>pos(...v,-.20)),'#c2cdd6');
+  polygon([pos(4,0,0),pos(4,4,0),pos(4,4,-.22),pos(4,0,-.22)],'#c5d3dc');
+  polygon([pos(0,4,0),pos(4,4,0),pos(4,4,-.22),pos(0,4,-.22)],'url(#edge)');
+  polygon([[0,0],[4,0],[4,4],[0,4]].map(v=>pos(...v,0)),'#e8eff3');
+  const activeCells= new Set(STAGES[currentStage].cells.map(c=>c.join(',')));
+  for(let sum=0;sum<=6;sum++)for(let x=0;x<4;x++)for(let y=0;y<4;y++){
+    if(x+y!==sum)continue;
+    const active=activeCells.has(x+','+y);
+    const tile=polygon(diamond(x,y),active?'#e4f8fa':'#f9fbfc',{stroke:active?'#b5e7ee':'#dfe8ee','stroke-width':1.8,'stroke-linejoin':'round'});
+  }
+  // Path above tiles: halo below a fine cyan stroke, with a small travel direction indicator.
+  const cells=STAGES[currentStage].cells;
+  const centers=cells.map(([x,y])=>pos(x+.5,y+.5,.018));
+  svg('polyline',{points:pts(centers),fill:'none',stroke:'#fff','stroke-opacity':.94,'stroke-width':20,'stroke-linejoin':'round','stroke-linecap':'round'});
+  svg('polyline',{points:pts(centers),fill:'none',stroke:'#73cad6','stroke-width':8,'stroke-linejoin':'round','stroke-linecap':'round','stroke-opacity':.93});
+  // Direction arrows make the prescribed traversal unambiguous.
+  cells.slice(1).forEach((c,i)=>{const a=centers[i],b=centers[i+1];const tx=a[0]+(b[0]-a[0])*.56,ty=a[1]+(b[1]-a[1])*.56;const angle=Math.atan2(b[1]-a[1],b[0]-a[0]);const ux=Math.cos(angle),uy=Math.sin(angle),vx=-uy,vy=ux;
+    polygon([[tx+ux*8,ty+uy*8],[tx-ux*4+vx*5,ty-uy*4+vy*5],[tx-ux*4-vx*5,ty-uy*4-vy*5]],'#fff',{opacity:.95});
+  });
+  // Markers float just above their tiles and are deliberately understated.
+  const a=centers[0],b=centers.at(-1);
+  svg('circle',{cx:a[0],cy:a[1],r:25,fill:'#d7e8ec',stroke:'#fff','stroke-width':3});
+  textSvg(a[0],a[1]+1,'A',{'font-size':23,'font-weight':900,fill:'#507d8a'});
+  svg('circle',{cx:b[0],cy:b[1],r:27,fill:'#00aac1',stroke:'#fff','stroke-width':4});
+  textSvg(b[0],b[1]+1,'B',{'font-size':24,'font-weight':900,fill:'#fff'});
+  if(state)renderDie(state);
+}
+const PIP={1:[[0,0]],2:[[-.47,-.47],[.47,.47]],3:[[-.5,-.5],[0,0],[.5,.5]],4:[[-.52,-.52],[-.52,.52],[.52,-.52],[.52,.52]],5:[[-.52,-.52],[-.52,.52],[0,0],[.52,-.52],[.52,.52]],6:[[-.52,-.58],[-.52,0],[-.52,.58],[.52,-.58],[.52,0],[.52,.58]]};
+function blend3(a,b,scale=1){return a.map((v,i)=>v+b[i]*scale)}
+function getShade(norm){if(norm[2]>.60)return '#ffffff';if(norm[0]>norm[1])return '#dce7ee';return '#edf3f7'}
+function renderDie({at,orientation,angleDir=null,t=0,failed=false}){
+  const side=.82,h=side/2;
+  let center=[at[0]+.5,at[1]+.5,h+.025],matrix=orientation;
+  if(angleDir){
+    const [dx,dy]=DIRS[angleDir],axis=rollAxis(angleDir),theta=t*Math.PI/2;
+    const pivot=[center[0]+dx*h,center[1]+dy*h,.025];
+    const vec=[-dx*h,-dy*h,h];
+    const spin=rv(axis,theta,vec);
+    center=[pivot[0]+spin[0]+dx*(1-side)*t,pivot[1]+spin[1]+dy*(1-side)*t,pivot[2]+spin[2]];
+    matrix=mm(rm(axis,theta),orientation);
+  }
+  const base=pos(center[0],center[1],.014);
+  svg('ellipse',{cx:base[0],cy:base[1]+7,rx:55-(angleDir?8*Math.sin(t*Math.PI):0),ry:25,fill:failed?'#f1b8b3':'#8faebc',opacity:angleDir?.18:.26,filter:'url(#shadow)'});
+  const visible=[];
+  const towards=[.8,.8,1.15];
+  for(const face of FACES){
+    const n=mv(matrix,face.n),u=mv(matrix,face.u),v=mv(matrix,face.v);
+    const viewDot=n[0]*towards[0]+n[1]*towards[1]+n[2]*towards[2];
+    if(viewDot<.015)continue;
+    const c=blend3(center,n,h),corners=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([du,dv])=>pos(...blend3(blend3(c,u,du*h),v,dv*h)));
+    visible.push({face,n,u,v,c,corners,depth:c[0]+c[1]+c[2]*.7});
+  }
+  visible.sort((a,b)=>a.depth-b.depth);
+  const group=svg('g',{opacity:failed?.8:1});
+  for(const f of visible){
+    polygon(f.corners,failed?lerpColor(getShade(f.n),'#ffe1de',.48):getShade(f.n),{stroke:failed?'#e9a7a2':'#d0dce5','stroke-width':2.5,'stroke-linejoin':'round'},group);
+    const size=h*.23;
+    for(const [px,py] of PIP[f.face.label]){
+      const p=blend3(blend3(blend3(f.c,f.n,.004),f.u,px*h*.99),f.v,py*h*.99);
+      const out=[];
+      for(let k=0;k<18;k++){const theta=k*Math.PI*2/18;out.push(pos(...blend3(blend3(p,f.u,Math.cos(theta)*size),f.v,Math.sin(theta)*size)))}
+      polygon(out,'#27404e',{},group);
+    }
+  }
+  // Tiny reflection lines reveal the dice's otherwise flat silhouette.
+}
+function framesForPath(st){let f={...INITIAL};let matrix=identity();const frames=[{f,matrix}];for(const dir of st.path){f=rollFaces(f,dir);matrix=mm(rm(rollAxis(dir),Math.PI/2),matrix);frames.push({f,matrix})}return frames}
+function validateMath(){
+  let tested=0;
+  for(let stage of STAGES){
+    let f={...INITIAL};let m=identity();
+    const expected=solutionFor(stage);
+    for(let i=0;i<stage.steps;i++){
+      const dir=stage.path[i];
+      if(intendedDirection(f,expected[i])!==dir)throw Error('Direction mismatch at stage '+stage.name);
+      f=rollFaces(f,dir);m=mm(rm(rollAxis(dir),Math.PI/2),m);
+      for(const face of FACES){const n=mv(m,face.n);const current= Math.abs(n[2])>.9 ? (n[2]>0?f.top:f.bottom) : Math.abs(n[0])>.9 ? (n[0]>0?f.east:f.west):(n[1]>0?f.south:f.north);
+        if(current!==face.label)throw Error('Die display and logic mismatch '+stage.name+' '+i);
+      }
+      tested++;
+    }
+  }
+  console.info('DICE ROUTE: die rotations checked for',tested,'moves in',STAGES.length,'stages.');
+}
+validateMath();
+const initialRender=()=>({at:[...STAGES[currentStage].start],orientation:identity()});
+function setStatus(s,type=''){el('status').textContent=s;el('status').className='status '+type}
+function setStage(i){if(playing)return;currentStage=(i+STAGES.length)%STAGES.length;answers=Array(STAGES[currentStage].steps).fill(null);selected=0;result=null;renderState=initialRender();const stage=STAGES[currentStage];el('stage-num').textContent=String(i+1).padStart(2,'0');el('stage-tag').textContent='SPATIAL PUZZLE / '+stage.label;el('stage-name').textContent=i===0?'数字で、転がせ。':stage.name;el('steps-label').textContent=stage.steps+' ROLLS';el('progress-bar').style.width=(100*(i+1)/10)+'%';el('stage-desc').textContent=i===0?'接地する面の数字を、順番に入力。':'コースを読み、転がり方を考える。';setStatus('全'+stage.steps+'手を入力してから実行しよう。');renderBoard(renderState);refresh()}
+function refresh(){
+  const length=STAGES[currentStage].steps,filled=answers.filter(n=>n!==null).length;
+  el('input-count').textContent=filled+' / '+length;
+  const box=el('slots');box.replaceChildren();
+  for(let i=0;i<length;i++){
+    const slot=document.createElement('button');slot.type='button';slot.className='slot'+(answers[i]!=null?' filled':'')+(selected===i?' selected':'')+(result&&result.errorIndex===i?' wrong':'')+(result&&result.success?' correct':'');slot.textContent=answers[i]??'·';slot.setAttribute('aria-label',(i+1)+'手目: '+(answers[i]??'未入力'));slot.disabled=playing;slot.addEventListener('click',()=>{selected=i;refresh()});box.append(slot);
+  }
+  const done=filled===length;
+  const btn=el('run');btn.disabled=!done||playing;
+  btn.textContent=playing?'転がしています…':result?.success?(currentStage===9?'もう一度プレイ':'次のステージ →'):done?'転がしてみる →':'数字を入れる';
+  btn.disabled=playing||(!done&&!result?.success);
+  el('undo').disabled=playing||filled===0;
+  document.querySelectorAll('.num').forEach(btn=>btn.disabled=playing);
+  const levelWrap=el('levels');levelWrap.replaceChildren();
+  for(let i=0;i<STAGES.length;i++){let btn=document.createElement('button');btn.className='lvl'+(i===currentStage?' active':'')+(completed.has(i)?' completed':'');btn.textContent=completed.has(i)?'✓':i+1;btn.setAttribute('aria-label','ステージ '+(i+1));btn.setAttribute('aria-current',i===currentStage?'step':'false');btn.disabled=playing;btn.addEventListener('click',()=>setStage(i));levelWrap.append(btn)}
+}
+function addDigit(n){if(playing)return;
+  if(result){result=null;renderState=initialRender();renderBoard(renderState)}
+  const idx=selected??answers.findIndex(v=>v===null);
+  if(idx<0||idx>=answers.length)return;
+  answers[idx]=n;
+  const next=answers.findIndex((v,j)=>j>idx&&v===null);
+  selected=next>=0?next:answers.findIndex(v=>v===null);
+  if(selected<0)selected=null;
+  setStatus(answers.every(v=>v!==null)?'準備完了。まとめて転がしてみよう。':'数字を並べて、進む向きを予想しよう。');refresh();
+}
+function undo(){if(playing)return;const i=selected!==null&&answers[selected]!==null?selected:answers.findLastIndex(x=>x!==null);if(i<0)return;answers[i]=null;selected=i;result=null;renderState=initialRender();renderBoard(renderState);setStatus('入力を修正できます。');refresh()}
+function reset(){if(playing)return;answers.fill(null);selected=0;result=null;renderState=initialRender();renderBoard(renderState);setStatus('最初から考えてみよう。');refresh()}
+function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
+function easeInOut(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+const prefersReduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function animate({at,orientation},dir,duration=440){return new Promise(resolve=>{
+  if(prefersReduce){renderBoard({at:[at[0]+DIRS[dir][0],at[1]+DIRS[dir][1]],orientation:mm(rm(rollAxis(dir),Math.PI/2),orientation)});resolve();return}
+  let start=null;
+  function frame(time){if(start===null)start=time;const t=Math.min(1,(time-start)/duration);renderBoard({at,orientation,angleDir:dir,t:easeInOut(t)});if(t<1)requestAnimationFrame(frame);else resolve()}
+  requestAnimationFrame(frame);
+})}
+async function run(){
+  if(playing)return;
+  if(result?.success){if(currentStage<9)setStage(currentStage+1);else setStage(0);return}
+  if(answers.some(x=>x===null))return;
+  playing=true;result=null;refresh();setStatus('');
+  const stage=STAGES[currentStage];let at=[...stage.start],faces={...INITIAL},orientation=identity();
+  renderBoard({at,orientation});await sleep(prefersReduce?50:250);
+  for(let k=0;k<stage.steps;k++){
+    const digit=answers[k];const actual=intendedDirection(faces,digit);const expected=stage.path[k];
+    if(!actual){result={errorIndex:k};renderBoard({at,orientation,failed:true});setStatus((k+1)+'手目：'+digit+'は現在、上面か下面です。','error');playing=false;selected=k;refresh();return}
+    const [dx,dy]=DIRS[actual];
+    const dest=[at[0]+dx,at[1]+dy];
+    // A wrong direction can briefly roll on the board. Never animate outside the board.
+    if(dest[0]<0||dest[0]>3||dest[1]<0||dest[1]>3){result={errorIndex:k};renderBoard({at,orientation,failed:true});setStatus((k+1)+'手目：盤面の外に出てしまいます。','error');playing=false;selected=k;refresh();return}
+    await animate({at,orientation},actual);
+    faces=rollFaces(faces,actual);orientation=mm(rm(rollAxis(actual),Math.PI/2),orientation);at=dest;
+    renderBoard({at,orientation,failed:actual!==expected});
+    if(actual!==expected){result={errorIndex:k};setStatus((k+1)+'手目でコースを外れました。数字を修正しよう。','error');playing=false;selected=k;refresh();return}
+    await sleep(prefersReduce?10:100);
+  }
+  result={success:true};completed.add(currentStage);renderBoard({at,orientation});setStatus('PERFECT! すべてのマスを正しい順番で通過しました。','success');playing=false;selected=null;refresh();
+}
+for(const btn of document.querySelectorAll('[data-digit]'))btn.addEventListener('click',()=>addDigit(Number(btn.dataset.digit)));
+el('run').addEventListener('click',run);el('undo').addEventListener('click',undo);el('reset').addEventListener('click',reset);
+el('help').addEventListener('click',()=>el('modal-cover').classList.add('show'));
+el('close-help').addEventListener('click',()=>el('modal-cover').classList.remove('show'));
+el('modal-cover').addEventListener('click',e=>{if(e.target===el('modal-cover'))el('modal-cover').classList.remove('show')});
+document.addEventListener('keydown',e=>{
+  if(el('modal-cover').classList.contains('show')){if(e.key==='Escape')el('modal-cover').classList.remove('show');return}
+  if(/^[1-6]$/.test(e.key))addDigit(+e.key);
+  else if(e.key==='Backspace'){e.preventDefault();undo()}
+  else if(e.key==='Enter'){if(!el('run').disabled)run()}
+  else if(e.key==='ArrowLeft'&&selected!==null){selected=Math.max(0,selected-1);refresh()}
+  else if(e.key==='ArrowRight'&&selected!==null){selected=Math.min(answers.length-1,selected+1);refresh()}
+});
+window.DiceRouteTest={STAGES,INITIAL,rollFaces,intendedDirection,solutionFor,validateMath,setStage,getState:()=>({currentStage,answers:[...answers],playing,result}),getSnapshot:()=>({stage:STAGES[currentStage],solution:solutionFor(STAGES[currentStage])})};
+setStage(0);
+</script>
+</body>
+</html>
