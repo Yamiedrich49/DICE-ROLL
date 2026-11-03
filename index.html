@@ -59,23 +59,44 @@ button:disabled{cursor:default}
 @media(max-width:345px){.app{padding-left:14px;padding-right:14px}.brand{gap:7px;letter-spacing:.1em;font-size:10px}.logo{width:22px;height:22px}.topright{gap:7px}.topright .stage-label{font-size:10px;letter-spacing:0}.icon-btn{width:29px;height:29px;font-size:14px}.heading h1{font-size:24px;white-space:nowrap}.heading .micro{font-size:9px;letter-spacing:.11em}.mini-progress{gap:3px}.mini-progress i{width:8px}.board-area{margin-left:-14px;margin-right:-14px}.panel-top h2{font-size:13px}.key{height:48px;font-size:20px}.slot{height:45px}}
 @media(max-height:730px){.topbar{padding-top:8px;height:45px}.heading{padding-top:14px}.board-area{max-height:335px}.panel{padding-top:0}.slots{margin-top:7px}.slot{height:44px}.key{height:45px}.actions{margin-top:10px}.back,.primary{height:45px}.footer{padding-top:5px}.level-nav{padding-top:9px}.footline{padding-top:5px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* v1.3 — tactile interactions, accessible learning, and quicker recovery */
+.topright{gap:9px}
+.heading-tools{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.practice-toggle{border:1px solid #cfe2df;background:#edf7f5;color:#167e7b;border-radius:999px;font-size:11px;font-weight:750;letter-spacing:.012em;padding:7px 11px;min-height:30px;white-space:nowrap;box-shadow:0 2px 5px rgba(8,70,70,.025)}
+.practice-toggle:active{transform:scale(.97)}
+.key{transform:translateY(0);box-shadow:0 3px 0 #e0e8e5,0 7px 17px rgba(28,66,60,.035);will-change:transform}
+.key:active{transform:translateY(3px) scale(.96);box-shadow:0 0 0 #e0e8e5,0 2px 5px rgba(28,66,60,.02)}
+.slot{will-change:transform;touch-action:manipulation}
+.slot.active{border-color:#29aaa5;box-shadow:0 0 0 3px rgba(24,167,156,.14),0 3px 11px rgba(0,98,94,.045)}
+.slot.placed{animation:slotPlace .22s cubic-bezier(.17,1.5,.45,1) both}
+@keyframes slotPlace{0%{transform:scale(.87) translateY(-3px);background:#d7f3ed}70%{transform:scale(1.055)}100%{transform:scale(1)}}
+.slot:active{transform:translateY(1px) scale(.965)}
+.primary:not(:disabled):active{transform:translateY(2px) scale(.995);box-shadow:0 3px 7px rgba(20,49,52,.10)}
+.lesson{margin-top:10px;padding:9px 12px;border-radius:11px;background:#eaf5f2;color:#376e6c;font-size:12px;line-height:1.5;text-align:left;display:flex;align-items:center;gap:8px}
+.lesson[hidden]{display:none}
+.lesson-tag{font-size:9px;font-weight:800;letter-spacing:.07em;color:#0f827e;background:#fff;border-radius:8px;padding:5px 6px;white-space:nowrap}
+#board{cursor:pointer;touch-action:manipulation}
+@media(max-width:390px){.topright{gap:6px}.practice-toggle{font-size:10px;padding:6px 9px}.heading-tools{gap:6px}.heading{padding-top:15px}.lesson{padding:7px 10px;font-size:11px}}
+@media(max-width:345px){.practice-toggle{padding:5px 7px;font-size:9px}.mini-progress i{width:7px}.topright{gap:4px}}
+@media(prefers-reduced-motion:reduce){.slot.placed{animation:none}}
 </style>
 </head>
 <body>
 <main class="app">
   <header class="topbar">
     <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2L29 9V23L16 30 3 23V9Z" fill="#def0ec"/><path d="M16 2L29 9 16 17 3 9Z" fill="#3faba6"/><path d="M3 9 16 17V30L3 23Z" fill="#237c7f"/><path d="M29 9 16 17V30L29 23Z" fill="#126369"/></svg>DICE ROUTE</div>
-    <div class="topright"><span class="stage-label"><b id="numStage">01</b> / 10</span><button class="icon-btn on" id="sound" title="音のオン/オフ" aria-label="音のオン/オフ">♫</button><button class="icon-btn" id="help" title="遊び方" aria-label="遊び方">?</button><button class="icon-btn" id="restart" title="ステージをリセット" aria-label="ステージをリセット">↺</button></div>
+    <div class="topright"><span class="stage-label"><b id="numStage">01</b> / <span id="stageTotal">10</span></span><button class="icon-btn on" id="sound" title="音のオン/オフ" aria-label="音のオン/オフ">♫</button><button class="icon-btn" id="help" title="遊び方" aria-label="遊び方">?</button><button class="icon-btn" id="restart" title="ステージをリセット" aria-label="ステージをリセット">↺</button></div>
   </header>
-  <section class="heading"><div><div class="micro" id="stageType">SPATIAL PUZZLE · 01</div><h1 id="stageTitle">はじめの一歩</h1></div><div class="mini-progress" id="progress" aria-label="全10ステージ"></div></section>
-  <section class="board-area" aria-label="指定されたコースと立体サイコロ"><canvas id="board" role="img" aria-label="4×4の等角投影の盤面。サイコロには上・前・右の三面が見えます。"></canvas><div class="toast" id="toast" aria-live="polite"></div><div class="map-note"><span>START · A</span><span class="sep"></span><span id="rollCount">4 ROLLS</span><span class="sep"></span><span>GOAL · B</span></div></section>
-  <section class="panel"><div class="panel-top"><h2>接地する数字を、順番に。</h2><span class="kicker" id="filled">00 / 04</span></div><div class="slots" id="slots" aria-label="各手の数字を入力・修正"></div><div class="keypad" id="keypad"><button type="button" class="key" data-n="1">1</button><button type="button" class="key" data-n="2">2</button><button type="button" class="key" data-n="3">3</button><button type="button" class="key" data-n="4">4</button><button type="button" class="key" data-n="5">5</button><button type="button" class="key" data-n="6">6</button></div><div class="actions"><button type="button" class="back" id="back">⌫ 取り消す</button><button type="button" class="primary" id="play" disabled>数字を入力する</button></div><div class="guidance" id="hint" aria-live="polite">全手を考えてから、一度に転がそう。</div></section>
+  <section class="heading"><div><div class="micro" id="stageType">SPATIAL PUZZLE · 01</div><h1 id="stageTitle">はじめの一歩</h1></div><div class="heading-tools"><div class="mini-progress" id="progress" aria-label="全10ステージ"></div><button type="button" class="practice-toggle" id="practiceToggle">練習 3問 ↗</button></div></section>
+  <section class="board-area" aria-label="指定されたコースと立体サイコロ"><canvas id="board" role="img" aria-label="4×4の斜めから見たコース。経路をタップすると、その手の入力欄を選べます。"></canvas><div class="toast" id="toast" aria-live="polite"></div><div class="map-note"><span>START · A</span><span class="sep"></span><span id="rollCount">4 ROLLS</span><span class="sep"></span><span>GOAL · B</span></div></section>
+  <section class="panel"><div class="lesson" id="lesson" hidden><span class="lesson-tag">れんしゅう</span><span id="lessonText"></span></div><div class="panel-top"><h2>下になる数字を、順番に。</h2><span class="kicker" id="filled">00 / 04</span></div><div class="slots" id="slots" aria-label="各手の数字を入力・修正"></div><div class="keypad" id="keypad"><button type="button" class="key" data-n="1">1</button><button type="button" class="key" data-n="2">2</button><button type="button" class="key" data-n="3">3</button><button type="button" class="key" data-n="4">4</button><button type="button" class="key" data-n="5">5</button><button type="button" class="key" data-n="6">6</button></div><div class="actions"><button type="button" class="back" id="back">⌫ 取り消す</button><button type="button" class="primary" id="play" disabled>数字を入力する</button></div><div class="guidance" id="hint" aria-live="polite">ぜんぶの数字を決めてから、転がそう。</div></section>
   <footer class="footer"><nav class="level-nav" id="levels" aria-label="ステージ選択"></nav><div class="footline">THINK AHEAD. ROLL WITH PURPOSE.</div></footer>
 </main>
-<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="help-title"><div class="dialog"><div class="micro">HOW TO PLAY</div><h2 id="help-title">数字で、サイコロを動かす。</h2><p>水色のコースに沿って、サイコロを <strong>A から B</strong> へ転がします。</p><p>右や左を指示する代わりに、<strong>次に地面につけたい面の数字</strong>を入力します。たとえば、右に転がすときは現在の右面の数字を選びます。</p><p>サイコロは毎回向きが変わります。<strong>すべての数字を先に並べてから</strong>、一度に実行してください。</p><div class="rule"></div><p>ヒント：向かい合う面の目の合計は <strong>7</strong>。上面・下面の数字では転がせません。</p><button type="button" id="close">ゲームに戻る</button></div></div>
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="help-title"><div class="dialog"><div class="micro">HOW TO PLAY</div><h2 id="help-title">数字で、サイコロを動かす。</h2><p>水色のコースに沿って、サイコロを <strong>A から B</strong> へ転がします。</p><p>右や左を指示する代わりに、<strong>次に下になる面の数字</strong>を入力します。たとえば、右に転がすときは現在の右面の数字を選びます。</p><p>サイコロは毎回向きが変わります。<strong>すべての数字を先に並べてから</strong>、一度に実行してください。道をタップすると、その手の数字を選び直せます。</p><div class="rule"></div><p>ヒント：向かい合う面の目の合計は <strong>7</strong>。上面・下面の数字では転がせません。</p><button type="button" id="close">ゲームに戻る</button></div></div>
 <script>
 'use strict';
-// DICE ROUTE v1.0 — all rendering, puzzle logic, and animation run offline.
+// DICE ROUTE v1.3 — all rendering, puzzle logic, and animation run offline.
 const $=id=>document.getElementById(id);
 const canvas=$('board'),ctx=canvas.getContext('2d',{alpha:true});
 const INITIAL={top:1,bottom:6,north:5,south:2,east:3,west:4};
@@ -95,6 +116,13 @@ const RAW=[
 ];
 function makeStage(raw){const cells=[[...raw.start]];let [x,y]=raw.start;for(const key of raw.path){const d=DIRS[key];x+=d[0];y+=d[1];if(x<0||x>3||y<0||y>3)throw Error('Invalid route: '+raw.name);cells.push([x,y])}return {...raw,cells,steps:raw.path.length}}
 const STAGES=RAW.map(makeStage);
+// Optional, brisk three-question introduction. Original 10 stages remain unchanged.
+const PRACTICE=[
+ {name:'まずは1回',start:[0,2],path:'E',tag:'PRACTICE 01',lesson:'右へ1回。今の右側の面にある数字を入れてみよう。'},
+ {name:'次は2回',start:[0,2],path:'EN',tag:'PRACTICE 02',lesson:'2回分を先に考えよう。曲がると数字の向きも変わるよ。'},
+ {name:'3回の冒険',start:[0,2],path:'ENE',tag:'PRACTICE 03',lesson:'3回分の数字を並べて、一度に転がしてみよう。'}
+].map(makeStage);
+const currentStage=()=>level<0?PRACTICE[level+3]:STAGES[level];
 function rollFaces(f,d){switch(d){case'E':return {...f,top:f.west,bottom:f.east,east:f.top,west:f.bottom};case'W':return {...f,top:f.east,bottom:f.west,east:f.bottom,west:f.top};case'S':return {...f,top:f.north,bottom:f.south,south:f.top,north:f.bottom};case'N':return {...f,top:f.south,bottom:f.north,south:f.bottom,north:f.top}}}
 function directionFor(f,n){return Object.keys(SIDE).find(d=>f[SIDE[d]]===n)||null}
 function answerFor(s){let f={...INITIAL};return [...s.path].map(d=>{const n=f[SIDE[d]];f=rollFaces(f,d);return n})}
@@ -127,46 +155,45 @@ function roundPoly(screenPts,r){ctx.beginPath();for(let i=0;i<screenPts.length;i
 function isoTile(x,y,fill){const z=.004,g=.042;const corners=[[x+g,y+g,z],[x+1-g,y+g,z],[x+1-g,y+1-g,z],[x+g,y+1-g,z]].map(xy);roundPoly(corners,3.3);ctx.fillStyle=fill;ctx.fill();ctx.lineWidth=1.2;ctx.strokeStyle='#e3eae8';ctx.stroke()}
 function drawBoard(){
  ctx.clearRect(0,0,600,446);
- const stage=STAGES[level],route=stage.cells,centers=route.map(([x,y])=>[x+.5,y+.5,.025]);
+ const route=currentStage().cells,centers=route.map(([x,y])=>[x+.5,y+.5,.025]);
  const focusIndex=animating?playhead:(result?.error ?? (cursor??-1));
- const doneCount=animating?Math.max(-1,completedSegments):(result?.success?route.length-1:-1);
  const wrongIndex=result?.error ?? -1;
- const pulseScale=successPulse;
- const grd=ctx.createRadialGradient(300,355,10,300,355,280);grd.addColorStop(0,'rgba(42,85,83,.14)');grd.addColorStop(.55,'rgba(67,98,94,.065)');grd.addColorStop(1,'rgba(67,98,94,0)');ctx.fillStyle=grd;ctx.beginPath();ctx.ellipse(300,357,278,71,0,0,Math.PI*2);ctx.fill();
+ const completed=animating?completedSegments:(result?.success?route.length-1:-1);
+ const bg=ctx.createRadialGradient(300,356,0,300,356,269);
+ bg.addColorStop(0,'rgba(35,80,72,.115)');bg.addColorStop(.7,'rgba(35,80,72,.035)');bg.addColorStop(1,'rgba(35,80,72,0)');
+ ctx.fillStyle=bg;ctx.beginPath();ctx.ellipse(300,355,273,67,0,0,Math.PI*2);ctx.fill();
  const thick=.145;
  polygon([[4,0,0],[4,4,0],[4,4,-thick],[4,0,-thick]],'#d9e4e1');
  polygon([[0,4,0],[4,4,0],[4,4,-thick],[0,4,-thick]],'#c7d5d2');
  polygon([[0,0,0],[4,0,0],[4,4,0],[0,4,0]],'#edf2ef');
- const active=new Set(route.map(c=>c.join(',')));
- const focusCells=new Set();
- if(focusIndex>=0 && focusIndex<route.length){focusCells.add(route[Math.min(focusIndex,route.length-1)].join(','));if(route[focusIndex+1])focusCells.add(route[focusIndex+1].join(','));}
- for(let sum=0;sum<=6;sum++)for(let x=0;x<4;x++)for(let y=0;y<4;y++)if(x+y===sum){
-   const key=x+','+y;
-   let fill='#fbfcfb';
-   if(active.has(key))fill='#e8f5f2';
-   if(focusCells.has(key))fill=result?.error!==undefined && focusIndex===wrongIndex?'#f6ebe7':'#d8f1ee';
-   isoTile(x,y,fill)
+ const routeCells=new Set(route.map(c=>c.join(',')));
+ for(let sum=0;sum<=6;sum++)for(let x=0;x<4;x++)for(let y=0;y<4;y++)if(x+y===sum)isoTile(x,y,routeCells.has(x+','+y)?'#f4faf8':'#fbfcfb');
+ // One thin, recessed route — without colored tiles, thick ribbons or badges.
+ lineProjected(centers,'rgba(255,255,255,.82)',7.5);
+ lineProjected(centers,'#80b8b4',3.7);
+ if(completed>0)lineProjected(centers.slice(0,completed+1),'#249d97',4.3);
+ if(focusIndex>=0&&focusIndex<centers.length-1){
+   const seg=[centers[focusIndex],centers[focusIndex+1]];
+   if(wrongIndex===focusIndex){lineProjected(seg,'rgba(217,145,121,.16)',13);lineProjected(seg,'#d88d78',5.6)}
+   else{lineProjected(seg,'rgba(0,165,158,.12)',14);lineProjected(seg,'#009e99',5.4)}
  }
- lineProjected(centers,'rgba(255,255,255,.74)',18);
  for(let i=0;i<centers.length-1;i++){
-   const seg=[centers[i],centers[i+1]];
-   const isDone=i<doneCount;
-   const isFocus=i===focusIndex;
-   const isWrong=i===wrongIndex;
-   let outer='rgba(255,255,255,.96)',inner='#79bfbc',w=7;
-   if(isDone){outer='rgba(255,255,255,.98)';inner='#19a9a3';w=8.5}
-   if(isFocus){outer=isWrong?'rgba(255,247,244,.98)':'rgba(255,255,255,.98)';inner=isWrong?'#d88d78':'#09b7b3';w=11}
-   lineProjected(seg,outer,w+8);
-   lineProjected(seg,inner,w);
-   const a=xy(seg[0]),b=xy(seg[1]);const sx=a[0]+(b[0]-a[0])*.56,sy=a[1]+(b[1]-a[1])*.56;const ang=Math.atan2(b[1]-a[1],b[0]-a[0]);ctx.save();ctx.translate(sx,sy);ctx.rotate(ang);ctx.beginPath();ctx.moveTo(5,-3.8);ctx.lineTo(9,0);ctx.lineTo(5,3.8);ctx.strokeStyle=isFocus?(isWrong?'#fff8f5':'#ffffff'):'#f8fffe';ctx.lineWidth=isFocus?2.4:1.8;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();ctx.restore();
-   if(isFocus && !animating){const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2-19;ctx.save();ctx.beginPath();ctx.roundRect(mx-13,my-11,26,22,9);ctx.fillStyle=isWrong?'rgba(214,141,120,.96)':'rgba(14,152,149,.96)';ctx.fill();ctx.fillStyle='#fff';ctx.font='700 12px -apple-system,BlinkMacSystemFont,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(i+1),mx,my+0.5);ctx.restore();}
+   const a=xy(centers[i]),b=xy(centers[i+1]),mx=a[0]+(b[0]-a[0])*.57,my=a[1]+(b[1]-a[1])*.57;
+   const angle=Math.atan2(b[1]-a[1],b[0]-a[0]);
+   ctx.save();ctx.translate(mx,my);ctx.rotate(angle);ctx.beginPath();ctx.moveTo(2.5,-3.1);ctx.lineTo(6.3,0);ctx.lineTo(2.5,3.1);
+   ctx.strokeStyle='#fff';ctx.lineWidth=i===focusIndex?2:1.7;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();ctx.restore();
  }
- function marker(p,label,isGoal){const [x,y]=xy(p);ctx.save();if(isGoal&&pulseScale>0){ctx.beginPath();ctx.arc(x,y,22+pulseScale*28,0,Math.PI*2);ctx.fillStyle=`rgba(12,148,146,${.16*(1-pulseScale)})`;ctx.fill();}
- ctx.shadowColor=isGoal?'rgba(0,119,114,.23)':'rgba(79,105,103,.13)';ctx.shadowBlur=13;ctx.shadowOffsetY=4;ctx.beginPath();ctx.arc(x,y,isGoal?18:16,0,Math.PI*2);ctx.fillStyle=isGoal?'#0c9492':'#f8fbfa';ctx.fill();ctx.shadowColor='transparent';ctx.lineWidth=isGoal?3:2;ctx.strokeStyle='#fff';ctx.stroke();ctx.fillStyle=isGoal?'#fff':'#688b8b';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 16px -apple-system,BlinkMacSystemFont,sans-serif';ctx.fillText(label,x,y+.8);ctx.restore()}
+ function marker(p,label,isGoal){
+   const [x,y]=xy(p);ctx.save();
+   if(isGoal&&successPulse>0){ctx.beginPath();ctx.arc(x,y,17+successPulse*28,0,Math.PI*2);ctx.fillStyle=`rgba(11,151,140,${.13*(1-successPulse)})`;ctx.fill();}
+   ctx.beginPath();ctx.arc(x,y,isGoal?15:13,0,Math.PI*2);ctx.fillStyle=isGoal?'#008d88':'#fff';ctx.fill();
+   ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.fillStyle=isGoal?'#fff':'#6e9592';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 13px -apple-system,BlinkMacSystemFont,sans-serif';ctx.fillText(label,x,y+.7);ctx.restore();
+ }
  marker(centers[0],'A',false);marker(centers.at(-1),'B',true);
-}// A rounded cube is rendered from a precise 3-D mesh: six equal faces, twelve
+}
+// A rounded cube is rendered from a precise 3-D mesh: six equal faces, twelve
 // quarter-cylinder edge fillets and eight spherical corner fillets.
-const SIDE_LENGTH=.91,H=SIDE_LENGTH/2,R=.112,C=H-R;
+const SIDE_LENGTH=.6825,H=SIDE_LENGTH/2,R=.084,C=H-R;
 const MODEL=[];
 function mesh(points,normal){MODEL.push({points,normal:norm(normal)})}
 for(let k=0;k<3;k++)for(let s of [-1,1]){let others=[0,1,2].filter(i=>i!==k);let verts=[];for(const [u,v] of [[-1,-1],[1,-1],[1,1],[-1,1]]){const p=[0,0,0];p[k]=s*H;p[others[0]]=u*C;p[others[1]]=v*C;verts.push(p)}let n=[0,0,0];n[k]=s;mesh(verts,n)}
@@ -187,10 +214,10 @@ for(let sx of [-1,1])for(let sy of [-1,1])for(let sz of [-1,1]){
 }
 const LIGHT=norm([-.35,-.46,1.8]);
 function shade(n){const l=Math.max(0,dot(n,LIGHT));const sideBoost=Math.max(0,n[2])*.06;const val=Math.min(254,215+34*l+8*sideBoost);return `rgb(${Math.round(val)},${Math.round(Math.min(255,val+2))},${Math.round(Math.min(255,val+3))})`}
-const PIP_R=.064;
+const PIP_R=.048;
 const PIP_MESH=[];
 for(const face of FACES)for(const [a,b] of PIPS[face.value]){
- let center=vec(vec(face.n.map(n=>n*(H+.004)),face.u,a*.43),face.v,b*.43);
+ let center=vec(vec(face.n.map(n=>n*(H+.004)),face.u,a*.3225),face.v,b*.3225);
  let verts=[];for(let i=0;i<26;i++){const th=i/26*Math.PI*2;verts.push(vec(vec(center,face.u,Math.cos(th)*PIP_R),face.v,Math.sin(th)*PIP_R))}
  PIP_MESH.push({points:verts,normal:face.n,pip:true});
 }
@@ -199,10 +226,11 @@ function dieState(state){
  if(state.dir){const d=DIRS[state.dir],theta=(state.t||0)*Math.PI/2,pivot=[center[0]+d[0]*H,center[1]+d[1]*H,.025],from=[-d[0]*H,-d[1]*H,H];const spun=rv(AXIS[state.dir],theta,from);const gap=(1-SIDE_LENGTH)*(state.t||0);
   center=[pivot[0]+spun[0]+d[0]*gap,pivot[1]+spun[1]+d[1]*gap,pivot[2]+spun[2]];orientation=mm(rm(AXIS[state.dir],theta),orientation)
  }
+ if(state.lift)center=[center[0],center[1],center[2]+state.lift];
  return {center,orientation};
 }
 function drawDie(state){
- if(!state)return;const {center,orientation}=dieState(state);const [shx,shy]=xy([center[0],center[1],.02]);ctx.save();const shadow=ctx.createRadialGradient(shx,shy+3,3,shx,shy+3,54);shadow.addColorStop(0,'rgba(46,63,66,.24)');shadow.addColorStop(.48,'rgba(55,69,68,.12)');shadow.addColorStop(1,'rgba(55,69,68,0)');ctx.beginPath();ctx.ellipse(shx,shy+3,56,28,0,0,Math.PI*2);ctx.fillStyle=shadow;ctx.fill();ctx.restore();
+ if(!state)return;const {center,orientation}=dieState(state);const [shx,shy]=xy([center[0],center[1],.02]);ctx.save();const shadow=ctx.createRadialGradient(shx,shy+2,2,shx,shy+2,42);shadow.addColorStop(0,'rgba(46,63,66,.24)');shadow.addColorStop(.48,'rgba(55,69,68,.12)');shadow.addColorStop(1,'rgba(55,69,68,0)');ctx.beginPath();ctx.ellipse(shx,shy+2,42,21,0,0,Math.PI*2);ctx.fillStyle=shadow;ctx.fill();ctx.restore();
  const primitives=[];
  for(let idx=0;idx<MODEL.length;idx++){const item=MODEL[idx];const normal=mv(orientation,item.normal);if(dot(normal,camera)<-.015)continue;const points=item.points.map(p=>vec(center,mv(orientation,p)));const depth=points.reduce((sum,p)=>sum+dot(p,camera),0)/points.length;primitives.push({points,normal,depth,part:idx<6?0:idx<150?1:2})}
  primitives.sort((a,b)=>a.part-b.part||a.depth-b.depth);
@@ -214,8 +242,8 @@ function drawDie(state){
    const top=xy(vec(center,[q,q,C+.02]));const bot=xy(vec(center,[q,q,-C-.02]));
    const edgeGr=ctx.createLinearGradient(top[0]-7,0,top[0]+7,0);
    edgeGr.addColorStop(0,'#d5dcdf');edgeGr.addColorStop(.48,'#dbe2e4');edgeGr.addColorStop(1,'#e0e5e7');
-   ctx.save();ctx.filter='blur(1.8px)';
-   ctx.beginPath();ctx.moveTo(...top);ctx.lineTo(...bot);ctx.lineWidth=10;ctx.strokeStyle=edgeGr;ctx.lineCap='butt';ctx.stroke();
+   ctx.save();ctx.filter='blur(1.35px)';
+   ctx.beginPath();ctx.moveTo(...top);ctx.lineTo(...bot);ctx.lineWidth=7.5;ctx.strokeStyle=edgeGr;ctx.lineCap='butt';ctx.stroke();
    ctx.beginPath();ctx.moveTo(top[0]-.5,top[1]+2);ctx.lineTo(bot[0]-.5,bot[1]-2);ctx.lineWidth=1.1;ctx.strokeStyle='rgba(255,255,255,.1)';ctx.stroke();ctx.restore();
  }
  // The spots are inked on their own faces and must never be hidden by an
@@ -228,64 +256,167 @@ function sizeCanvas(){const r=canvas.getBoundingClientRect();if(!r.width)return;
 function draw(){if(!canvas.width)return;ctx.setTransform(canvas.width/600,0,0,canvas.height/446,0,0);drawBoard();drawDie(visual)}
 let level=0,inputs=[],cursor=0,animating=false,result=null,visual=null,seen=new Set();
 let playhead=-1,completedSegments=-1,successPulse=0,soundOn=true,audioCtx=null;
+let replayPrefix=0,lastPlaced=-1;
 try{seen=new Set(JSON.parse(localStorage.getItem('dice-route-v100-cleared')||'[]'))}catch(e){}
 try{soundOn=JSON.parse(localStorage.getItem('dice-route-v110-sound')||'true')}catch(e){}
-const resetVisual=()=>({at:[...STAGES[level].start],orientation:I()});
+const resetVisual=()=>({at:[...currentStage().start],orientation:I()});
 function updateSoundButton(){const b=$('sound');if(!b)return;b.classList.toggle('on',soundOn);b.textContent=soundOn?'♫':'♪';b.setAttribute('aria-label',soundOn?'音をオフにする':'音をオンにする');b.title=soundOn?'音をオフにする':'音をオンにする'}
 function getAudio(){if(!soundOn)return null;const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return null;if(!audioCtx)audioCtx=new Ctx();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx}
-function tone(freq,duration=.08,type='sine',gain=.03,delay=0){const ac=getAudio();if(!ac)return;const osc=ac.createOscillator(),g=ac.createGain();osc.type=type;osc.frequency.setValueAtTime(freq,ac.currentTime+delay);g.gain.setValueAtTime(.0001,ac.currentTime+delay);g.gain.exponentialRampToValueAtTime(gain,ac.currentTime+delay+.01);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+delay+duration);osc.connect(g).connect(ac.destination);osc.start(ac.currentTime+delay);osc.stop(ac.currentTime+delay+duration+.05)}
-function sound(kind){if(!soundOn)return; if(kind==='tap'){tone(580,.035,'triangle',.012)} else if(kind==='roll'){tone(240,.04,'sine',.012); tone(175,.07,'triangle',.009,.035)} else if(kind==='land'){tone(360,.03,'triangle',.015)} else if(kind==='error'){tone(210,.08,'sawtooth',.018); tone(150,.12,'triangle',.012,.06)} else if(kind==='success'){tone(520,.09,'triangle',.02); tone(660,.11,'triangle',.017,.09); tone(880,.14,'sine',.018,.19)}}
-function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
-function pulseGoal(){if(reduced){successPulse=0;draw();return}const start=performance.now(),dur=620;function frame(now){const t=Math.min(1,(now-start)/dur);successPulse=t;draw();if(t<1)requestAnimationFrame(frame);else{successPulse=0;draw()}}requestAnimationFrame(frame)}
-function status(message='',kind=''){const node=$('hint');node.textContent=kind==='bad'?'数字をタップして、その手を修正できます。':kind==='good'?'次のステージへ進めます。':kind==='focus'?(message||'盤面の光っている区間に対応する数字を考えよう。'):(message||'全手を考えてから、一度に転がそう。');node.className='guidance '+kind;const toast=$('toast');toast.className='toast';toast.textContent='';if(kind==='bad'||kind==='good'){toast.textContent=message;toast.classList.add('show',kind==='bad'?'bad':'good')}}
-function changeStage(i){if(animating)return;level=(i+STAGES.length)%STAGES.length;const stage=STAGES[level];inputs=Array(stage.steps).fill(null);cursor=0;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;$('stageTitle').textContent=stage.name;$('stageType').textContent=stage.tag+' · '+String(level+1).padStart(2,'0');$('numStage').textContent=String(level+1).padStart(2,'0');$('rollCount').textContent=stage.steps+' ROLLS';status();sync();draw()}
-function sync(){const stage=STAGES[level],filled=inputs.filter(n=>n!==null).length;updateSoundButton();
- $('filled').textContent=String(filled).padStart(2,'0')+' / '+String(stage.steps).padStart(2,'0');
- const slots=$('slots');slots.replaceChildren();inputs.forEach((n,i)=>{const b=document.createElement('button');b.className='slot'+(n===null?' empty':' filled')+(cursor===i&&!animating?' active':'')+(result?.error===i?' error':'')+(result?.success?' ok':'');b.type='button';b.textContent=n===null?'·':n;b.setAttribute('aria-label',`${i+1}手目: ${n??'未入力'}`);b.disabled=animating;b.addEventListener('click',()=>{cursor=i;sync()});slots.append(b)});
- const play=$('play');play.className='primary'+(result?.success?' success':'');play.disabled=animating||(!result?.success&&filled!==stage.steps);play.textContent=animating?'ROLLING…':result?.success?(level===9?'最初からプレイ ↗':'次のステージ ↗'):(filled===stage.steps?'転がしてみる ↗':'数字を入力する');
- $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>b.disabled=animating);
- const nav=$('levels');nav.replaceChildren();for(let i=0;i<STAGES.length;i++){let b=document.createElement('button');b.type='button';b.className='level'+(level===i?' current':'')+(seen.has(i)?' passed':'');b.textContent=seen.has(i)?'✓':String(i+1).padStart(2,'0');b.disabled=animating;b.setAttribute('aria-label',`ステージ${i+1}`);b.setAttribute('aria-current',i===level?'step':'false');b.addEventListener('click',()=>changeStage(i));nav.append(b)}
- const progress=$('progress');progress.replaceChildren();for(let i=0;i<10;i++){let p=document.createElement('i');p.className=i===level?'current':(seen.has(i)?'past':'');progress.append(p)}
+// A soft, dry UI click. No musical chords or pitched confirmation melodies.
+function clickSound(volume=.36,delay=0){
+ const ac=getAudio();if(!ac)return;
+ const length=Math.max(8,Math.floor(ac.sampleRate*.027));
+ const buf=ac.createBuffer(1,length,ac.sampleRate),data=buf.getChannelData(0);
+ let seed=1777;
+ for(let i=0;i<length;i++){
+   seed=(seed*1664525+1013904223)>>>0;
+   const random=((seed>>>9)/8388608)*2-1,t=i/(length-1);
+   data[i]=random*Math.pow(1-t,3.8)*Math.min(1,t*45);
+ }
+ const src=ac.createBufferSource(),low=ac.createBiquadFilter(),high=ac.createBiquadFilter(),gain=ac.createGain();
+ src.buffer=buf;low.type='lowpass';low.frequency.value=1450;low.Q.value=.5;
+ high.type='highpass';high.frequency.value=210;high.Q.value=.6;
+ gain.gain.value=.052*volume;
+ src.connect(low).connect(high).connect(gain).connect(ac.destination);
+ src.start(ac.currentTime+delay);src.stop(ac.currentTime+delay+buf.duration+.005);
 }
-function editAfterResult(){if(!result)return;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;status();draw()}
-function inputDigit(n){if(animating)return;editAfterResult();if(cursor===null)cursor=inputs.findIndex(x=>x===null);if(cursor<0)return;inputs[cursor]=n;sound('tap');let next=inputs.findIndex((v,i)=>i>cursor&&v===null);cursor=next>=0?next:inputs.findIndex(v=>v===null);if(cursor<0)cursor=null;status(inputs.every(n=>n!==null)?'入力完了。転がしてみよう。':'盤面の光っている区間に対応する数字を考えよう。',inputs.every(n=>n!==null)?'':'focus');sync();draw()}
-function deleteDigit(){if(animating)return;editAfterResult();let i=cursor!==null&&inputs[cursor]!==null?cursor:inputs.findLastIndex(v=>v!==null);if(i<0)return;inputs[i]=null;cursor=i;status('盤面の光っている区間に対応する数字を考えよう。','focus');sync();draw()}
-function restart(){if(animating)return;inputs.fill(null);cursor=0;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;status();sync();draw()}
+function sound(kind){
+ if(!soundOn)return;
+ if(kind==='tap')clickSound(.28);
+ if(kind==='land')clickSound(.48);
+ if(kind==='error')clickSound(.36);
+ if(kind==='success')clickSound(.65)
+ // The dice roll itself is silent; the contact makes one gentle click.
+}
+function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
+function pulseGoal(){if(reduced){successPulse=0;draw();return}const start=performance.now(),dur=480;function frame(now){const t=Math.min(1,(now-start)/dur);successPulse=t;draw();if(t<1)requestAnimationFrame(frame);else{successPulse=0;draw()}}requestAnimationFrame(frame)}
+function status(message='',kind=''){const node=$('hint');node.textContent=kind==='bad'?'数字をタップして、その手を修正できます。':kind==='good'?'次のステージへ進めます。':kind==='focus'?(message||'光っている道の、次の数字を考えよう。'):(message||'ぜんぶの数字を決めてから、転がそう。');node.className='guidance '+kind;const toast=$('toast');toast.className='toast';toast.textContent='';if(kind==='bad'||kind==='good'){toast.textContent=message;toast.classList.add('show',kind==='bad'?'bad':'good')}}
+function changeStage(i){
+ if(animating)return;
+ level=i<0?Math.max(-3,Math.min(-1,i)):(i+STAGES.length)%STAGES.length;
+ const stage=currentStage();inputs=Array(stage.steps).fill(null);cursor=0;result=null;visual=resetVisual();
+ playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;lastPlaced=-1;
+ $('stageTitle').textContent=stage.name;
+ $('stageType').textContent=stage.tag+' · '+(level<0?'れんしゅう':String(level+1).padStart(2,'0'));
+ $('numStage').textContent=level<0?'P'+(level+4):String(level+1).padStart(2,'0');
+ $('stageTotal').textContent=level<0?'03':'10';
+ $('rollCount').textContent=stage.steps+' 回';
+ $('practiceToggle').textContent=level<0?'本編へ ↗':'練習 3問 ↗';
+ $('lesson').hidden=level>=0;
+ $('lessonText').textContent=level<0?stage.lesson:'';
+ status();sync();draw();
+}
+function sync(){
+ const stage=currentStage(),filled=inputs.filter(n=>n!==null).length;updateSoundButton();
+ $('filled').textContent=String(filled).padStart(2,'0')+' / '+String(stage.steps).padStart(2,'0');
+ const slots=$('slots');slots.replaceChildren();inputs.forEach((n,i)=>{
+  const b=document.createElement('button');b.className='slot'+(n===null?' empty':' filled')+(cursor===i&&!animating?' active':'')+(result?.error===i?' error':'')+(result?.success?' ok':'')+(lastPlaced===i?' placed':'');
+  b.type='button';b.textContent=n===null?'·':n;b.setAttribute('aria-label',`${i+1}手目: ${n??'未入力'}`);
+  b.disabled=animating;b.addEventListener('click',()=>selectStep(i));slots.append(b);
+ });lastPlaced=-1;
+ const play=$('play');play.className='primary'+(result?.success?' success':'');play.disabled=animating||(!result?.success&&filled!==stage.steps);
+ play.textContent=animating?'転がり中…':result?.success?(level===9?'最初からプレイ ↗':level===-1?'本編スタート ↗':'次のステージ ↗'):(filled===stage.steps?(replayPrefix>0?'もう一度転がす ↗':'転がしてみる ↗'):'数字を入力する');
+ $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>b.disabled=animating);
+ const nav=$('levels');nav.replaceChildren();const n=level<0?3:STAGES.length;
+ for(let i=0;i<n;i++){
+  const idx=level<0?i-3:i,passed=level>=0&&seen.has(i);let b=document.createElement('button');b.type='button';
+  b.className='level'+(level===idx?' current':'')+(passed?' passed':'');b.textContent=passed?'✓':String(i+1).padStart(2,'0');b.disabled=animating;
+  b.setAttribute('aria-label',`${level<0?'練習':'ステージ'}${i+1}`);b.setAttribute('aria-current',idx===level?'step':'false');b.addEventListener('click',()=>changeStage(idx));nav.append(b)
+ }
+ const progress=$('progress');progress.replaceChildren();for(let i=0;i<n;i++){let p=document.createElement('i');p.className=i===(level<0?level+3:level)?'current':(level>=0&&seen.has(i)?'past':'');progress.append(p)}
+}
+function selectStep(i){if(animating)return;if(result?.success)editAfterResult();cursor=i;sound('tap');status('道の選んだ区間を考えよう。','focus');sync();draw()}
+function editAfterResult(){if(!result)return;if(result.error!==undefined)replayPrefix=Math.max(0,result.error);else replayPrefix=0;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;status();draw()}
+function inputDigit(n){
+ if(animating)return;editAfterResult();
+ if(cursor===null){cursor=inputs.findIndex(x=>x===null);if(cursor<0)cursor=inputs.length-1}
+ if(cursor<0)return;
+ if(cursor<replayPrefix && inputs[cursor]!==n)replayPrefix=cursor;
+ const modified=cursor;inputs[cursor]=n;lastPlaced=modified;sound('tap');
+ let next=inputs.findIndex((v,i)=>i>cursor&&v===null);
+ cursor=next>=0?next:inputs.findIndex(v=>v===null);
+ if(cursor<0)cursor=null;
+ const ready=inputs.every(v=>v!==null);
+ status(ready?'入力完了。まとめて転がそう。':'光っている道の、次の数字を考えよう。',ready?'':'focus');
+ sync();draw();
+}
+function deleteDigit(){
+ if(animating)return;editAfterResult();
+ let i=cursor!==null&&inputs[cursor]!==null?cursor:inputs.findLastIndex(v=>v!==null);if(i<0)return;
+ if(i<replayPrefix)replayPrefix=i;
+ inputs[i]=null;cursor=i;status('光っている道の、次の数字を考えよう。','focus');sync();draw()
+}
+function restart(){if(animating)return;inputs.fill(null);cursor=0;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;status();sync();draw()}
 const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-function animateRoll(at,orientation,dir,stepIndex=0,total=1){return new Promise(resolve=>{
+function animateRoll(at,orientation,dir,options={}){return new Promise(resolve=>{
  if(reduced){visual={at:[at[0]+DIRS[dir][0],at[1]+DIRS[dir][1]],orientation:mm(rm(AXIS[dir],Math.PI/2),orientation)};draw();resolve();return}
- const duration=Math.max(255,365-stepIndex*12);let start=null;sound('roll');
- function frame(now){if(start===null)start=now;const t=Math.min(1,(now-start)/duration);visual={at,orientation,dir,t:ease(t)};draw();if(t<1)requestAnimationFrame(frame);else{sound('land');resolve()}}requestAnimationFrame(frame)
+ const duration=options.fast?105:(options.final?395:325);let start=null;
+ function frame(now){
+  if(start===null)start=now;
+  const t=Math.min(1,(now-start)/duration);
+  const rolling=options.fast?t:(t<.87?ease(t/.87):1);
+  const lift=!options.fast&&t>.87?.035*Math.sin(Math.PI*Math.min(1,(t-.87)/.13)):0;
+  visual={at,orientation,dir,t:rolling,lift};draw();
+  if(t<1)requestAnimationFrame(frame);else{if(!options.fast)sound('land');resolve()}
+ }
+ requestAnimationFrame(frame)
 })}
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
-async function play(){if(animating)return;if(result?.success){changeStage(level===9?0:level+1);return}if(inputs.some(n=>n===null))return;
- animating=true;result=null;playhead=-1;completedSegments=-1;successPulse=0;status('');sync();let at=[...STAGES[level].start],faces={...INITIAL},orientation=I();visual={at,orientation};draw();await wait(reduced?0:120);
- for(let k=0;k<STAGES[level].steps;k++){
-   playhead=k;draw();
-   const actual=directionFor(faces,inputs[k]),expected=STAGES[level].path[k];
-   if(!actual){result={error:k};cursor=k;visual={at,orientation};sound('error');haptic(24);draw();status(`${k+1}手目：その数字は上面か下面です。`,'bad');animating=false;sync();return}
-   const d=DIRS[actual],next=[at[0]+d[0],at[1]+d[1]];
-   if(next.some(n=>n<0||n>3)){result={error:k};cursor=k;visual={at,orientation};sound('error');haptic(24);draw();status(`${k+1}手目：盤面の外に出てしまいます。`,'bad');animating=false;sync();return}
-   await animateRoll(at,orientation,actual,k,STAGES[level].steps);
-   at=next;orientation=mm(rm(AXIS[actual],Math.PI/2),orientation);faces=rollFaces(faces,actual);visual={at,orientation};draw();
-   if(actual!==expected){result={error:k};cursor=k;sound('error');haptic(26);status(`${k+1}手目でコースを外れました。`,'bad');animating=false;sync();draw();return}
-   completedSegments=k+1;
-   draw();
-   await wait(reduced?0:Math.max(28,72-k*4));
+async function play(){
+ if(animating)return;
+ if(result?.success){changeStage(level===-1?0:level===9?0:level+1);return}
+ if(inputs.some(n=>n===null))return;
+ const fastPrefix=replayPrefix;
+ animating=true;result=null;playhead=-1;completedSegments=-1;successPulse=0;status('');sync();
+ let at=[...currentStage().start],faces={...INITIAL},orientation=I();visual={at,orientation};draw();
+ await wait(reduced?0:fastPrefix?36:90);
+ for(let k=0;k<currentStage().steps;k++){
+  playhead=k;draw();
+  const actual=directionFor(faces,inputs[k]),expected=currentStage().path[k];
+  if(!actual){result={error:k};replayPrefix=k;cursor=k;sound('error');haptic(10);status(`${k+1}手目：上下の面は選べないよ。`,'bad');animating=false;sync();draw();return}
+  const d=DIRS[actual],next=[at[0]+d[0],at[1]+d[1]];
+  if(next.some(n=>n<0||n>3)){result={error:k};replayPrefix=k;cursor=k;sound('error');haptic(10);status(`${k+1}手目：盤面の外へ出てしまうよ。`,'bad');animating=false;sync();draw();return}
+  const fast=k<fastPrefix&&actual===expected;
+  await animateRoll(at,orientation,actual,{fast,final:k===currentStage().steps-1});
+  at=next;orientation=mm(rm(AXIS[actual],Math.PI/2),orientation);faces=rollFaces(faces,actual);visual={at,orientation};draw();
+  if(actual!==expected){result={error:k};replayPrefix=k;cursor=k;sound('error');haptic(10);status(`${k+1}手目で道を外れたよ。ここだけ直してみよう。`,'bad');animating=false;sync();draw();return}
+  completedSegments=k+1;draw();await wait(reduced||fast?0:Math.max(12,40-k*3));
  }
- result={success:true};seen.add(level);try{localStorage.setItem('dice-route-v100-cleared',JSON.stringify([...seen]))}catch(e){}
- sound('success');haptic([12,24,16]);status('PERFECT · 指定されたコースを通過しました。','good');animating=false;cursor=null;playhead=-1;pulseGoal();sync();draw();
+ result={success:true};replayPrefix=0;
+ if(level>=0){seen.add(level);try{localStorage.setItem('dice-route-v100-cleared',JSON.stringify([...seen]))}catch(e){}}
+ sound('success');haptic(12);status(level<0?'できた！ この調子で次へ。':'PERFECT · AからBまで通れたよ。','good');
+ animating=false;cursor=null;playhead=-1;pulseGoal();sync();draw();
 }
-function verify(){let moves=0;for(const s of STAGES){let f={...INITIAL},m=I();for(let i=0;i<s.steps;i++){const d=s.path[i],n=answerFor(s)[i];if(directionFor(f,n)!==d)throw Error('Wrong move at '+s.name);f=rollFaces(f,d);m=mm(rm(AXIS[d],Math.PI/2),m);for(const face of FACES){const world=mv(m,face.n);const actual=Math.abs(world[2])>.99?(world[2]>0?f.top:f.bottom):Math.abs(world[0])>.99?(world[0]>0?f.east:f.west):(world[1]>0?f.south:f.north);if(actual!==face.value)throw Error('Render and logic mismatch '+s.name+' '+i)}moves++}}return moves}
+function verify(){let moves=0;for(const s of [...PRACTICE,...STAGES]){let f={...INITIAL},m=I();for(let i=0;i<s.steps;i++){const d=s.path[i],n=answerFor(s)[i];if(directionFor(f,n)!==d)throw Error('Wrong move at '+s.name);f=rollFaces(f,d);m=mm(rm(AXIS[d],Math.PI/2),m);for(const face of FACES){const world=mv(m,face.n);const actual=Math.abs(world[2])>.99?(world[2]>0?f.top:f.bottom):Math.abs(world[0])>.99?(world[0]>0?f.east:f.west):(world[1]>0?f.south:f.north);if(actual!==face.value)throw Error('Render and logic mismatch '+s.name+' '+i)}moves++}}return moves}
 verify();
 for(const b of document.querySelectorAll('[data-n]'))b.addEventListener('click',()=>inputDigit(+b.dataset.n));
+$('practiceToggle').addEventListener('click',()=>changeStage(level<0?0:-3));
 $('play').addEventListener('click',play);$('back').addEventListener('click',deleteDigit);$('restart').addEventListener('click',restart);$('sound').addEventListener('click',()=>{soundOn=!soundOn;try{localStorage.setItem('dice-route-v110-sound',JSON.stringify(soundOn))}catch(e){}updateSoundButton();if(soundOn){sound('tap')}});
 const open=()=>$('scrim').classList.add('open'),close=()=>$('scrim').classList.remove('open');
 $('help').addEventListener('click',open);$('close').addEventListener('click',close);$('scrim').addEventListener('click',e=>{if(e.target===$('scrim'))close()});
-document.addEventListener('keydown',e=>{if($('scrim').classList.contains('open')){if(e.key==='Escape')close();return}if(/^[1-6]$/.test(e.key))inputDigit(+e.key);else if(e.key==='Backspace'){e.preventDefault();deleteDigit()}else if(e.key==='Enter'){if(!$('play').disabled)play()}else if(e.key==='ArrowLeft'&&cursor!==null){cursor=Math.max(0,cursor-1);sync()}else if(e.key==='ArrowRight'&&cursor!==null){cursor=Math.min(inputs.length-1,cursor+1);sync()}});
+document.addEventListener('keydown',e=>{if($('scrim').classList.contains('open')){if(e.key==='Escape')close();return}if(/^[1-6]$/.test(e.key))inputDigit(+e.key);else if(e.key==='Backspace'){e.preventDefault();deleteDigit()}else if(e.key==='Enter'){if(!$('play').disabled)play()}else if(e.key==='ArrowLeft'&&cursor!==null){cursor=Math.max(0,cursor-1);sync();draw()}else if(e.key==='ArrowRight'&&cursor!==null){cursor=Math.min(inputs.length-1,cursor+1);sync();draw()}});
+// The route is a second way to select an input slot; no direction is disclosed.
+let downPoint=null;
+canvas.addEventListener('pointerdown',e=>{downPoint=[e.clientX,e.clientY]});
+canvas.addEventListener('pointerup',e=>{
+ if(animating||!downPoint||Math.hypot(e.clientX-downPoint[0],e.clientY-downPoint[1])>14){downPoint=null;return}
+ downPoint=null;
+ const rect=canvas.getBoundingClientRect(),p=[(e.clientX-rect.left)*600/rect.width,(e.clientY-rect.top)*446/rect.height];
+ let chosen=-1,best=37;
+ const route=currentStage().cells.map(([x,y])=>xy([x+.5,y+.5,.025]));
+ for(let i=0;i<route.length-1;i++){
+  const a=route[i],b=route[i+1],ab=[b[0]-a[0],b[1]-a[1]],ap=[p[0]-a[0],p[1]-a[1]];
+  const t=Math.max(0,Math.min(1,(ap[0]*ab[0]+ap[1]*ab[1])/(ab[0]*ab[0]+ab[1]*ab[1])));
+  const dist=Math.hypot(p[0]-a[0]-t*ab[0],p[1]-a[1]-t*ab[1]);
+  // Repeated paths favor the currently selected area to minimize surprise.
+  const distance=dist+(cursor===null?0:Math.abs(i-cursor)*.08);
+  if(distance<best){best=distance;chosen=i}
+ }
+ if(chosen>=0)selectStep(chosen);
+});
 window.addEventListener('resize',sizeCanvas);new ResizeObserver(sizeCanvas).observe(canvas);
-window.DiceRouteTest={STAGES,INITIAL,answerFor,rollFaces,directionFor,verify,changeStage,getState:()=>({level,inputs:[...inputs],animating,result}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
+window.DiceRouteTest={STAGES,INITIAL,answerFor,rollFaces,directionFor,verify,changeStage,getState:()=>({level,inputs:[...inputs],animating,result,cursor,replayPrefix}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
 changeStage(0);sizeCanvas();
 </script>
 </body>
