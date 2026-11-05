@@ -509,6 +509,31 @@ function clickSound(volume=.36,delay=0){
  src.connect(low).connect(high).connect(gain).connect(ac.destination);
  src.start(ac.currentTime+delay);src.stop(ac.currentTime+delay+buf.duration+.005);
 }
+// A clear two-step completion signature. The two pitches do NOT overlap:
+// first a short soft wooden note, then a higher, gently ringing resolve.
+// This differs unmistakably from the dry impact clicks without a chord.
+function successSound(){
+ const ac=getAudio();if(!ac)return;
+ const t0=ac.currentTime+.095; // leave a tiny gap after the final landing click
+ clickSound(.34,.085);
+ const notes=[
+  {freq:659.25,at:0,dur:.088,volume:.050},
+  {freq:880.00,at:.155,dur:.255,volume:.062}
+ ];
+ for(const note of notes){
+  const start=t0+note.at;
+  const osc=ac.createOscillator(),amp=ac.createGain();
+  // A soft, pure pluck: no dissonant layers, vibrato, or simultaneous pitches.
+  osc.type='sine';
+  osc.frequency.setValueAtTime(note.freq,start);
+  osc.frequency.exponentialRampToValueAtTime(note.freq*.993,start+note.dur);
+  amp.gain.setValueAtTime(.0001,start);
+  amp.gain.exponentialRampToValueAtTime(note.volume,start+.008);
+  amp.gain.exponentialRampToValueAtTime(.0001,start+note.dur);
+  osc.connect(amp).connect(ac.destination);
+  osc.start(start);osc.stop(start+note.dur+.025);
+ }
+}
 function sound(kind){
  if(!soundOn)return;
  if(kind==='tap')clickSound(.23);
@@ -516,7 +541,7 @@ function sound(kind){
  if(kind==='turn')clickSound(.40);
  if(kind==='slide')clickSound(.26);
  if(kind==='error')clickSound(.22);
- if(kind==='success')clickSound(.60)
+ if(kind==='success')successSound();
  // The dice roll itself is silent; the contact makes one gentle click.
 }
 function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
