@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
 <meta name="theme-color" content="#f6f7f6">
-<title>DICE ROUTE — ATELIER EDITION · 50 STAGES</title>
+<title>DICE ROUTE — はじめの一歩から · 70 STAGES</title>
 <style>
 :root {color-scheme:light;--bg:#f6f7f6;--ink:#17292d;--muted:#839296;--teal:#008e93;--teal-dark:#007d83;--edge:#e0e7e6;--rust:#c67662;--white:#fff}
 *{box-sizing:border-box}
@@ -212,32 +212,47 @@ body::before{content:"";pointer-events:none;position:fixed;inset:0;background:ra
 
 .slots.many .slot{min-height:45px;height:45px}
 @media(max-height:760px){.slots.many .slot{min-height:40px;height:40px}}
+
+/* Seven seamless chapters; the first twenty levels are genuine stages. */
+.heading-tools{justify-content:flex-end;min-height:10px}
+.mini-progress{gap:4px}.mini-progress i{width:12px;min-width:12px}
+.atlas-chapters{grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.atlas-ch{height:58px;min-width:0;border-radius:12px;gap:3px}
+.atlas-ch .symbol{font-size:19px}.atlas-ch .cap{font-size:8px;letter-spacing:0}
+.lesson{gap:7px;flex-wrap:wrap;padding:10px 12px;align-items:center}
+#lessonText{flex:1;min-width:160px;font-size:12px;font-weight:600;line-height:1.6}
+.lesson-hint{border:1px solid #b9ded2;color:#16877d;border-radius:999px;background:#fff;font-size:11px;font-weight:750;padding:7px 11px;min-height:35px;white-space:nowrap}
+.lesson-hint[hidden],.hint-detail[hidden]{display:none}
+.hint-detail{margin-top:5px;padding:8px 11px;border-radius:9px;background:#f5faf5;border:1px solid #dcece3;color:#367d71;font-size:12px;line-height:1.65}
+.key.suggested:not(:disabled){background:#eafaf1;border-color:#5ac9b5;box-shadow:0 3px 0 #a0d7c7,0 0 0 3px rgba(25,165,142,.13)}
+@media(max-width:390px){.atlas-chapters{gap:3px}.atlas-ch{height:51px}.atlas-ch .cap{font-size:7px}.atlas-ch .symbol{font-size:17px}.mini-progress i{width:10px;min-width:10px}#lessonText{min-width:140px;font-size:11px}}
+@media(max-width:345px){.atlas-chapters{gap:2px}.atlas-ch .cap{font-size:7px}.lesson{padding:7px 9px}#lessonText{min-width:135px}}
 </style>
 </head>
 <body>
 <main class="app">
   <header class="topbar">
     <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2L29 9V23L16 30 3 23V9Z" fill="#def0ec"/><path d="M16 2L29 9 16 17 3 9Z" fill="#3faba6"/><path d="M3 9 16 17V30L3 23Z" fill="#237c7f"/><path d="M29 9 16 17V30L29 23Z" fill="#126369"/></svg>DICE ROUTE</div>
-    <div class="topright"><span class="stage-label"><b id="numStage">01</b> / <span id="stageTotal">50</span></span><button class="icon-btn on" id="sound" title="音のオン/オフ" aria-label="音のオン/オフ">♫</button><button class="icon-btn" id="help" title="遊び方" aria-label="遊び方">?</button><button class="icon-btn" id="restart" title="ステージをリセット" aria-label="ステージをリセット">↺</button></div>
+    <div class="topright"><span class="stage-label"><b id="numStage">01</b> / <span id="stageTotal">70</span></span><button class="icon-btn on" id="sound" title="音のオン/オフ" aria-label="音のオン/オフ">♫</button><button class="icon-btn" id="help" title="遊び方" aria-label="遊び方">?</button><button class="icon-btn" id="restart" title="ステージをリセット" aria-label="ステージをリセット">↺</button></div>
   </header>
-  <section class="heading"><div><div class="micro" id="stageType">SPATIAL PUZZLE · 01</div><h1 id="stageTitle">はじめの一歩</h1></div><div class="heading-tools"><div class="mini-progress" id="progress" aria-label="全50ステージ"></div><button type="button" class="practice-toggle" id="practiceToggle">練習 3問 ↗</button></div></section>
+  <section class="heading"><div><div class="micro" id="stageType">SPATIAL PUZZLE · 01</div><h1 id="stageTitle">はじめの一歩</h1></div><div class="heading-tools"><div class="mini-progress" id="progress" aria-label="全70ステージ"></div></div></section>
   <section class="board-area" aria-label="指定されたコースと立体サイコロ">
   <button type="button" class="net-panel" id="netPanel" hidden aria-label="展開図を拡大して見る"><span class="net-title">展開図 <span aria-hidden="true">↗</span></span><span class="net-cells" id="netCells"></span><span class="net-sub">タップで拡大</span></button>
   <button class="order-toggle" type="button" id="orderToggle" hidden aria-pressed="true">道順を見る</button><canvas id="board" role="img" aria-label="4×4の斜めから見たコース。行き先のマスをタップすると、その手の入力欄を選べます。"></canvas><div class="toast" id="toast" aria-live="polite"></div><div class="map-note"><span>START · A</span><span class="sep"></span><span id="rollCount">4 ROLLS</span><span class="sep"></span><span>GOAL · B</span></div></section>
-  <section class="panel"><div class="lesson" id="lesson" hidden><span class="lesson-tag">れんしゅう</span><span id="lessonText"></span></div><div class="panel-top"><h2>下になる数字を、順番に。</h2><span class="kicker" id="filled">00 / 04</span></div><div class="slots" id="slots" aria-label="各手の数字を入力・修正"></div><div class="keypad" id="keypad"><button type="button" class="key" data-n="1">1</button><button type="button" class="key" data-n="2">2</button><button type="button" class="key" data-n="3">3</button><button type="button" class="key" data-n="4">4</button><button type="button" class="key" data-n="5">5</button><button type="button" class="key" data-n="6">6</button></div><div class="actions"><button type="button" class="back" id="back">⌫ 取り消す</button><button type="button" class="primary" id="play" disabled>数字を入力する</button></div><div class="guidance" id="hint" aria-live="polite">ぜんぶの数字を決めてから、転がそう。</div></section>
-  <div hidden aria-hidden="true"><div id="levels"></div><div id="chapterNav" class="chapter-nav"><button id="prevChapter">‹</button><span id="chapterLabel"></span><button id="nextChapter">›</button></div></div><footer class="footer"><div class="footer-pick"><div class="chapter-summary"><small>YOUR COLLECTION</small><span id="chapterSummary">CHAPTER 01 · はじめの一歩</span></div><div style="display:flex;gap:13px;align-items:center"><button type="button" class="free-entry" id="freeEntry" aria-label="サイコロを自由に転がす">ころがす ↗</button><button type="button" class="map-btn" id="openAtlas">50問　▦</button></div></div><div class="footline">A SMALL WORLD OF BIG IDEAS</div></footer>
+  <section class="panel"><div class="lesson" id="lesson" hidden><span class="lesson-tag">ちいさなヒント</span><span id="lessonText"></span><button type="button" class="lesson-hint" id="lessonHint" hidden>ヒントをみる</button></div><div class="hint-detail" id="hintDetail" hidden aria-live="polite"></div><div class="panel-top"><h2>下になる数字を、順番に。</h2><span class="kicker" id="filled">00 / 04</span></div><div class="slots" id="slots" aria-label="各手の数字を入力・修正"></div><div class="keypad" id="keypad"><button type="button" class="key" data-n="1">1</button><button type="button" class="key" data-n="2">2</button><button type="button" class="key" data-n="3">3</button><button type="button" class="key" data-n="4">4</button><button type="button" class="key" data-n="5">5</button><button type="button" class="key" data-n="6">6</button></div><div class="actions"><button type="button" class="back" id="back">⌫ 取り消す</button><button type="button" class="primary" id="play" disabled>数字を入力する</button></div><div class="guidance" id="hint" aria-live="polite">ぜんぶの数字を決めてから、転がそう。</div></section>
+  <div hidden aria-hidden="true"><div id="levels"></div><div id="chapterNav" class="chapter-nav"><button id="prevChapter">‹</button><span id="chapterLabel"></span><button id="nextChapter">›</button></div></div><footer class="footer"><div class="footer-pick"><div class="chapter-summary"><small>YOUR COLLECTION</small><span id="chapterSummary">CHAPTER 01 · はじめの一歩</span></div><div style="display:flex;gap:13px;align-items:center"><button type="button" class="free-entry" id="freeEntry" aria-label="サイコロを自由に転がす">ころがす ↗</button><button type="button" class="map-btn" id="openAtlas">70問　▦</button></div></div><div class="footline">A SMALL WORLD OF BIG IDEAS</div></footer>
 </main>
 <div class="net-overlay" id="netOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="netBigTitle">
   <div class="net-sheet"><div class="net-sheet-top"><div><span class="net-overline">CUBE NET</span><h2 id="netBigTitle">展開図を組み立てよう</h2></div><button type="button" class="net-close" id="netClose" aria-label="展開図を閉じる">×</button></div>
   <div class="net-big-cells" id="netBigCells"></div><p>水色の枠は、スタート時の上面。<br>どの数字が側面にくるか、頭の中で折ってみよう。</p><button type="button" class="net-return" id="netReturn">盤面に戻る</button></div>
 </div>
-<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="help-title"><div class="dialog"><div class="micro">HOW TO PLAY</div><h2 id="help-title">数字で、サイコロを動かす。</h2><p>水色のコースに沿って、サイコロを <strong>A から B</strong> へ転がします。</p><p>右や左を指示する代わりに、<strong>次に下になる面の数字</strong>を入力します。たとえば、右に転がすときは現在の右面の数字を選びます。</p><p>サイコロは毎回向きが変わります。<strong>すべての数字を先に並べてから</strong>、一度に実行してください。行き先のマスをタップすると、その手の数字を選び直せます。道が交差する問題では「道順」を表示すると進む順番がわかります。</p><div class="rule"></div><p>ヒント：基本のサイコロでは向かい合う面の目の合計は <strong>7</strong>。上面・下面の数字では転がせません。21問目以降は特殊な床、41問目以降は展開図も登場します。</p><button type="button" id="close">ゲームに戻る</button></div></div>
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="help-title"><div class="dialog"><div class="micro">HOW TO PLAY</div><h2 id="help-title">数字で、サイコロを動かす。</h2><p>水色のコースに沿って、サイコロを <strong>A から B</strong> へ転がします。</p><p>右や左を指示する代わりに、<strong>次に下になる面の数字</strong>を入力します。たとえば、右に転がすときは現在の右面の数字を選びます。</p><p>サイコロは毎回向きが変わります。<strong>すべての数字を先に並べてから</strong>、一度に実行してください。行き先のマスをタップすると、その手の数字を選び直せます。道が交差する問題では「道順」を表示すると進む順番がわかります。</p><div class="rule"></div><p>ヒント：基本のサイコロでは向かい合う面の目の合計は <strong>7</strong>。上面・下面の数字では転がせません。41問目以降は特殊な床、61問目以降は展開図も登場します。</p><button type="button" id="close">ゲームに戻る</button></div></div>
 
-<div class="atlas" id="atlas" hidden role="dialog" aria-modal="true" aria-labelledby="atlasTitle"><div class="atlas-sheet"><div class="atlas-top"><div><div class="atlas-overline">DICE ROUTE · COLLECTION</div><h2 id="atlasTitle">50の小さな挑戦</h2><p>好きなステージから遊べます。</p></div><button class="atlas-close" id="atlasClose" aria-label="ステージ一覧を閉じる">×</button></div><div class="atlas-chapters" id="atlasChapters"></div><div id="atlasChapterTitle" style="font-size:12px;color:#6e9186;font-weight:700;margin:-4px 0 12px"></div><div class="atlas-levels" id="atlasLevels"></div><div class="atlas-bottom"><span id="atlasProgress">0 / 50 COMPLETE</span><button id="atlasPractice">はじめての練習へ</button></div></div></div>
+<div class="atlas" id="atlas" hidden role="dialog" aria-modal="true" aria-labelledby="atlasTitle"><div class="atlas-sheet"><div class="atlas-top"><div><div class="atlas-overline">DICE ROUTE · COLLECTION</div><h2 id="atlasTitle">70の小さな挑戦</h2><p>01から順番に遊んでも、好きなところから選んでもOK。</p></div><button class="atlas-close" id="atlasClose" aria-label="ステージ一覧を閉じる">×</button></div><div class="atlas-chapters" id="atlasChapters"></div><div id="atlasChapterTitle" style="font-size:12px;color:#6e9186;font-weight:700;margin:-4px 0 12px"></div><div class="atlas-levels" id="atlasLevels"></div><div class="atlas-bottom"><span id="atlasProgress">0 / 70 COMPLETE</span><button id="atlasContinue">いまのステージに戻る</button></div></div></div>
 <div class="free-overlay" id="freeOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="freeTitle"><div class="free-card"><div class="free-top"><div><div class="free-overline">JUST ROLL.</div><h2 id="freeTitle">サイコロの遊び場</h2></div><button type="button" id="freeClose" class="atlas-close" aria-label="遊び場を閉じる">×</button></div><canvas id="freeCanvas" aria-label="指でスワイプしてサイコロを転がす"></canvas><div class="free-tip">↔　指で転がしてみよう　↕</div><p>正解も時間制限もない、サイコロの小さな遊び場。</p><button type="button" class="free-exit" id="freeReturn">パズルに戻る</button></div></div>
 <script>
 'use strict';
-// DICE ROUTE 50: turns, slides, cube nets; retry retains exactly the same cadence and sound.
+// DICE ROUTE 70: continuous gentle introduction + 50 original puzzles; keep tactile sounds and physics.
 const $=id=>document.getElementById(id);
 const canvas=$('board'),ctx=canvas.getContext('2d',{alpha:true});
 const INITIAL={top:1,bottom:6,north:5,south:2,east:3,west:4};
@@ -256,7 +271,30 @@ const DICE_PRESETS=[
  {top:3,bottom:6,north:5,south:2,east:1,west:4},
  {top:5,bottom:1,north:3,south:6,east:2,west:4}
 ];
-const CHAPTERS=['基本の道','交差とループ','回転床','すべる床','展開図'];
+const CHAPTERS=['いっぽずつ','くねくねの道','基本の道','交差とループ','回転床','すべる床','展開図'];
+const INTRO_COUNT=20;
+const INTRO_RAW=[
+ {name:'右へ コロン',start:[0,2],path:'E',tag:'はじめの一歩',lesson:'右の面に見える「3」をおして、ころがそう。'},
+ {name:'手前へ コロン',start:[0,0],path:'S',tag:'はじめの一歩',lesson:'こんどは手前の面に見える「2」をおしてみよう。'},
+ {name:'うらの すうじ',start:[1,2],path:'W',tag:'見えない面',lesson:'右の「3」のうらは「4」。見えない面もあるよ。'},
+ {name:'おくへ コロン',start:[1,2],path:'N',tag:'見えない面',lesson:'手前の「2」のうらは「5」。おくへころがそう。'},
+ {name:'右へ 2かい',start:[0,2],path:'EE',tag:'2かいの道',lesson:'1かいころがすと、数字の向きがかわるよ。'},
+ {name:'手前へ 2かい',start:[0,0],path:'SS',tag:'2かいの道',lesson:'2つの数字を先に入れて、まとめてころがそう。'},
+ {name:'はじめての かど',start:[0,1],path:'ES',tag:'2かいの道',lesson:'右へ、そして手前へ。かどをまがるよ。'},
+ {name:'もうひとつの かど',start:[1,0],path:'SE',tag:'2かいの道',lesson:'手前へ、そして右へ。数字をよそうしよう。'},
+ {name:'3かい コロン',start:[0,0],path:'EES',tag:'3かいの道',lesson:'右、右、手前。3つの数字を考えてみよう。'},
+ {name:'ながい まっすぐ',start:[0,0],path:'SSS',tag:'3かいの道',lesson:'手前へ3かい。おなじ方向でも数字はかわるよ。'},
+ {name:'かどを 2つ',start:[0,2],path:'ENE',tag:'3かいの道',lesson:'右、おく、右。どの面が下になるかな？'},
+ {name:'くねくね',start:[0,1],path:'SEN',tag:'3かいの道',lesson:'手前、右、おく。ゆっくり考えてだいじょうぶ。'},
+ {name:'右・手前・右',start:[0,0],path:'ESE',tag:'3かいの道',lesson:'かどをまがってから、もう1かい。'},
+ {name:'4かいの ぼうけん',start:[0,2],path:'EENN',tag:'4かいの道',lesson:'右に2かい、おくに2かい。4つを先に入れよう。'},
+ {name:'しかくい みち',start:[0,1],path:'ESEN',tag:'4かいの道',lesson:'右、手前、右、おく。かどがいっぱい。'},
+ {name:'かどの れんぞく',start:[0,0],path:'SENE',tag:'4かいの道',lesson:'まがるたびにサイコロの向きがかわるよ。'},
+ {name:'ぐるっと ひとまわり',start:[0,1],path:'ESWN',tag:'もどる道',lesson:'もとのマスへもどるよ。でもサイコロの向きは？'},
+ {name:'いって もどって',start:[0,0],path:'EWES',tag:'もどる道',lesson:'行って、もどって、また進む。順番を考えよう。'},
+ {name:'おりかえす みち',start:[1,0],path:'SEWN',tag:'もどる道',lesson:'おなじマスをもう1回とおるよ。'},
+ {name:'小さな たんけん',start:[0,0],path:'EESWN',tag:'5かいの道',lesson:'いよいよ5かい。むずかしければヒントをみてね。'}
+];
 const RAW=[
 {name:'はじめの一歩', start:[0,2],path:'EENN',tag:'THE FIRST TURN'},
 {name:'角を曲がる',start:[0,0],path:'EESSE',tag:'TWO CORNERS'},
@@ -292,15 +330,9 @@ function makeStage(raw){
  stage.ambiguous=stage.trace.length>new Set(stage.trace.map(c=>c.join(','))).size;
  return stage;
 }
-const STAGES=RAW.map(makeStage);
-
-// Optional, brisk three-question introduction. Original 10 stages remain unchanged.
-const PRACTICE=[
- {name:'まずは1回',start:[0,2],path:'E',tag:'PRACTICE 01',lesson:'右へ1回。今の右側の面にある数字を入れてみよう。'},
- {name:'次は2回',start:[0,2],path:'EN',tag:'PRACTICE 02',lesson:'2回分を先に考えよう。曲がると数字の向きも変わるよ。'},
- {name:'3回の冒険',start:[0,2],path:'ENE',tag:'PRACTICE 03',lesson:'3回分の数字を並べて、一度に転がしてみよう。'}
-].map(makeStage);
-const currentStage=()=>level<0?PRACTICE[level+3]:STAGES[level];
+const STAGES=[...INTRO_RAW.map(makeStage),...RAW.map(makeStage)];
+const PRACTICE=[]; // Compatibility with existing test helpers; no separate practice mode.
+const currentStage=()=>STAGES[level];
 function yawFaces(f,dir){return dir==='R'?{...f,north:f.west,east:f.north,south:f.east,west:f.south}:{...f,north:f.east,east:f.south,south:f.west,west:f.north}}
 function rollFaces(f,d){switch(d){case'E':return {...f,top:f.west,bottom:f.east,east:f.top,west:f.bottom};case'W':return {...f,top:f.east,bottom:f.west,east:f.bottom,west:f.top};case'S':return {...f,top:f.north,bottom:f.south,south:f.top,north:f.bottom};case'N':return {...f,top:f.south,bottom:f.north,south:f.bottom,north:f.top}}}
 function directionFor(f,n){return Object.keys(SIDE).find(d=>f[SIDE[d]]===n)||null}
@@ -486,7 +518,12 @@ function draw(){if(!canvas.width)return;ctx.setTransform(canvas.width/600,0,0,ca
 let level=0,inputs=[],cursor=0,animating=false,result=null,visual=null,seen=new Set();
 let playhead=-1,completedSegments=-1,successPulse=0,soundOn=true,audioCtx=null;
 let replayPrefix=0,lastPlaced=-1,showOrder=false, floorAnim=null;
-try{seen=new Set(JSON.parse(localStorage.getItem('dice-route-v100-cleared')||'[]'))}catch(e){}
+try{
+ const modern=localStorage.getItem('dice-route-v2-cleared');
+ const original=JSON.parse(localStorage.getItem('dice-route-v100-cleared')||'[]');
+ seen=modern?new Set(JSON.parse(modern)):new Set(original.filter(Number.isInteger).map(i=>i+INTRO_COUNT));
+}catch(e){seen=new Set()}
+
 try{soundOn=JSON.parse(localStorage.getItem('dice-route-v110-sound')||'true')}catch(e){}
 const resetVisual=()=>({at:[...currentStage().start],orientation:I()});
 function updateSoundButton(){const b=$('sound');if(!b)return;b.classList.toggle('on',soundOn);b.textContent=soundOn?'♫':'♪';b.setAttribute('aria-label',soundOn?'音をオフにする':'音をオンにする');b.title=soundOn?'音をオフにする':'音をオンにする'}
@@ -571,28 +608,39 @@ function makeNetView(stage){
  $('netBigCells').innerHTML=holder.innerHTML;
 }
 function updateChapter(){
- const grp=level<0?0:Math.floor(level/10);
- $('chapterLabel').textContent=level<0?'PRACTICE · 練習':`CH ${String(grp+1).padStart(2,'0')} / 05 · ${CHAPTERS[grp]}`;
+ const grp=Math.floor(level/10);
+ $('chapterLabel').textContent=`CH ${String(grp+1).padStart(2,'0')} / 07 · ${CHAPTERS[grp]}`;
  $('prevChapter').disabled=animating;$('nextChapter').disabled=animating;
- $('prevChapter').style.opacity=level<0?'.4':'1';$('nextChapter').style.opacity=level<0?'.4':'1';
+}
+let hintSteps=0;
+function revealHint(){
+ if(animating||level>=INTRO_COUNT)return;
+ const stage=currentStage(),correct=answerFor(stage);
+ hintSteps=Math.min(stage.steps,hintSteps+1);
+ const shown=correct.slice(0,hintSteps).join(' → ');
+ $('hintDetail').hidden=false;
+ $('hintDetail').textContent=hintSteps>=stage.steps?`この順番でおしてみよう： ${shown}`:`ここまでは ${shown} 。つづきは考えてみよう！`;
+ $('lessonHint').textContent=hintSteps>=stage.steps?'ぜんぶ わかった！':'もう1つヒント';
+ sound('tap');
 }
 function changeStage(i){
  if(animating)return;
- level=i<0?Math.max(-3,Math.min(-1,i)):(i+STAGES.length)%STAGES.length;
+ level=Math.max(0,Math.min(STAGES.length-1,i));
  const stage=currentStage();inputs=Array(stage.steps).fill(null);cursor=0;result=null;visual=resetVisual();
- playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;lastPlaced=-1;floorAnim=null;
+ playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;lastPlaced=-1;floorAnim=null;hintSteps=0;
  updateProjection();
  $('stageTitle').textContent=stage.name;
- $('stageType').textContent=stage.tag+' · '+(level<0?'れんしゅう':String(level+1).padStart(2,'0'));
- $('numStage').textContent=level<0?'P'+(level+4):String(level+1).padStart(2,'0');
- $('stageTotal').textContent=level<0?'03':'50';
+ $('stageType').textContent=level<INTRO_COUNT?`STEP ${String(level+1).padStart(2,'0')} · ${stage.tag}`:stage.tag+' · '+String(level+1).padStart(2,'0');
+ $('numStage').textContent=String(level+1).padStart(2,'0');
+ $('stageTotal').textContent=String(STAGES.length);
  $('rollCount').textContent=stage.steps+' 回';
- $('practiceToggle').textContent=level<0?'本編へ ↗':'練習 3問 ↗';
  const types=new Set(Object.values(stage.tiles||{}));
  const lesson=$('lesson'),lessonTag=lesson.querySelector('.lesson-tag'),lessonText=$('lessonText');
- lesson.hidden=level>=0&&types.size===0&&stage.netId===undefined;
+ lesson.hidden=level>=INTRO_COUNT&&types.size===0&&stage.netId===undefined;
  lessonText.replaceChildren();
- if(level<0){lessonTag.textContent='れんしゅう';lessonText.textContent=stage.lesson}
+ $('hintDetail').hidden=true;$('hintDetail').textContent='';
+ const lessonHint=$('lessonHint');lessonHint.hidden=level>=INTRO_COUNT;lessonHint.textContent='ヒントをみる';
+ if(level<INTRO_COUNT){lessonTag.textContent=level<4?'やってみよう':'ひとこと';lessonText.textContent=stage.lesson}
  else{
   lessonTag.textContent=stage.netId!==undefined?'展開図＋床':'床に乗ると';
   const rules=[];
@@ -603,7 +651,8 @@ function changeStage(i){
   for(const [symbol,label] of rules){const chip=document.createElement('span');chip.className='mechanic-chip';const mark=document.createElement('b');mark.textContent=symbol;chip.append(mark,document.createTextNode(label));lessonText.append(chip)}
  }
  $('orderToggle').hidden=!stage.ambiguous;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',String(showOrder));$('orderToggle').textContent=showOrder?'道順を隠す':'道順を見る';
- makeNetView(stage);updateChapter();$('chapterSummary').textContent=level<0?'PRACTICE · 3つの練習':`CH ${String(Math.floor(level/10)+1).padStart(2,'0')} · ${CHAPTERS[Math.floor(level/10)]}`;status();sync();draw();
+ makeNetView(stage);updateChapter();$('chapterSummary').textContent=`CH ${String(Math.floor(level/10)+1).padStart(2,'0')} · ${CHAPTERS[Math.floor(level/10)]}`;
+ status();sync();draw();
 }
 function sync(){
  const stage=currentStage(),filled=inputs.filter(n=>n!==null).length;updateSoundButton();
@@ -614,17 +663,17 @@ function sync(){
   b.disabled=animating;b.addEventListener('click',()=>selectStep(i));slots.append(b);
  });lastPlaced=-1;
  const play=$('play');play.className='primary'+(result?.success?' success':'');play.disabled=animating||(!result?.success&&filled!==stage.steps);
- play.textContent=animating?'転がり中…':result?.success?(level===STAGES.length-1?'最初からプレイ ↗':level===-1?'本編スタート ↗':'次のステージ ↗'):(filled===stage.steps?(replayPrefix>0?'もう一度転がす ↗':'転がしてみる ↗'):'数字を入力する');
- $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>b.disabled=animating);
- const nav=$('levels');nav.replaceChildren();const n=level<0?3:10;
- const grp=level<0?0:Math.floor(level/10);
- for(let i=0;i<n;i++){
-  const idx=level<0?i-3:grp*10+i,passed=level>=0&&seen.has(idx);let b=document.createElement('button');b.type='button';
-  b.className='level'+(level===idx?' current':'')+(passed?' passed':'');b.textContent=passed?'✓':String(i+1).padStart(2,'0');b.disabled=animating;
-  b.setAttribute('aria-label',`${level<0?'練習':'ステージ'}${level<0?i+1:idx+1}`);b.setAttribute('aria-current',idx===level?'step':'false');b.addEventListener('click',()=>changeStage(idx));nav.append(b)
+ play.textContent=animating?'ころがり中…':result?.success?(level===STAGES.length-1?'さいしょから あそぶ ↗':'つぎへすすむ ↗'):(filled===stage.steps?(replayPrefix>0?'もういちど ころがす ↗':'ころがしてみよう ↗'):'数字をいれよう');
+ $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>{b.disabled=animating;b.classList.toggle('suggested',level===0&&filled===0&&Number(b.dataset.n)===3||level===1&&filled===0&&Number(b.dataset.n)===2)});
+ const nav=$('levels');nav.replaceChildren();
+ const grp=Math.floor(level/10);
+ for(let i=0;i<10;i++){
+  const idx=grp*10+i,passed=seen.has(idx);let b=document.createElement('button');b.type='button';
+  b.className='level'+(level===idx?' current':'')+(passed?' passed':'');b.textContent=passed?'✓':String(idx+1).padStart(2,'0');b.disabled=animating;
+  b.setAttribute('aria-label',`ステージ${idx+1}`);b.addEventListener('click',()=>changeStage(idx));nav.append(b)
  }
- const progress=$('progress');progress.replaceChildren();for(let i=0;i<5;i++){
-   let p=document.createElement('i');p.className=(level>=0&&Math.floor(level/10)===i?'current':Array.from({length:10},(_,j)=>i*10+j).every(j=>seen.has(j))?'past':'');progress.append(p)
+ const progress=$('progress');progress.replaceChildren();for(let i=0;i<CHAPTERS.length;i++){
+   let p=document.createElement('i');p.className=Math.floor(level/10)===i?'current':Array.from({length:10},(_,j)=>i*10+j).every(j=>seen.has(j))?'past':'';progress.append(p)
  }
  updateChapter();
 
@@ -683,7 +732,7 @@ function animateSlide(at,to,orientation){return new Promise(resolve=>{
 })}
 async function play(){
  if(animating)return;
- if(result?.success){changeStage(level===-1?0:level===STAGES.length-1?0:level+1);return}
+ if(result?.success){changeStage(level===STAGES.length-1?0:level+1);return}
  if(inputs.some(n=>n===null))return;
  const stage=currentStage();
  animating=true;result=null;playhead=-1;completedSegments=-1;successPulse=0;status('');sync();
@@ -710,13 +759,13 @@ async function play(){
   completedSegments=k+1;draw();await wait(reduced?0:Math.max(10,36-k*2));
  }
  result={success:true};replayPrefix=0;
- if(level>=0){seen.add(level);try{localStorage.setItem('dice-route-v100-cleared',JSON.stringify([...seen]))}catch(e){}}
- sound('success');haptic(12);status(level<0?'できた！ この調子で次へ。':'PERFECT · AからBまで通れたよ。','good');
+ seen.add(level);try{localStorage.setItem('dice-route-v2-cleared',JSON.stringify([...seen]))}catch(e){}
+ sound('success');haptic(12);status(level<INTRO_COUNT?'やったね！ つぎへすすもう！':'PERFECT · AからBまで通れたよ。','good');
  animating=false;cursor=null;playhead=-1;pulseGoal();sync();draw();
 }
 function verify(){
  let moves=0;
- for(const s of [...PRACTICE,...STAGES]){
+ for(const s of STAGES){
   let f={...s.dice},m=I(),at=[...s.start];const ans=answerFor(s);
   for(let i=0;i<s.steps;i++){
    const d=s.path[i],n=ans[i];if(directionFor(f,n)!==d)throw Error('Wrong move at '+s.name+' '+i);
@@ -734,7 +783,7 @@ function verify(){
    moves++;
   }
  }
- if(STAGES.length!==50)throw Error('Incorrect stage count');
+ if(STAGES.length!==70)throw Error('Incorrect stage count');
  return moves;
 }
 verify();
@@ -746,9 +795,9 @@ $('netPanel').addEventListener('click',openNet);
 $('netClose').addEventListener('click',closeNet);
 $('netReturn').addEventListener('click',closeNet);
 $('netOverlay').addEventListener('click',e=>{if(e.target===$('netOverlay'))closeNet()});
-$('practiceToggle').addEventListener('click',()=>changeStage(level<0?0:-3));
-$('prevChapter').addEventListener('click',()=>{if(level>=0)changeStage((Math.floor(level/10)+4)%5*10)});
-$('nextChapter').addEventListener('click',()=>{if(level>=0)changeStage((Math.floor(level/10)+1)%5*10)});
+$('lessonHint').addEventListener('click',revealHint);
+$('prevChapter').addEventListener('click',()=>changeStage((Math.floor(level/10)+CHAPTERS.length-1)%CHAPTERS.length*10));
+$('nextChapter').addEventListener('click',()=>changeStage((Math.floor(level/10)+1)%CHAPTERS.length*10));
 $('orderToggle').addEventListener('click',()=>{showOrder=!showOrder;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',String(showOrder));$('orderToggle').textContent=showOrder?'道順を隠す':'道順を見る';draw()});
 $('play').addEventListener('click',play);$('back').addEventListener('click',deleteDigit);$('restart').addEventListener('click',restart);$('sound').addEventListener('click',()=>{soundOn=!soundOn;try{localStorage.setItem('dice-route-v110-sound',JSON.stringify(soundOn))}catch(e){}updateSoundButton();if(soundOn){sound('tap')}});
 const open=()=>$('scrim').classList.add('open'),close=()=>$('scrim').classList.remove('open');
@@ -791,8 +840,8 @@ canvas.addEventListener('pointerup',e=>{
 let atlasChapter=0, atlasPriorFocus=null;
 function buildAtlas(){
  const chapters=$('atlasChapters'),levels=$('atlasLevels');chapters.replaceChildren();levels.replaceChildren();
- const icons=['⬡','⌁','⟳','⇢','▦'];
- for(let c=0;c<5;c++){
+ const icons=['●','◌','⬡','⌁','⟳','⇢','▦'];
+ for(let c=0;c<CHAPTERS.length;c++){
   const b=document.createElement('button');b.type='button';b.className='atlas-ch'+(c===atlasChapter?' current':'');
   b.innerHTML=`<span class="symbol" aria-hidden="true">${icons[c]}</span><span class="cap">CH ${c+1}</span>`;
   b.setAttribute('aria-label',`チャプター${c+1}：${CHAPTERS[c]}`);
@@ -804,13 +853,13 @@ function buildAtlas(){
   b.title=STAGES[idx].name;b.setAttribute('aria-label',`ステージ${idx+1} ${STAGES[idx].name}${seen.has(idx)?' クリア済み':''}`);
   b.addEventListener('click',()=>{closeAtlas();changeStage(idx);sound('tap')});levels.append(b)
  }
- $('atlasChapterTitle').textContent=CHAPTERS[atlasChapter];$('atlasProgress').textContent=`${seen.size} / 50 COMPLETE`;
+ $('atlasChapterTitle').textContent=CHAPTERS[atlasChapter];$('atlasProgress').textContent=`${seen.size} / ${STAGES.length} COMPLETE`;
 }
 function openAtlas(){if(animating)return;atlasChapter=Math.floor(Math.max(0,level)/10);atlasPriorFocus=document.activeElement;buildAtlas();$('atlas').hidden=false;$('atlasClose').focus()}
 function closeAtlas(){$('atlas').hidden=true;atlasPriorFocus?.focus?.()}
 $('openAtlas').addEventListener('click',openAtlas);$('atlasClose').addEventListener('click',closeAtlas);
 $('atlas').addEventListener('click',e=>{if(e.target===$('atlas'))closeAtlas()});
-$('atlasPractice').addEventListener('click',()=>{closeAtlas();changeStage(-3)});
+$('atlasContinue').addEventListener('click',closeAtlas);
 // FREE PLAY is an independent tactile toy; it always uses the standard die and
 // never reveals the active puzzle's hidden state or net-dice solution.
 const freeCanvas=$('freeCanvas'),freeCtx=freeCanvas.getContext('2d');
@@ -867,7 +916,7 @@ freeCanvas.addEventListener('pointerup',async e=>{
 window.addEventListener('resize',()=>{if(!$('freeOverlay').hidden)freeFit()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('atlas').hidden)closeAtlas();else if(!$('freeOverlay').hidden)closeFree()}});
 window.addEventListener('resize',sizeCanvas);new ResizeObserver(sizeCanvas).observe(canvas);
-window.DiceRouteTest={STAGES,PRACTICE,INITIAL,answerFor,rollFaces,yawFaces,directionFor,nextCell,verify,changeStage,inputDigit,play,getState:()=>({level,inputs:[...inputs],animating,result,cursor,replayPrefix}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
+window.DiceRouteTest={STAGES,PRACTICE,INTRO_COUNT,INITIAL,answerFor,rollFaces,yawFaces,directionFor,nextCell,verify,changeStage,inputDigit,play,getState:()=>({level,inputs:[...inputs],animating,result,cursor,replayPrefix}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
 changeStage(0);sizeCanvas();
 </script>
 </body>
