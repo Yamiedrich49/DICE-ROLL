@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
 <meta name="theme-color" content="#f6f7f6">
-<title>DICE ROUTE — 500の冒険 · MASTER CLASS</title>
+<title>DICE ROUTE · 50 STAGES v2.1 — 数字で転がす立体パズル</title>
 <style>
 :root {color-scheme:light;--bg:#f6f7f6;--ink:#17292d;--muted:#839296;--teal:#008e93;--teal-dark:#007d83;--edge:#e0e7e6;--rust:#c67662;--white:#fff}
 *{box-sizing:border-box}
@@ -81,6 +81,15 @@ button:disabled{cursor:default}
 @media(max-width:345px){.practice-toggle{padding:5px 7px;font-size:9px}.mini-progress i{width:7px}.topright{gap:4px}}
 @media(prefers-reduced-motion:reduce){.slot.placed{animation:none}}
 
+/* v2.1: optional process hints, no prefilled answers */
+.hint-row{display:flex;align-items:flex-start;justify-content:center;gap:8px;min-height:39px}
+.hint-row .guidance{min-height:0;flex:1;text-align:left;font-size:11px}
+.hint-toggle{flex:none;min-width:81px;height:30px;border:1px solid #cbdeda;border-radius:999px;background:#fff;color:#397e7b;font-size:10px;font-weight:750;margin-top:5px;padding:0 10px}
+.hint-toggle:active{transform:scale(.97);background:#eef7f5}
+.hint-toggle[aria-expanded="true"]{background:#e4f4f0;color:#047d7b;border-color:#b0dcd3}
+.tip-detail{background:#edf7f4;color:#426f6b;border:1px solid #d4eae4;border-radius:11px;padding:11px 14px;font-size:12px;line-height:1.6;margin:3px 0 4px}
+.tip-detail[hidden]{display:none}
+@media(max-width:390px){.hint-row{gap:5px}.hint-row .guidance{font-size:10px}.hint-toggle{min-width:74px;padding:0 7px}}
 /* v2.0: fifty hand-vetted routes, calm 5×5 board and tactile mechanics */
 .heading .micro{letter-spacing:.17em}.mini-progress i{width:20px}
 .chapter-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #e3eae8;padding:8px 1px 3px}
@@ -104,171 +113,25 @@ button:disabled{cursor:default}
 @media(max-width:390px){.net-panel{left:9px;top:6px;padding:5px}.net-cells{grid-template-columns:repeat(4,19px);grid-template-rows:repeat(4,19px);gap:1px}.net-cell{line-height:17px;font-size:11px}.heading h1{font-size:25px}.chapter-nav{padding-top:5px}.level-nav{padding-top:1px}}
 @media(max-width:345px){.order-toggle{right:7px;top:12px;padding:6px 7px;font-size:9px}.net-panel{transform:scale(.88);transform-origin:top left}.slots.many .slot{height:37px;font-size:17px}}
 
-
-/* v2.1 — clear mechanisms without adding a second puzzle */
-.lesson{display:flex;align-items:flex-start;gap:8px;min-height:27px}
-.lesson-tag{flex-shrink:0;margin-right:0!important}
-#lessonText{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;min-width:0}
-.mechanic-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;color:#376b67}
-.mechanic-chip b{font-size:14px;line-height:1;color:#188b86;font-weight:700}
-.net-panel{pointer-events:auto;cursor:zoom-in;text-align:center;font-family:inherit;appearance:none;-webkit-appearance:none}
-.net-panel:active{transform:scale(.97)}.net-panel:focus-visible{outline:2px solid #40b2ae;outline-offset:3px}
-.net-cell.net-top{background:#d4f6eb;border:1.5px solid #17a8a1;color:#006d68}
-.net-overlay[hidden]{display:none}
-.net-overlay{position:fixed;inset:0;z-index:12;background:rgba(25,46,47,.42);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center;padding:20px}
-.net-sheet{width:min(100%,340px);border-radius:23px;background:#fff;padding:22px 20px 19px;box-shadow:0 26px 70px rgba(15,42,39,.22);display:flex;flex-direction:column;gap:16px}
-.net-sheet-top{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.net-sheet h2{margin:5px 0 0;font-size:19px;letter-spacing:-.045em}.net-overline{font-size:10px;font-weight:750;color:#639b96;letter-spacing:.13em}
-.net-close{width:36px;height:36px;border-radius:50%;font-size:24px;font-weight:400;border:1px solid #e1e9e7;color:#658784;background:#fff;line-height:1}
-.net-big-cells{display:grid;grid-template-columns:repeat(4,50px);grid-template-rows:repeat(4,50px);gap:5px;justify-content:center;padding:15px 0 5px}
-.net-big-cells .net-cell{height:50px;width:50px;border-width:1.4px;line-height:48px;font-size:25px;border-radius:8px;background:#f6faf9;color:#225f5c}
-.net-big-cells .net-cell.net-top{background:#d8f6eb;border:2px solid #0aa89f;color:#006d68;line-height:46px}
-.net-big-cells .net-cell.empty{background:transparent;border:0}
-.net-sheet p{margin:0;text-align:center;color:#6b8583;font-size:12px;line-height:1.75}
-.net-return{height:48px;border:0;background:#19393b;color:white;border-radius:12px;font-size:13px;font-weight:750}
-.slots.many .slot{position:relative;padding-top:6px}
-.slots.many .slot::before{content:attr(data-step);position:absolute;top:4px;left:7px;font-size:8px;font-weight:650;line-height:1;letter-spacing:.02em;color:#9eb2af}
-.slots.many .slot.active::before{color:#0b9893}
-@media(max-width:345px){.mechanic-chip{font-size:9px}.net-big-cells{grid-template-columns:repeat(4,47px);grid-template-rows:repeat(4,47px)}.net-big-cells .net-cell{width:47px;height:47px;line-height:45px}}
-
-
-/* ATELIER — premium, quiet tactile interface */
-:root{--bg:#f4f6f3;--ink:#183037;--teal:#098e87;--teal-dark:#006e70;--edge:#dfe9e5}
-html,body{background:radial-gradient(ellipse at 50% 18%,#fff 0%,#f7f9f6 39%,#f0f4f0 100%);}
-body::before{content:"";pointer-events:none;position:fixed;inset:0;background:radial-gradient(circle at 8% 3%,rgba(164,206,186,.12),transparent 24%),radial-gradient(circle at 85% 70%,rgba(204,220,209,.16),transparent 34%)}
-.app{position:relative;width:min(100%,590px);padding-left:19px;padding-right:19px}
-.topbar{height:59px;padding-top:16px}
-.brand{font-size:12px;letter-spacing:.16em;color:#163b3e}.logo{width:28px;height:28px;filter:drop-shadow(0 3px 3px rgba(21,80,68,.09))}
-.topright{gap:7px}.topright .stage-label{margin-right:5px;color:#9aaba8}
-.icon-btn{width:35px;height:35px;border-color:#e0e8e5;background:rgba(255,255,255,.65);box-shadow:0 2px 6px rgba(28,69,58,.025)}
-.icon-btn.on{border-color:#b5dcd3;background:#edf9f4}
-.heading{padding-top:19px}.heading h1{font-size:clamp(23px,6vw,30px);font-weight:760;letter-spacing:-.055em}.heading .micro{color:#7fa29b;font-size:9px}
-.board-area{margin:5px -19px 0;aspect-ratio:600/446;max-height:445px}
-.board-area::before{inset:0 0 2%;background:radial-gradient(ellipse at 48% 50%,rgba(213,231,221,.6),transparent 70%)}
-.map-note{bottom:5px;letter-spacing:.13em;color:#879e99;font-weight:650}
-.panel{padding-top:9px}.panel-top h2{font-size:13px;font-weight:710;color:#47666a}.kicker{color:#789b93}
-.slots{margin-top:12px;gap:6px}.slot{height:53px;background:#fff;border:1px solid #e1eae7;border-bottom-color:#d4dfdb;box-shadow:0 2px 0 rgba(179,197,188,.35),0 6px 14px rgba(40,77,67,.025);border-radius:12px;font-variant-numeric:tabular-nums;transition:transform .15s cubic-bezier(.2,.8,.2,1),background .15s,box-shadow .15s,border-color .15s}
-.slot.active{border-color:#4db9ac;background:#f9fffd;box-shadow:0 0 0 3px rgba(49,175,159,.11),0 3px 0 rgba(112,191,180,.3)}
-.slot.error{background:#fff8f4;border-color:#daa58d;box-shadow:0 0 0 3px rgba(208,133,100,.09)}
-.slot.ok{background:#f4fcf8;border-color:#b4dad0}
-.keypad{gap:8px;margin-top:16px}
-.key{height:60px;border:1px solid #e4eae6;border-bottom-color:#c8d7cf;border-radius:14px;color:#24454a;background:linear-gradient(168deg,#ffffff 12%,#fafcf9 100%);box-shadow:0 4px 0 #d9e3dc,0 11px 19px rgba(26,65,57,.055);font-size:25px;font-weight:690;transition:transform .075s ease-out,box-shadow .075s ease-out,background .075s}
-.key:active{transform:translateY(4px) scale(.982);box-shadow:0 0 0 #d9e3dc,0 3px 8px rgba(26,65,57,.045);background:#e7f8f1}
-.actions{gap:10px;margin-top:20px}.back,.primary{height:54px;border-radius:14px}
-.back{color:#6d8986;border-color:#d8e5df;background:rgba(255,255,255,.65)}
-.primary{background:linear-gradient(145deg,#164248,#103237);box-shadow:0 5px 0 #0c272a,0 11px 22px rgba(14,55,57,.17);font-size:14px;transition:transform .1s,box-shadow .1s,background .16s}
-.primary:not(:disabled):active{transform:translateY(5px)!important;box-shadow:0 1px 0 #0c272a,0 4px 12px rgba(14,55,57,.14)!important}
-.primary:disabled{background:#dee7e2;color:#93a6a0;box-shadow:none}
-.primary.success{background:linear-gradient(145deg,#0d9b8f,#08756f);box-shadow:0 5px 0 #04625e,0 10px 21px rgba(9,129,111,.16)}
-.guidance{padding-top:14px;color:#849c98}
-.footline{letter-spacing:.18em;color:#9dacaa}
-.toast{border:1px solid #dfebe4;box-shadow:0 12px 25px rgba(26,62,52,.11);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.toast.good{background:#f4fffa}.toast.bad{background:#fff9f5}
-.lesson{background:#edf6f1;border:1px solid #e3eee8;border-radius:12px;color:#567e78}
-.practice-toggle{background:#fff;border:1px solid #e0eae5;color:#578980;box-shadow:0 2px 5px rgba(9,67,57,.02)}
-.net-panel{border:1px solid #e0ebe4;box-shadow:0 8px 24px rgba(32,65,49,.08)}
-.order-toggle{border-color:#dcebe4;color:#537e76}
-/* stage map becomes a separate collectible atlas */
-.footer{margin-top:auto;padding-top:13px}
-.chapter-nav,.level-nav{display:none}
-.footer-pick{display:flex;gap:9px;align-items:center;justify-content:space-between;padding:11px 0 4px;border-top:1px solid rgba(165,192,178,.36)}
-.chapter-summary{display:flex;flex-direction:column;gap:3px;min-width:0}
-.chapter-summary small{font-size:9px;letter-spacing:.14em;color:#8da7a0;font-weight:800}
-.chapter-summary span{font-size:12px;font-weight:740;color:#476c67}
-.map-btn{border:1px solid #d9e7e1;background:rgba(255,255,255,.82);min-height:38px;border-radius:12px;padding:0 14px;font-size:12px;font-weight:740;color:#3a8078;box-shadow:0 3px 7px rgba(23,78,65,.035)}
-.map-btn:active{transform:translateY(2px)}
-.atlas[hidden],.free-overlay[hidden]{display:none}
-.atlas,.free-overlay{position:fixed;inset:0;z-index:16;background:rgba(21,45,43,.34);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px}
-.atlas-sheet{background:linear-gradient(175deg,#fff,#f7faf6);width:min(100%,460px);max-height:min(90dvh,760px);overflow:auto;border-radius:25px;padding:22px;box-shadow:0 32px 75px rgba(13,53,43,.17)}
-.atlas-top{display:flex;justify-content:space-between;align-items:start;gap:10px}
-.atlas-overline{font-size:10px;letter-spacing:.14em;font-weight:850;color:#79a79c}
-.atlas-top h2{margin:7px 0 4px;font-size:23px;letter-spacing:-.06em}
-.atlas-top p{font-size:12px;line-height:1.6;color:#79948d;margin:0}
-.atlas-close{width:38px;height:38px;border:1px solid #e0eae5;border-radius:50%;background:#fff;color:#6e8d87;font-size:20px}
-.atlas-chapters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin:23px 0 16px}
-.atlas-ch{height:69px;border:1px solid #e0e9e4;border-radius:13px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#74918a}
-.atlas-ch.current{border-color:#69b9ad;background:#ebf9f3;color:#087f76;box-shadow:0 0 0 2px rgba(66,177,153,.09)}
-.atlas-ch .symbol{font-size:22px;line-height:1}.atlas-ch .cap{font-size:9px;font-weight:700;letter-spacing:.07em}
-.atlas-levels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.atlas-level{height:53px;border:1px solid #e1eae5;border-bottom:2px solid #d9e5de;background:#fff;border-radius:13px;color:#577a73;font-size:15px;font-weight:750}
-.atlas-level.current{background:#0b8d83;border-color:#0b8d83;color:#fff}
-.atlas-level.passed:not(.current){background:#eefaf4;color:#0a927f;border-color:#bfe4d8}
-.atlas-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:18px;gap:10px;color:#8ca49d;font-size:11px}
-.atlas-bottom button{background:#edf8f3;border:1px solid #cfe8db;color:#228679;border-radius:10px;padding:10px 13px;font-weight:750}
-.free-card{position:relative;width:min(100%,430px);background:linear-gradient(165deg,#fff,#f0f6f1);border-radius:26px;box-shadow:0 32px 75px rgba(13,53,43,.20);padding:22px 18px 20px;overflow:hidden}
-.free-top{display:flex;justify-content:space-between;align-items:start}.free-overline{font-size:10px;font-weight:800;letter-spacing:.15em;color:#84a59a}.free-top h2{font-size:25px;letter-spacing:-.065em;margin:6px 0 0}
-.free-card p{margin:0;text-align:center;color:#819b92;font-size:12px;line-height:1.6}
-#freeCanvas{display:block;width:100%;aspect-ratio:1.15;background:radial-gradient(ellipse at center,#e1eee5 0%,transparent 67%);border-radius:20px;touch-action:none;cursor:grab}
-.free-tip{display:flex;gap:10px;align-items:center;justify-content:center;padding:12px 0 8px;color:#4f8880;font-size:12px;font-weight:750}
-.free-exit{width:100%;height:46px;border-radius:13px;border:1px solid #dce9e2;background:#fff;color:#4d8178;font-weight:750}
-.free-entry{border:0;background:transparent;font-size:11px;color:#6c9b90;font-weight:700;padding:6px 0;text-decoration:underline;text-decoration-color:#b7d5cb;text-underline-offset:4px}
-@media(max-width:390px){.app{padding-left:16px;padding-right:16px}.board-area{margin-left:-16px;margin-right:-16px}.heading{padding-top:12px}.topright .stage-label{margin-right:0}.key{height:55px}.actions{margin-top:15px}.heading h1{font-size:25px}.slot{height:46px}}
-@media(max-width:345px){.app{padding-left:11px;padding-right:11px}.board-area{margin-left:-11px;margin-right:-11px}.brand{font-size:10px;letter-spacing:.09em}.logo{width:23px;height:23px}.icon-btn{width:29px;height:29px}.key{height:49px}.atlas-sheet{padding:16px}.atlas-levels{gap:7px}}
-@media(max-height:760px){.heading{padding-top:8px}.board-area{max-height:335px;margin-top:0}.key{height:48px}.actions{margin-top:10px}.back,.primary{height:47px}.footer{padding-top:6px}.map-note{bottom:0}.slots{margin-top:8px}}
-@media(prefers-reduced-motion:reduce){.slot.placed{animation:none!important}}
-
-.footer-pick{min-width:0}.chapter-summary{flex:1;overflow:hidden}.chapter-summary span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.footer-pick>div:last-child{display:flex;align-items:center;flex-shrink:0;gap:9px!important}
-@media(max-width:360px){.footer-pick>div:last-child{gap:4px!important}.free-entry{font-size:10px;padding:5px 0}.map-btn{font-size:11px;padding:0 9px;min-height:34px}.chapter-summary span{font-size:10px}.chapter-summary small{font-size:8px}.footline{font-size:8px}}
-
-.slots.many .slot{min-height:45px;height:45px}
-@media(max-height:760px){.slots.many .slot{min-height:40px;height:40px}}
-
-/* Ten seamless chapters; fifty gradual on-ramp stages before the original fifty. */
-.heading-tools{justify-content:flex-end;min-height:10px}
-.mini-progress{gap:4px}.mini-progress i{width:12px;min-width:12px}
-.atlas-chapters{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-.atlas-ch{height:58px;min-width:0;border-radius:12px;gap:3px}
-.atlas-ch .symbol{font-size:19px}.atlas-ch .cap{font-size:8px;letter-spacing:0}
-.lesson{gap:7px;flex-wrap:wrap;padding:10px 12px;align-items:center}
-#lessonText{flex:1;min-width:160px;font-size:12px;font-weight:600;line-height:1.6}
-.lesson-hint{border:1px solid #b9ded2;color:#16877d;border-radius:999px;background:#fff;font-size:11px;font-weight:750;padding:7px 11px;min-height:35px;white-space:nowrap}
-.lesson-hint[hidden],.hint-detail[hidden]{display:none}
-.hint-detail{margin-top:5px;padding:8px 11px;border-radius:9px;background:#f5faf5;border:1px solid #dcece3;color:#367d71;font-size:12px;line-height:1.65}
-.key.suggested:not(:disabled){background:#eafaf1;border-color:#5ac9b5;box-shadow:0 3px 0 #a0d7c7,0 0 0 3px rgba(25,165,142,.13)}
-@media(max-width:390px){.atlas-chapters{gap:3px}.atlas-ch{height:51px}.atlas-ch .cap{font-size:7px}.atlas-ch .symbol{font-size:17px}.mini-progress i{width:10px;min-width:10px}#lessonText{min-width:140px;font-size:11px}}
-@media(max-width:345px){.atlas-chapters{gap:2px}.atlas-ch .cap{font-size:7px}.lesson{padding:7px 9px}#lessonText{min-width:135px}}
-.slot.given{background:#f1f6f3;border-color:#c5dcd2;color:#689389;box-shadow:none}
-.slot.given::after{content:"おてほん";position:absolute;left:2px;right:2px;bottom:2px;font-size:8px;line-height:1;color:#7daaa0;font-weight:650}
-.slot.given:disabled{opacity:1}
-@media(max-width:390px){.atlas-top h2{font-size:20px;letter-spacing:-.075em}.atlas-top>div:first-child{min-width:0}.atlas-top p{font-size:11px}.atlas-bottom button{white-space:nowrap}}
-
-/* MASTER CLASS — 5 stages of growth × 5 lessons × 20 questions */
-.atlas-phases{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:17px 0 3px}
-.atlas-phase{min-width:0;min-height:44px;display:flex;align-items:center;justify-content:center;flex-direction:column;border:1px solid #e1ebe7;background:#f8fbf9;border-radius:10px;color:#829c95;font-weight:750;font-size:9px;line-height:1.4;padding:5px 2px;overflow-wrap:anywhere}
-.atlas-phase.current{border-color:#45b6a4;background:#eaf8f2;color:#057c73}
-.atlas-chapters{margin:9px 0 10px}
-.atlas-ch{height:54px}
-.atlas-levels{gap:7px}
-.atlas-level{height:44px;font-size:13px;border-radius:10px}
-.atlas-sheet{max-height:min(94dvh,850px)}
-.lesson-hint{display:inline-flex;align-items:center;justify-content:center}
-@media(max-width:390px){.atlas-phases{gap:3px}.atlas-phase{font-size:8px;padding:4px 1px;min-height:42px}.atlas-level{height:40px}.atlas-levels{gap:6px}.atlas-ch{height:49px}.atlas-sheet{padding:16px}}
 </style>
 </head>
 <body>
 <main class="app">
   <header class="topbar">
     <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2L29 9V23L16 30 3 23V9Z" fill="#def0ec"/><path d="M16 2L29 9 16 17 3 9Z" fill="#3faba6"/><path d="M3 9 16 17V30L3 23Z" fill="#237c7f"/><path d="M29 9 16 17V30L29 23Z" fill="#126369"/></svg>DICE ROUTE</div>
-    <div class="topright"><span class="stage-label"><b id="numStage">01</b> / <span id="stageTotal">500</span></span><button class="icon-btn on" id="sound" title="音のオン/オフ" aria-label="音のオン/オフ">♫</button><button class="icon-btn" id="help" title="遊び方" aria-label="遊び方">?</button><button class="icon-btn" id="restart" title="ステージをリセット" aria-label="ステージをリセット">↺</button></div>
+    <div class="topright"><span class="stage-label"><b id="numStage">01</b> / <span id="stageTotal">50</span></span><button class="icon-btn on" id="sound" title="音のオン/オフ" aria-label="音のオン/オフ">♫</button><button class="icon-btn" id="help" title="遊び方" aria-label="遊び方">?</button><button class="icon-btn" id="restart" title="ステージをリセット" aria-label="ステージをリセット">↺</button></div>
   </header>
-  <section class="heading"><div><div class="micro" id="stageType">SPATIAL PUZZLE · 01</div><h1 id="stageTitle">はじめの一歩</h1></div><div class="heading-tools"><div class="mini-progress" id="progress" aria-label="全500ステージ"></div></div></section>
+  <section class="heading"><div><div class="micro" id="stageType">SPATIAL PUZZLE · 01</div><h1 id="stageTitle">はじめの一歩</h1></div><div class="heading-tools"><div class="mini-progress" id="progress" aria-label="全50ステージ"></div><button type="button" class="practice-toggle" id="practiceToggle">練習 3問 ↗</button></div></section>
   <section class="board-area" aria-label="指定されたコースと立体サイコロ">
-  <button type="button" class="net-panel" id="netPanel" hidden aria-label="展開図を拡大して見る"><span class="net-title">展開図 <span aria-hidden="true">↗</span></span><span class="net-cells" id="netCells"></span><span class="net-sub">タップで拡大</span></button>
-  <button class="order-toggle" type="button" id="orderToggle" hidden aria-pressed="true">道順を見る</button><canvas id="board" role="img" aria-label="4×4の斜めから見たコース。行き先のマスをタップすると、その手の入力欄を選べます。"></canvas><div class="toast" id="toast" aria-live="polite"></div><div class="map-note"><span>START · A</span><span class="sep"></span><span id="rollCount">4 ROLLS</span><span class="sep"></span><span>GOAL · B</span></div></section>
-  <section class="panel"><div class="lesson" id="lesson" hidden><span class="lesson-tag">ちいさなヒント</span><span id="lessonText"></span><button type="button" class="lesson-hint" id="lessonHint" hidden>ヒントをみる</button></div><div class="hint-detail" id="hintDetail" hidden aria-live="polite"></div><div class="panel-top"><h2>下になる数字を、順番に。</h2><span class="kicker" id="filled">00 / 04</span></div><div class="slots" id="slots" aria-label="各手の数字を入力・修正"></div><div class="keypad" id="keypad"><button type="button" class="key" data-n="1">1</button><button type="button" class="key" data-n="2">2</button><button type="button" class="key" data-n="3">3</button><button type="button" class="key" data-n="4">4</button><button type="button" class="key" data-n="5">5</button><button type="button" class="key" data-n="6">6</button></div><div class="actions"><button type="button" class="back" id="back">⌫ 取り消す</button><button type="button" class="primary" id="play" disabled>数字を入力する</button></div><div class="guidance" id="hint" aria-live="polite">ぜんぶの数字を決めてから、転がそう。</div></section>
-  <div hidden aria-hidden="true"><div id="levels"></div><div id="chapterNav" class="chapter-nav"><button id="prevChapter">‹</button><span id="chapterLabel"></span><button id="nextChapter">›</button></div></div><footer class="footer"><div class="footer-pick"><div class="chapter-summary"><small>YOUR COLLECTION</small><span id="chapterSummary">CHAPTER 01 · はじめの一歩</span></div><div style="display:flex;gap:13px;align-items:center"><button type="button" class="free-entry" id="freeEntry" aria-label="サイコロを自由に転がす">ころがす ↗</button><button type="button" class="map-btn" id="openAtlas">500問　▦</button></div></div><div class="footline">A SMALL WORLD OF BIG IDEAS</div></footer>
+  <div class="net-panel" id="netPanel" hidden><span class="net-title">展開図 · FOLD</span><div class="net-cells" id="netCells"></div><span class="net-sub">6面を頭で組み立てよう</span></div>
+  <button class="order-toggle" type="button" id="orderToggle" hidden aria-pressed="true">道順 ①②③</button><canvas id="board" role="img" aria-label="4×4の斜めから見たコース。行き先のマスをタップすると、その手の入力欄を選べます。"></canvas><div class="toast" id="toast" aria-live="polite"></div><div class="map-note"><span>START · A</span><span class="sep"></span><span id="rollCount">4 ROLLS</span><span class="sep"></span><span>GOAL · B</span></div></section>
+  <section class="panel"><div class="lesson" id="lesson" hidden><span class="lesson-tag">れんしゅう</span><span id="lessonText"></span></div><div class="panel-top"><h2>下になる数字を、順番に。</h2><span class="kicker" id="filled">00 / 04</span></div><div class="slots" id="slots" aria-label="各手の数字を入力・修正"></div><div class="keypad" id="keypad"><button type="button" class="key" data-n="1">1</button><button type="button" class="key" data-n="2">2</button><button type="button" class="key" data-n="3">3</button><button type="button" class="key" data-n="4">4</button><button type="button" class="key" data-n="5">5</button><button type="button" class="key" data-n="6">6</button></div><div class="actions"><button type="button" class="back" id="back">⌫ 取り消す</button><button type="button" class="primary" id="play" disabled>数字を入力する</button></div><div class="hint-row"><div class="guidance" id="hint" aria-live="polite">ぜんぶの数字を決めてから、転がそう。</div><button type="button" class="hint-toggle" id="hintToggle" aria-expanded="false" aria-controls="tipDetail">ヒントを見る</button></div><div class="tip-detail" id="tipDetail" hidden aria-live="polite"></div></section>
+  <footer class="footer"><div class="chapter-nav" id="chapterNav"><button type="button" id="prevChapter" aria-label="前のチャプター">‹</button><span id="chapterLabel">CH 01 · 基本の道</span><button type="button" id="nextChapter" aria-label="次のチャプター">›</button></div><nav class="level-nav" id="levels" aria-label="ステージ選択"></nav><div class="footline">THINK AHEAD. ROLL WITH PURPOSE.</div></footer>
 </main>
-<div class="net-overlay" id="netOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="netBigTitle">
-  <div class="net-sheet"><div class="net-sheet-top"><div><span class="net-overline">CUBE NET</span><h2 id="netBigTitle">展開図を組み立てよう</h2></div><button type="button" class="net-close" id="netClose" aria-label="展開図を閉じる">×</button></div>
-  <div class="net-big-cells" id="netBigCells"></div><p>水色の枠は、スタート時の上面。<br>どの数字が側面にくるか、頭の中で折ってみよう。</p><button type="button" class="net-return" id="netReturn">盤面に戻る</button></div>
-</div>
-<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="help-title"><div class="dialog"><div class="micro">HOW TO PLAY</div><h2 id="help-title">数字で、サイコロを動かす。</h2><p>水色のコースに沿って、サイコロを <strong>A から B</strong> へ転がします。</p><p>右や左を指示する代わりに、<strong>次に下になる面の数字</strong>を入力します。たとえば、右に転がすときは現在の右面の数字を選びます。</p><p>サイコロは毎回向きが変わります。<strong>すべての数字を先に並べてから</strong>、一度に実行してください。行き先のマスをタップすると、その手の数字を選び直せます。道が交差する問題では「道順」を表示すると進む順番がわかります。</p><div class="rule"></div><p>ヒント：基本のサイコロでは向かい合う面の目の合計は <strong>7</strong>。上面・下面の数字では転がせません。301問目から特殊な床、401問目から展開図も登場します。</p><button type="button" id="close">ゲームに戻る</button></div></div>
-
-<div class="atlas" id="atlas" hidden role="dialog" aria-modal="true" aria-labelledby="atlasTitle"><div class="atlas-sheet"><div class="atlas-top"><div><div class="atlas-overline">DICE ROUTE · COLLECTION</div><h2 id="atlasTitle">500の小さな冒険</h2><p>01から順番に遊んでも、好きなところから選んでもOK。</p></div><button class="atlas-close" id="atlasClose" aria-label="ステージ一覧を閉じる">×</button></div><div class="atlas-phases" id="atlasPhases" aria-label="5つのマスター段階"></div><div class="atlas-chapters" id="atlasChapters"></div><div id="atlasChapterTitle" style="font-size:12px;color:#6e9186;font-weight:700;margin:-4px 0 12px"></div><div class="atlas-levels" id="atlasLevels"></div><div class="atlas-bottom"><span id="atlasProgress">0 / 500 COMPLETE</span><button id="atlasContinue">ステージに戻る</button></div></div></div>
-<div class="free-overlay" id="freeOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="freeTitle"><div class="free-card"><div class="free-top"><div><div class="free-overline">JUST ROLL.</div><h2 id="freeTitle">サイコロの遊び場</h2></div><button type="button" id="freeClose" class="atlas-close" aria-label="遊び場を閉じる">×</button></div><canvas id="freeCanvas" aria-label="指でスワイプしてサイコロを転がす"></canvas><div class="free-tip">↔　指で転がしてみよう　↕</div><p>正解も時間制限もない、サイコロの小さな遊び場。</p><button type="button" class="free-exit" id="freeReturn">パズルに戻る</button></div></div>
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="help-title"><div class="dialog"><div class="micro">HOW TO PLAY</div><h2 id="help-title">数字で、サイコロを動かす。</h2><p>水色のコースに沿って、サイコロを <strong>A から B</strong> へ転がします。</p><p>右や左を指示する代わりに、<strong>次に下になる面の数字</strong>を入力します。たとえば、右に転がすときは現在の右面の数字を選びます。</p><p>サイコロは毎回向きが変わります。<strong>すべての数字を先に並べてから</strong>、一度に実行してください。行き先のマスをタップすると、その手の数字を選び直せます。道が交差する問題では「道順」を表示すると進む順番がわかります。</p><div class="rule"></div><p>サイコロの最初の向きはステージごとに変わります。基本のサイコロは向かい合う面の合計が <strong>7</strong>。入力欄はすべて空欄から始まり、「ヒントを見る」では答えの数字を教えずに考えるコツを表示します。</p><p>21問目以降は特殊な床、41問目以降は展開図も登場します。</p><button type="button" id="close">ゲームに戻る</button></div></div>
 <script>
 'use strict';
-// DICE ROUTE 100: continuous gentle introduction + 50 original puzzles; keep tactile sounds and physics.
+// DICE ROUTE 50: turns, slides, cube nets; retry retains exactly the same cadence and sound.
 const $=id=>document.getElementById(id);
 const canvas=$('board'),ctx=canvas.getContext('2d',{alpha:true});
 const INITIAL={top:1,bottom:6,north:5,south:2,east:3,west:4};
@@ -287,11 +150,41 @@ const DICE_PRESETS=[
  {top:3,bottom:6,north:5,south:2,east:1,west:4},
  {top:5,bottom:1,north:3,south:6,east:2,west:4}
 ];
-const CHAPTERS=["はじめの ころがり","2つを つなぐ","かくれた うら","2手の たんけん","3手を おてほんと","3手を ひとりで","いって もどって","まがる ちから","4手の おてほん","4手の たつじん","5手の あしあと","5手を よむ","小さな ループ","6手を よむ","交差する みち","まわる ゆか","90°を おいかける","すべる ゆか","すべりの たつじん","2つの しかけ","展開図に であう","頭の中で くみたてる","展開図と 回転床","しかけの たつじん","マスタークラス"];
-const PHASES=["はじめての発見","立体を考える","道を読み解く","しかけの研究","マスターへの道"];
-const INTRO_COUNT=200;
-const INTRO_RAW=[];
-const RAW=[{"name":"右へ コロン","start":[0,2],"path":"E","tag":"はじめの ころがり","lesson":"右にある「3」をおしてみよう。","size":4},{"name":"手前へ コロン","start":[0,0],"path":"S","tag":"はじめの ころがり","lesson":"手前にある「2」をおしてみよう。","size":4},{"name":"うらの すうじ","start":[1,2],"path":"W","tag":"はじめの ころがり","lesson":"「3」のうらは「4」。みつけられるかな？","size":4},{"name":"おくへ コロン","start":[1,2],"path":"N","tag":"はじめの ころがり","lesson":"「2」のうらは「5」。見えない面を考えよう。","size":4},{"name":"できるかな 05","start":[3,2],"path":"NS","size":4,"tag":"はじめの ころがり","givenCount":1,"lesson":"右・手前・見えない面を、ひとつずつ考えよう。"},{"name":"コロン 06","start":[3,2],"path":"WE","size":4,"tag":"はじめの ころがり","givenCount":1,"lesson":"右・手前・見えない面を、ひとつずつ考えよう。"},{"name":"はじめの一歩 07","start":[1,2],"path":"EW","size":4,"tag":"はじめの ころがり","givenCount":1,"lesson":"右・手前・見えない面を、ひとつずつ考えよう。"},{"name":"いっこずつ 08","start":[3,0],"path":"SN","size":4,"tag":"はじめの ころがり","givenCount":1,"lesson":"右・手前・見えない面を、ひとつずつ考えよう。"},{"name":"ころころ 09","start":[1,0],"path":"WE","size":4,"tag":"はじめの ころがり","givenCount":1,"lesson":"右・手前・見えない面を、ひとつずつ考えよう。"},{"name":"できるかな 10","start":[2,1],"path":"WE","size":4,"tag":"はじめの ころがり","givenCount":1,"lesson":"見える数字を1つおしてみよう。"},{"name":"道をたどって 11","start":[3,2],"path":"WS","size":4,"tag":"はじめの ころがり","givenCount":1,"lesson":"見える数字を1つおしてみよう。"},{"name":"右と左 12","start":[3,1],"path":"WN","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"みっつの動き 13","start":[2,3],"path":"EN","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"角をよむ 14","start":[1,0],"path":"SW","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"まがりかど 15","start":[2,3],"path":"NW","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"小さなかど 16","start":[2,3],"path":"WN","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"くるりと 17","start":[0,3],"path":"NE","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"道をたどって 18","start":[0,2],"path":"NE","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"右と左 19","start":[0,0],"path":"ES","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"みっつの動き 20","start":[1,3],"path":"NW","size":4,"tag":"はじめの ころがり","lesson":"見える数字を1つおしてみよう。"},{"name":"2回のリズム 01","start":[2,0],"path":"SS","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"同じ方向 02","start":[3,0],"path":"SS","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"もういっかい 03","start":[3,1],"path":"WW","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"ふたつの音 04","start":[3,3],"path":"NN","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"まっすぐ 05","start":[1,1],"path":"SS","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"2回のリズム 06","start":[1,3],"path":"EE","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"同じ方向 07","start":[3,0],"path":"WW","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"もういっかい 08","start":[1,0],"path":"EE","size":4,"tag":"2つを つなぐ","lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"ふたつの音 09","start":[1,1],"path":"SS","size":4,"tag":"2つを つなぐ","dice":{"top":4,"bottom":3,"north":5,"south":2,"east":1,"west":6},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"まっすぐ 10","start":[0,3],"path":"NN","size":4,"tag":"2つを つなぐ","dice":{"top":5,"bottom":2,"north":6,"south":1,"east":3,"west":4},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"右と左 11","start":[3,0],"path":"WS","size":4,"tag":"2つを つなぐ","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"みっつの動き 12","start":[2,2],"path":"WS","size":4,"tag":"2つを つなぐ","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"角をよむ 13","start":[1,1],"path":"NW","size":4,"tag":"2つを つなぐ","dice":{"top":4,"bottom":3,"north":6,"south":1,"east":5,"west":2},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"まがりかど 14","start":[2,0],"path":"WS","size":4,"tag":"2つを つなぐ","dice":{"top":5,"bottom":2,"north":1,"south":6,"east":4,"west":3},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"小さなかど 15","start":[1,0],"path":"SE","size":4,"tag":"2つを つなぐ","dice":{"top":3,"bottom":4,"north":2,"south":5,"east":1,"west":6},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"くるりと 16","start":[0,2],"path":"EN","size":4,"tag":"2つを つなぐ","dice":{"top":4,"bottom":3,"north":2,"south":5,"east":6,"west":1},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"道をたどって 17","start":[2,3],"path":"EN","size":4,"tag":"2つを つなぐ","dice":{"top":4,"bottom":3,"north":5,"south":2,"east":1,"west":6},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"右と左 18","start":[1,1],"path":"SW","size":4,"tag":"2つを つなぐ","dice":{"top":5,"bottom":2,"north":6,"south":1,"east":3,"west":4},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"みっつの動き 19","start":[1,1],"path":"ES","size":4,"tag":"2つを つなぐ","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"角をよむ 20","start":[3,3],"path":"NW","size":4,"tag":"2つを つなぐ","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"lesson":"まっすぐ2回。数字の場所がどう変わるかな？"},{"name":"くるりと 01","start":[0,1],"path":"ES","size":4,"tag":"かくれた うら","dice":{"top":2,"bottom":5,"north":4,"south":3,"east":1,"west":6},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"道をたどって 02","start":[2,3],"path":"WN","size":4,"tag":"かくれた うら","dice":{"top":2,"bottom":5,"north":4,"south":3,"east":1,"west":6},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"右と左 03","start":[3,0],"path":"SW","size":4,"tag":"かくれた うら","dice":{"top":2,"bottom":5,"north":4,"south":3,"east":1,"west":6},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"みっつの動き 04","start":[3,1],"path":"WS","size":4,"tag":"かくれた うら","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"角をよむ 05","start":[1,0],"path":"WS","size":4,"tag":"かくれた うら","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"まがりかど 06","start":[0,3],"path":"NE","size":4,"tag":"かくれた うら","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"小さなかど 07","start":[1,1],"path":"WS","size":4,"tag":"かくれた うら","dice":{"top":2,"bottom":5,"north":3,"south":4,"east":6,"west":1},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"くるりと 08","start":[1,3],"path":"EN","size":4,"tag":"かくれた うら","dice":{"top":2,"bottom":5,"north":3,"south":4,"east":6,"west":1},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"道をたどって 09","start":[0,0],"path":"ES","size":4,"tag":"かくれた うら","dice":{"top":2,"bottom":5,"north":3,"south":4,"east":6,"west":1},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"右と左 10","start":[1,3],"path":"NE","size":4,"tag":"かくれた うら","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"みっつの動き 11","start":[3,1],"path":"NW","size":4,"tag":"かくれた うら","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"角をよむ 12","start":[0,2],"path":"EN","size":4,"tag":"かくれた うら","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"まがりかど 13","start":[3,3],"path":"WN","size":4,"tag":"かくれた うら","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"小さなかど 14","start":[1,0],"path":"SE","size":4,"tag":"かくれた うら","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"くるりと 15","start":[3,1],"path":"WN","size":4,"tag":"かくれた うら","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"道をたどって 16","start":[1,3],"path":"EN","size":4,"tag":"かくれた うら","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"右と左 17","start":[2,3],"path":"EN","size":4,"tag":"かくれた うら","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"みっつの動き 18","start":[0,0],"path":"ES","size":4,"tag":"かくれた うら","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"角をよむ 19","start":[1,0],"path":"ES","size":4,"tag":"かくれた うら","dice":{"top":6,"bottom":1,"north":2,"south":5,"east":3,"west":4},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"まがりかど 20","start":[0,0],"path":"ES","size":4,"tag":"かくれた うら","dice":{"top":6,"bottom":1,"north":2,"south":5,"east":3,"west":4},"lesson":"見えない面も「うらのペア」からわかるよ。"},{"name":"さかさまの道 01","start":[3,1],"path":"NS","size":4,"tag":"2手の たんけん","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"行きと帰り 02","start":[2,0],"path":"EW","size":4,"tag":"2手の たんけん","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"いってもどる 03","start":[2,3],"path":"EW","size":4,"tag":"2手の たんけん","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"Uターン 04","start":[1,2],"path":"WE","size":4,"tag":"2手の たんけん","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"もどる道 05","start":[2,1],"path":"NS","size":4,"tag":"2手の たんけん","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"さかさまの道 06","start":[3,3],"path":"NS","size":4,"tag":"2手の たんけん","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"行きと帰り 07","start":[0,2],"path":"NS","size":4,"tag":"2手の たんけん","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"いってもどる 08","start":[2,1],"path":"SNS","size":4,"tag":"2手の たんけん","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"Uターン 09","start":[2,2],"path":"NSN","size":4,"tag":"2手の たんけん","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"もどる道 10","start":[3,0],"path":"WEW","size":4,"tag":"2手の たんけん","dice":{"top":6,"bottom":1,"north":2,"south":5,"east":3,"west":4},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"さかさまの道 11","start":[0,3],"path":"NSN","size":4,"tag":"2手の たんけん","dice":{"top":6,"bottom":1,"north":2,"south":5,"east":3,"west":4},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"行きと帰り 12","start":[1,3],"path":"EWE","size":4,"tag":"2手の たんけん","dice":{"top":6,"bottom":1,"north":2,"south":5,"east":3,"west":4},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"いってもどる 13","start":[1,0],"path":"WEW","size":4,"tag":"2手の たんけん","dice":{"top":4,"bottom":3,"north":6,"south":1,"east":5,"west":2},"givenCount":1,"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"Uターン 14","start":[1,1],"path":"SNS","size":4,"tag":"2手の たんけん","dice":{"top":4,"bottom":3,"north":6,"south":1,"east":5,"west":2},"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"もどる道 15","start":[3,0],"path":"WEW","size":4,"tag":"2手の たんけん","dice":{"top":4,"bottom":3,"north":6,"south":1,"east":5,"west":2},"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"さかさまの道 16","start":[0,3],"path":"EWE","size":4,"tag":"2手の たんけん","dice":{"top":3,"bottom":4,"north":6,"south":1,"east":2,"west":5},"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"行きと帰り 17","start":[2,0],"path":"WEW","size":4,"tag":"2手の たんけん","dice":{"top":3,"bottom":4,"north":6,"south":1,"east":2,"west":5},"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"いってもどる 18","start":[1,0],"path":"EWE","size":4,"tag":"2手の たんけん","dice":{"top":3,"bottom":4,"north":6,"south":1,"east":2,"west":5},"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"Uターン 19","start":[3,3],"path":"WEW","size":4,"tag":"2手の たんけん","dice":{"top":2,"bottom":5,"north":6,"south":1,"east":4,"west":3},"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"もどる道 20","start":[2,0],"path":"EWE","size":4,"tag":"2手の たんけん","dice":{"top":2,"bottom":5,"north":6,"south":1,"east":4,"west":3},"lesson":"少しずつ、2手をじっくり考えよう。"},{"name":"右と左 01","start":[0,2],"path":"SNE","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"みっつの動き 02","start":[0,2],"path":"NSE","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"角をよむ 03","start":[1,2],"path":"NWE","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"まがりかど 04","start":[3,0],"path":"WSN","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"小さなかど 05","start":[1,2],"path":"SEW","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"くるりと 06","start":[2,1],"path":"EWN","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"道をたどって 07","start":[3,3],"path":"WEN","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"右と左 08","start":[0,1],"path":"NSE","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"みっつの動き 09","start":[1,0],"path":"WES","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"角をよむ 10","start":[0,2],"path":"SNE","size":4,"tag":"3手を おてほんと","dice":{"top":4,"bottom":3,"north":5,"south":2,"east":1,"west":6},"givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"まがりかど 11","start":[3,0],"path":"SNW","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"小さなかど 12","start":[2,3],"path":"NSE","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"くるりと 13","start":[0,3],"path":"NSE","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"道をたどって 14","start":[0,3],"path":"NEW","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"右と左 15","start":[0,1],"path":"NSE","size":4,"tag":"3手を おてほんと","dice":{"top":3,"bottom":4,"north":5,"south":2,"east":6,"west":1},"givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"みっつの動き 16","start":[3,0],"path":"SWE","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"角をよむ 17","start":[0,1],"path":"EWS","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"まがりかど 18","start":[1,2],"path":"EWN","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"小さなかど 19","start":[3,2],"path":"SNW","size":4,"tag":"3手を おてほんと","givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"くるりと 20","start":[2,0],"path":"WSN","size":4,"tag":"3手を おてほんと","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":3,"west":4},"givenCount":1,"lesson":"最初はおてほん。つづきだけ考えてみよう。"},{"name":"みっつの動き 01","start":[3,0],"path":"WES","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"角をよむ 02","start":[2,0],"path":"WES","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"まがりかど 03","start":[3,1],"path":"NSW","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"小さなかど 04","start":[3,3],"path":"NWS","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"くるりと 05","start":[1,3],"path":"NSE","size":4,"tag":"3手を ひとりで","dice":{"top":4,"bottom":3,"north":5,"south":2,"east":1,"west":6},"lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"道をたどって 06","start":[2,0],"path":"ESW","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"右と左 07","start":[2,2],"path":"ESN","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"みっつの動き 08","start":[0,2],"path":"SEN","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"角をよむ 09","start":[2,0],"path":"SNW","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"まがりかど 10","start":[0,0],"path":"SNE","size":4,"tag":"3手を ひとりで","dice":{"top":3,"bottom":4,"north":5,"south":2,"east":6,"west":1},"lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"小さなかど 11","start":[0,3],"path":"ENS","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"くるりと 12","start":[1,3],"path":"EWN","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"道をたどって 13","start":[1,0],"path":"WSE","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"右と左 14","start":[0,3],"path":"EWN","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"みっつの動き 15","start":[2,0],"path":"SNE","size":4,"tag":"3手を ひとりで","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":3,"west":4},"lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"角をよむ 16","start":[1,0],"path":"EWS","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"まがりかど 17","start":[3,1],"path":"NWE","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"小さなかど 18","start":[0,0],"path":"SNE","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"くるりと 19","start":[2,1],"path":"ESN","size":4,"tag":"3手を ひとりで","lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"道をたどって 20","start":[2,3],"path":"NEW","size":4,"tag":"3手を ひとりで","dice":{"top":5,"bottom":2,"north":6,"south":1,"east":3,"west":4},"lesson":"3手全部できたら、もう立派な立体名人！"},{"name":"Uターン 01","start":[1,2],"path":"SNS","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"もどる道 02","start":[3,0],"path":"SNS","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"さかさまの道 03","start":[0,3],"path":"NSN","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"行きと帰り 04","start":[0,0],"path":"SNS","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"いってもどる 05","start":[2,0],"path":"SNS","size":4,"tag":"いって もどって","dice":{"top":3,"bottom":4,"north":5,"south":2,"east":6,"west":1},"givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"Uターン 06","start":[1,0],"path":"WEW","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"もどる道 07","start":[2,1],"path":"NSN","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"さかさまの道 08","start":[3,2],"path":"NSNS","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"行きと帰り 09","start":[1,3],"path":"WEWE","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"いってもどる 10","start":[0,2],"path":"NSNS","size":4,"tag":"いって もどって","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":3,"west":4},"givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"Uターン 11","start":[3,0],"path":"SNSN","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"もどる道 12","start":[3,3],"path":"WEWE","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"さかさまの道 13","start":[0,1],"path":"NSNS","size":4,"tag":"いって もどって","givenCount":1,"lesson":"もどると、数字はどうなるかな？"},{"name":"行きと帰り 14","start":[2,0],"path":"EWEW","size":4,"tag":"いって もどって","lesson":"もどると、数字はどうなるかな？"},{"name":"いってもどる 15","start":[2,0],"path":"EWEW","size":4,"tag":"いって もどって","dice":{"top":5,"bottom":2,"north":6,"south":1,"east":3,"west":4},"lesson":"もどると、数字はどうなるかな？"},{"name":"Uターン 16","start":[0,0],"path":"EWEW","size":4,"tag":"いって もどって","lesson":"もどると、数字はどうなるかな？"},{"name":"もどる道 17","start":[0,0],"path":"SNSN","size":4,"tag":"いって もどって","lesson":"もどると、数字はどうなるかな？"},{"name":"さかさまの道 18","start":[1,0],"path":"WEWE","size":4,"tag":"いって もどって","lesson":"もどると、数字はどうなるかな？"},{"name":"行きと帰り 19","start":[3,3],"path":"NSNS","size":4,"tag":"いって もどって","lesson":"もどると、数字はどうなるかな？"},{"name":"いってもどる 20","start":[1,0],"path":"WEWE","size":4,"tag":"いって もどって","dice":{"top":6,"bottom":1,"north":5,"south":2,"east":4,"west":3},"lesson":"もどると、数字はどうなるかな？"},{"name":"まがりかど 01","start":[1,1],"path":"WSN","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"小さなかど 02","start":[2,0],"path":"ESN","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"くるりと 03","start":[3,2],"path":"SWE","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"道をたどって 04","start":[1,0],"path":"SNW","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"右と左 05","start":[3,3],"path":"NSW","size":4,"tag":"まがる ちから","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":3,"west":4},"lesson":"曲がるときは、次の面を考えよう。"},{"name":"みっつの動き 06","start":[0,2],"path":"SEW","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"角をよむ 07","start":[3,2],"path":"WSN","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"まがりかど 08","start":[2,1],"path":"NEWS","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"小さなかど 09","start":[2,0],"path":"ESWN","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"くるりと 10","start":[0,1],"path":"ENWS","size":4,"tag":"まがる ちから","dice":{"top":5,"bottom":2,"north":6,"south":1,"east":3,"west":4},"lesson":"曲がるときは、次の面を考えよう。"},{"name":"道をたどって 11","start":[1,2],"path":"SENW","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"右と左 12","start":[2,1],"path":"ENWS","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"みっつの動き 13","start":[0,3],"path":"ENSW","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"角をよむ 14","start":[0,1],"path":"NEWS","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"まがりかど 15","start":[0,3],"path":"NESW","size":4,"tag":"まがる ちから","dice":{"top":6,"bottom":1,"north":5,"south":2,"east":4,"west":3},"lesson":"曲がるときは、次の面を考えよう。"},{"name":"小さなかど 16","start":[2,3],"path":"NESW","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"くるりと 17","start":[0,2],"path":"SENW","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"道をたどって 18","start":[3,2],"path":"SWNE","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"右と左 19","start":[3,1],"path":"NWSE","size":4,"tag":"まがる ちから","lesson":"曲がるときは、次の面を考えよう。"},{"name":"みっつの動き 20","start":[1,2],"path":"ENWS","size":4,"tag":"まがる ちから","dice":{"top":2,"bottom":5,"north":4,"south":3,"east":1,"west":6},"lesson":"曲がるときは、次の面を考えよう。"},{"name":"小さなかど 01","start":[3,2],"path":"WSEN","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"くるりと 02","start":[2,1],"path":"SENW","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"道をたどって 03","start":[3,0],"path":"SWNE","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"右と左 04","start":[0,2],"path":"ESWN","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"みっつの動き 05","start":[3,1],"path":"WNES","size":4,"tag":"4手の おてほん","dice":{"top":5,"bottom":2,"north":6,"south":1,"east":3,"west":4},"givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"角をよむ 06","start":[2,1],"path":"NESW","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"まがりかど 07","start":[3,1],"path":"SWEN","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"小さなかど 08","start":[2,2],"path":"WSEN","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"くるりと 09","start":[1,0],"path":"SENW","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"道をたどって 10","start":[0,0],"path":"ESWN","size":4,"tag":"4手の おてほん","dice":{"top":6,"bottom":1,"north":5,"south":2,"east":4,"west":3},"givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"右と左 11","start":[1,2],"path":"WNES","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"みっつの動き 12","start":[3,2],"path":"SWEN","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"角をよむ 13","start":[3,1],"path":"WNES","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"まがりかど 14","start":[0,1],"path":"ESWN","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"小さなかど 15","start":[2,2],"path":"ESWN","size":4,"tag":"4手の おてほん","dice":{"top":2,"bottom":5,"north":4,"south":3,"east":1,"west":6},"givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"くるりと 16","start":[1,0],"path":"WSEN","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"道をたどって 17","start":[1,0],"path":"SWNE","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"右と左 18","start":[2,2],"path":"SENW","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"みっつの動き 19","start":[0,1],"path":"SENW","size":4,"tag":"4手の おてほん","givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"角をよむ 20","start":[1,2],"path":"WSEN","size":4,"tag":"4手の おてほん","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"givenCount":2,"lesson":"2つおてほん。残りをゆっくり考えよう。"},{"name":"くるりと 01","start":[2,2],"path":"ENWS","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"道をたどって 02","start":[1,3],"path":"WNES","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"右と左 03","start":[1,2],"path":"WSEN","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"みっつの動き 04","start":[2,0],"path":"SENW","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"角をよむ 05","start":[0,3],"path":"NEWS","size":4,"tag":"4手の たつじん","dice":{"top":6,"bottom":1,"north":5,"south":2,"east":4,"west":3},"lesson":"4つを頭の中でつなげてみよう。"},{"name":"まがりかど 06","start":[3,3],"path":"NWSE","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"小さなかど 07","start":[0,0],"path":"ESWN","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"くるりと 08","start":[1,3],"path":"NWSE","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"道をたどって 09","start":[1,2],"path":"NWSE","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"右と左 10","start":[1,2],"path":"WNES","size":4,"tag":"4手の たつじん","dice":{"top":2,"bottom":5,"north":4,"south":3,"east":1,"west":6},"lesson":"4つを頭の中でつなげてみよう。"},{"name":"みっつの動き 11","start":[2,2],"path":"WNES","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"角をよむ 12","start":[1,1],"path":"WNES","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"まがりかど 13","start":[2,1],"path":"SWNE","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"小さなかど 14","start":[3,1],"path":"NWES","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"くるりと 15","start":[3,1],"path":"WNES","size":4,"tag":"4手の たつじん","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"lesson":"4つを頭の中でつなげてみよう。"},{"name":"道をたどって 16","start":[0,2],"path":"NESW","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"右と左 17","start":[0,3],"path":"ENWS","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"みっつの動き 18","start":[3,2],"path":"NWSE","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"角をよむ 19","start":[0,1],"path":"ENWS","size":4,"tag":"4手の たつじん","lesson":"4つを頭の中でつなげてみよう。"},{"name":"まがりかど 20","start":[1,0],"path":"WSNE","size":4,"tag":"4手の たつじん","dice":{"top":2,"bottom":5,"north":3,"south":4,"east":6,"west":1},"lesson":"4つを頭の中でつなげてみよう。"},{"name":"道をたどって 01","start":[2,3],"path":"WNESE","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"右と左 02","start":[0,2],"path":"ESNWS","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"みっつの動き 03","start":[3,2],"path":"WSEWN","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"角をよむ 04","start":[3,3],"path":"NWSEW","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"まがりかど 05","start":[1,3],"path":"WNESE","size":4,"tag":"5手の あしあと","dice":{"top":2,"bottom":5,"north":4,"south":3,"east":1,"west":6},"givenCount":2},{"name":"小さなかど 06","start":[3,1],"path":"NWSES","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"くるりと 07","start":[1,0],"path":"SWNES","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"道をたどって 08","start":[1,0],"path":"ESENW","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"右と左 09","start":[2,2],"path":"WNSEN","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"みっつの動き 10","start":[2,1],"path":"ENSWS","size":4,"tag":"5手の あしあと","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6},"givenCount":2},{"name":"角をよむ 11","start":[1,1],"path":"NWSNE","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"まがりかど 12","start":[2,2],"path":"NENWS","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"小さなかど 13","start":[1,2],"path":"WSENE","size":4,"tag":"5手の あしあと","givenCount":2},{"name":"くるりと 14","start":[1,2],"path":"SWNEN","size":4,"tag":"5手の あしあと","givenCount":1},{"name":"道をたどって 15","start":[0,1],"path":"SNENW","size":4,"tag":"5手の あしあと","dice":{"top":2,"bottom":5,"north":3,"south":4,"east":6,"west":1},"givenCount":1},{"name":"右と左 16","start":[2,0],"path":"SWNES","size":4,"tag":"5手の あしあと","givenCount":1},{"name":"みっつの動き 17","start":[0,1],"path":"NESEW","size":4,"tag":"5手の あしあと","givenCount":1},{"name":"角をよむ 18","start":[2,1],"path":"SESWN","size":4,"tag":"5手の あしあと","givenCount":1},{"name":"まがりかど 19","start":[3,0],"path":"SWNES","size":4,"tag":"5手の あしあと","givenCount":1},{"name":"小さなかど 20","start":[0,1],"path":"ENWSN","size":4,"tag":"5手の あしあと","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1},"givenCount":1},{"name":"右と左 01","start":[1,2],"path":"WSEWN","size":4,"tag":"5手を よむ"},{"name":"みっつの動き 02","start":[1,3],"path":"NESWE","size":4,"tag":"5手を よむ"},{"name":"角をよむ 03","start":[0,1],"path":"NSENW","size":4,"tag":"5手を よむ"},{"name":"まがりかど 04","start":[2,0],"path":"SNESW","size":4,"tag":"5手を よむ"},{"name":"小さなかど 05","start":[0,3],"path":"NESNW","size":4,"tag":"5手を よむ","dice":{"top":5,"bottom":2,"north":3,"south":4,"east":1,"west":6}},{"name":"くるりと 06","start":[3,3],"path":"WNENS","size":4,"tag":"5手を よむ"},{"name":"道をたどって 07","start":[2,2],"path":"SWENE","size":4,"tag":"5手を よむ"},{"name":"右と左 08","start":[1,1],"path":"WSESN","size":4,"tag":"5手を よむ"},{"name":"みっつの動き 09","start":[0,3],"path":"NENSW","size":4,"tag":"5手を よむ"},{"name":"角をよむ 10","start":[0,3],"path":"ENEWS","size":4,"tag":"5手を よむ","dice":{"top":2,"bottom":5,"north":3,"south":4,"east":6,"west":1}},{"name":"まがりかど 11","start":[1,1],"path":"WNESN","size":4,"tag":"5手を よむ"},{"name":"小さなかど 12","start":[0,2],"path":"SEWNE","size":4,"tag":"5手を よむ"},{"name":"くるりと 13","start":[0,1],"path":"SNENW","size":4,"tag":"5手を よむ"},{"name":"道をたどって 14","start":[1,1],"path":"WENES","size":4,"tag":"5手を よむ"},{"name":"右と左 15","start":[1,1],"path":"NWSNE","size":4,"tag":"5手を よむ","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1}},{"name":"みっつの動き 16","start":[1,1],"path":"NEWSE","size":4,"tag":"5手を よむ"},{"name":"角をよむ 17","start":[1,0],"path":"WESEN","size":4,"tag":"5手を よむ"},{"name":"まがりかど 18","start":[2,1],"path":"ENWES","size":4,"tag":"5手を よむ"},{"name":"小さなかど 19","start":[2,2],"path":"WESWN","size":4,"tag":"5手を よむ"},{"name":"くるりと 20","start":[2,3],"path":"WENWS","size":4,"tag":"5手を よむ","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5}},{"name":"はじめの一歩","start":[0,2],"path":"EENN","tag":"小さな ループ","size":4},{"name":"くるりの道 02","start":[1,0],"path":"SWENE","size":4,"tag":"小さな ループ"},{"name":"角を曲がる","start":[0,0],"path":"EESSE","tag":"小さな ループ","size":4},{"name":"ぐるっと回る 04","start":[3,0],"path":"WESWN","size":4,"tag":"小さな ループ"},{"name":"ジグザグ","start":[0,3],"path":"EENEN","tag":"小さな ループ","size":4},{"name":"四角い旅 06","start":[3,1],"path":"WNWES","size":4,"tag":"小さな ループ"},{"name":"折り返し","start":[0,1],"path":"EESWSE","tag":"小さな ループ","size":4},{"name":"戻ってくる 08","start":[1,0],"path":"ESNWES","size":4,"tag":"小さな ループ"},{"name":"遠回り","start":[1,3],"path":"NNEESW","tag":"小さな ループ","size":4},{"name":"小さな輪 10","start":[1,2],"path":"SEWNSE","size":4,"tag":"小さな ループ","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1}},{"name":"小さな螺旋","start":[0,0],"path":"EEESSW","tag":"小さな ループ","size":4},{"name":"くるりの道 12","start":[0,2],"path":"ENSWEN","size":4,"tag":"小さな ループ"},{"name":"交差する道","start":[3,1],"path":"WWSSEEN","tag":"小さな ループ","size":4},{"name":"ぐるっと回る 14","start":[0,3],"path":"ENSWEN","size":4,"tag":"小さな ループ"},{"name":"深いカーブ","start":[0,3],"path":"ENNEESS","tag":"小さな ループ","size":4},{"name":"四角い旅 16","start":[2,2],"path":"WESWNEW","size":4,"tag":"小さな ループ"},{"name":"折り重なる","start":[3,3],"path":"WWNNESEN","tag":"小さな ループ","size":4},{"name":"戻ってくる 18","start":[1,1],"path":"NEWSNES","size":4,"tag":"小さな ループ"},{"name":"ラストルート","start":[0,2],"path":"EENNWWSE","tag":"小さな ループ","size":4},{"name":"小さな輪 20","start":[1,2],"path":"WNESNWE","size":4,"tag":"小さな ループ","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2}},{"name":"角をよむ 01","start":[0,3],"path":"SEWNES","size":5,"tag":"6手を よむ"},{"name":"まがりかど 02","start":[3,1],"path":"ENSWSE","size":5,"tag":"6手を よむ"},{"name":"小さなかど 03","start":[1,2],"path":"NESNWN","size":5,"tag":"6手を よむ"},{"name":"くるりと 04","start":[0,2],"path":"EWNESW","size":5,"tag":"6手を よむ"},{"name":"道をたどって 05","start":[1,4],"path":"NWSENS","size":5,"tag":"6手を よむ","dice":{"top":5,"bottom":2,"north":4,"south":3,"east":6,"west":1}},{"name":"右と左 06","start":[3,1],"path":"NEWSEN","size":5,"tag":"6手を よむ"},{"name":"みっつの動き 07","start":[4,3],"path":"SWNSEN","size":5,"tag":"6手を よむ"},{"name":"角をよむ 08","start":[1,0],"path":"SNWSES","size":5,"tag":"6手を よむ"},{"name":"まがりかど 09","start":[3,2],"path":"SENWSW","size":5,"tag":"6手を よむ"},{"name":"小さなかど 10","start":[3,1],"path":"WSWEWN","size":5,"tag":"6手を よむ","dice":{"top":4,"bottom":3,"north":1,"south":6,"east":2,"west":5}},{"name":"くるりと 11","start":[0,1],"path":"SESEWN","size":5,"tag":"6手を よむ"},{"name":"道をたどって 12","start":[0,1],"path":"SENSWS","size":5,"tag":"6手を よむ"},{"name":"右と左 13","start":[4,0],"path":"SWNSEN","size":5,"tag":"6手を よむ"},{"name":"みっつの動き 14","start":[2,3],"path":"EWSWEN","size":5,"tag":"6手を よむ"},{"name":"角をよむ 15","start":[3,3],"path":"SENWSN","size":5,"tag":"6手を よむ","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2}},{"name":"まがりかど 16","start":[0,1],"path":"NESWSN","size":5,"tag":"6手を よむ"},{"name":"小さなかど 17","start":[1,0],"path":"WESNWS","size":5,"tag":"6手を よむ"},{"name":"くるりと 18","start":[2,1],"path":"NWSEWN","size":5,"tag":"6手を よむ"},{"name":"道をたどって 19","start":[0,2],"path":"NSEWSE","size":5,"tag":"6手を よむ"},{"name":"右と左 20","start":[1,3],"path":"SEWENW","size":5,"tag":"6手を よむ","dice":{"top":6,"bottom":1,"north":2,"south":5,"east":3,"west":4}},{"name":"ひと筆の道","start":[1,0],"path":"WSESENE","size":4,"tag":"交差する みち"},{"name":"交差点 02","start":[4,1],"path":"WSNEWS","size":5,"tag":"交差する みち"},{"name":"ぐるっと一周","start":[3,0],"path":"WSNWSWSE","size":4,"tag":"交差する みち"},{"name":"何度も通る 04","start":[0,3],"path":"NEWSNE","size":5,"tag":"交差する みち"},{"name":"行って帰って","start":[0,2],"path":"SEWENENE","size":4,"tag":"交差する みち"},{"name":"重なった道 06","start":[0,2],"path":"SEWNSE","size":5,"tag":"交差する みち"},{"name":"小さな八の字","start":[1,0],"path":"SWSESENES","size":4,"tag":"交差する みち"},{"name":"すれ違う道 08","start":[0,0],"path":"EWSENWE","size":5,"tag":"交差する みち"},{"name":"交差点","start":[0,0],"path":"EWSESNESE","size":4,"tag":"交差する みち"},{"name":"くねくねの旅 10","start":[1,2],"path":"EWSENSW","size":5,"tag":"交差する みち","dice":{"top":3,"bottom":4,"north":1,"south":6,"east":5,"west":2}},{"name":"行き止まりの先","start":[0,2],"path":"SENENENS","size":4,"tag":"交差する みち"},{"name":"交差点 12","start":[4,2],"path":"WNWESEW","size":5,"tag":"交差する みち"},{"name":"折り返す角","start":[2,0],"path":"ESNSWSESW","size":4,"tag":"交差する みち"},{"name":"何度も通る 14","start":[1,2],"path":"EWNSENW","size":5,"tag":"交差する みち"},{"name":"四角い迷路","start":[0,2],"path":"ESESNENEWS","size":5,"tag":"交差する みち"},{"name":"重なった道 16","start":[4,1],"path":"NWESNWES","size":5,"tag":"交差する みち"},{"name":"二度目の道","start":[4,2],"path":"NSWSWSWNWN","size":5,"tag":"交差する みち"},{"name":"すれ違う道 18","start":[1,2],"path":"WNSEWNSE","size":5,"tag":"交差する みち"},{"name":"からまるルート","start":[4,3],"path":"NWENWNEWSW","size":5,"tag":"交差する みち"},{"name":"くねくねの旅 20","start":[3,3],"path":"WSNEWSNE","size":5,"tag":"交差する みち","dice":{"top":4,"bottom":3,"north":6,"south":1,"east":5,"west":2}},{"name":"新しい発見 01","start":[3,3],"path":"NWE","size":4,"tag":"まわる ゆか","tiles":{"2,2":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"ひみつの床 02","start":[2,1],"path":"WEN","size":4,"tag":"まわる ゆか","tiles":{"2,0":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"床に注目 03","start":[3,1],"path":"NSW","size":4,"tag":"まわる ゆか","tiles":{"3,1":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"できるかな 04","start":[2,3],"path":"WEN","size":4,"tag":"まわる ゆか","tiles":{"2,2":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"くるっとコロン 05","start":[0,1],"path":"SNE","size":4,"tag":"まわる ゆか","tiles":{"1,1":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"新しい発見 06","start":[2,1],"path":"EWN","size":4,"tag":"まわる ゆか","tiles":{"2,1":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"ひみつの床 07","start":[2,0],"path":"SNW","size":4,"tag":"まわる ゆか","tiles":{"2,0":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"床に注目 08","start":[1,3],"path":"WNSE","size":4,"tag":"まわる ゆか","tiles":{"1,3":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"できるかな 09","start":[2,1],"path":"NEWS","size":4,"tag":"まわる ゆか","tiles":{"2,1":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"くるっとコロン 10","start":[0,2],"path":"SEWN","size":4,"tag":"まわる ゆか","tiles":{"1,3":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"新しい発見 11","start":[3,1],"path":"NWES","size":4,"tag":"まわる ゆか","tiles":{"2,0":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"ひみつの床 12","start":[0,0],"path":"SEWN","size":4,"tag":"まわる ゆか","tiles":{"1,1":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"床に注目 13","start":[1,1],"path":"NEWS","size":4,"tag":"まわる ゆか","tiles":{"2,0":"R"},"givenCount":1,"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"できるかな 14","start":[2,3],"path":"ENSW","size":4,"tag":"まわる ゆか","tiles":{"2,3":"R"},"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"くるっとコロン 15","start":[3,1],"path":"NWES","size":4,"tag":"まわる ゆか","tiles":{"3,1":"R"},"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"新しい発見 16","start":[2,0],"path":"SWEN","size":4,"tag":"まわる ゆか","tiles":{"2,0":"R"},"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"ひみつの床 17","start":[0,3],"path":"ENSW","size":4,"tag":"まわる ゆか","tiles":{"1,2":"R"},"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"床に注目 18","start":[0,2],"path":"NESW","size":4,"tag":"まわる ゆか","tiles":{"0,1":"R"},"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"できるかな 19","start":[1,0],"path":"SEWN","size":4,"tag":"まわる ゆか","tiles":{"2,1":"R"},"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"くるっとコロン 20","start":[2,0],"path":"ESNW","size":4,"tag":"まわる ゆか","tiles":{"3,1":"R"},"lesson":"回転床にのると、上の面はそのまま。横の数字だけ入れかわるよ。"},{"name":"はじめての回転床","start":[0,2],"path":"NENES","size":5,"tag":"90°を おいかける","tiles":{"2,0":"L"}},{"name":"道をたどって 02","start":[1,3],"path":"SWNE","size":5,"tag":"90°を おいかける","tiles":{"0,3":"R"}},{"name":"右回りの罠","start":[2,0],"path":"SWSESW","size":5,"tag":"90°を おいかける","tiles":{"2,2":"R"}},{"name":"みっつの動き 04","start":[3,0],"path":"ESWN","size":5,"tag":"90°を おいかける","tiles":{"4,1":"L"}},{"name":"もう一度ターン","start":[1,1],"path":"ESNESEN","size":5,"tag":"90°を おいかける","tiles":{"4,2":"R"}},{"name":"まがりかど 06","start":[2,1],"path":"NWES","size":5,"tag":"90°を おいかける","tiles":{"2,1":"L"}},{"name":"カーブの向こう","start":[1,3],"path":"NENESNE","size":5,"tag":"90°を おいかける","tiles":{"3,2":"L"}},{"name":"くるりと 08","start":[4,1],"path":"NSWNE","size":5,"tag":"90°を おいかける","tiles":{"3,1":"R"}},{"name":"逆回転","start":[1,1],"path":"SWEWSESE","size":5,"tag":"90°を おいかける","tiles":{"0,2":"R"}},{"name":"右と左 10","start":[2,0],"path":"SWNWE","size":5,"tag":"90°を おいかける","tiles":{"0,0":"L"}},{"name":"同じ場所、違う顔","start":[4,3],"path":"NWSWNENW","size":5,"tag":"90°を おいかける","tiles":{"2,2":"R"}},{"name":"角をよむ 12","start":[1,2],"path":"ESWNS","size":5,"tag":"90°を おいかける","tiles":{"2,2":"R"}},{"name":"ターンテーブル","start":[2,0],"path":"SESWSWEN","size":5,"tag":"90°を おいかける","tiles":{"2,3":"L"}},{"name":"小さなかど 14","start":[2,3],"path":"WNENS","size":5,"tag":"90°を おいかける","tiles":{"1,3":"L"}},{"name":"右と左","start":[3,1],"path":"WSWESEWSW","size":5,"tag":"90°を おいかける","tiles":{"3,3":"R"}},{"name":"道をたどって 16","start":[0,1],"path":"ENWSNE","size":5,"tag":"90°を おいかける","tiles":{"1,1":"R"}},{"name":"ねじれる道","start":[2,3],"path":"NWNWNSNES","size":5,"tag":"90°を おいかける","tiles":{"0,1":"L"}},{"name":"みっつの動き 18","start":[3,1],"path":"NWSNES","size":5,"tag":"90°を おいかける","tiles":{"3,1":"R"}},{"name":"何度も回る床","start":[1,4],"path":"WEWNENSENE","size":5,"tag":"90°を おいかける","tiles":{"1,3":"L"}},{"name":"まがりかど 20","start":[1,1],"path":"WENESW","size":5,"tag":"90°を おいかける","tiles":{"0,1":"L"}},{"name":"床に注目 01","start":[2,4],"path":"ENS","size":5,"tag":"すべる ゆか","tiles":{"3,4":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"できるかな 02","start":[4,1],"path":"NSW","size":5,"tag":"すべる ゆか","tiles":{"4,1":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"くるっとコロン 03","start":[3,0],"path":"EWS","size":5,"tag":"すべる ゆか","tiles":{"3,0":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"新しい発見 04","start":[1,1],"path":"EWS","size":5,"tag":"すべる ゆか","tiles":{"1,2":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"ひみつの床 05","start":[4,4],"path":"NWE","size":5,"tag":"すべる ゆか","tiles":{"4,3":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"床に注目 06","start":[1,4],"path":"WEN","size":5,"tag":"すべる ゆか","tiles":{"1,4":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"できるかな 07","start":[3,0],"path":"EWS","size":5,"tag":"すべる ゆか","tiles":{"3,1":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"くるっとコロン 08","start":[4,3],"path":"SWEN","size":5,"tag":"すべる ゆか","tiles":{"4,3":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"新しい発見 09","start":[1,1],"path":"ENWS","size":5,"tag":"すべる ゆか","tiles":{"1,0":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"ひみつの床 10","start":[0,3],"path":"SEWN","size":5,"tag":"すべる ゆか","tiles":{"0,3":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"床に注目 11","start":[3,1],"path":"NWES","size":5,"tag":"すべる ゆか","tiles":{"3,1":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"できるかな 12","start":[2,4],"path":"ENSW","size":5,"tag":"すべる ゆか","tiles":{"2,4":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"くるっとコロン 13","start":[3,3],"path":"ENSW","size":5,"tag":"すべる ゆか","tiles":{"3,3":"S"},"givenCount":1,"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"新しい発見 14","start":[1,4],"path":"WNSE","size":5,"tag":"すべる ゆか","tiles":{"1,4":"S"},"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"ひみつの床 15","start":[4,2],"path":"NWES","size":5,"tag":"すべる ゆか","tiles":{"4,2":"S"},"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"床に注目 16","start":[1,1],"path":"SNWSE","size":5,"tag":"すべる ゆか","tiles":{"0,2":"S"},"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"できるかな 17","start":[4,3],"path":"WSWEN","size":5,"tag":"すべる ゆか","tiles":{"3,3":"S"},"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"くるっとコロン 18","start":[3,0],"path":"SENSW","size":5,"tag":"すべる ゆか","tiles":{"3,1":"S"},"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"新しい発見 19","start":[3,3],"path":"SEWNE","size":5,"tag":"すべる ゆか","tiles":{"3,3":"S"},"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"ひみつの床 20","start":[2,4],"path":"WENES","size":5,"tag":"すべる ゆか","tiles":{"2,4":"S"},"lesson":"すべる床はサイコロが回らない。1回の入力で2マス進むよ。"},{"name":"すべる床","start":[4,3],"path":"WNWNNW","size":5,"tag":"すべりの たつじん","tiles":{"1,1":"R","2,2":"S"}},{"name":"みっつの動き 02","start":[0,2],"path":"SEWNE","size":5,"tag":"すべりの たつじん","tiles":{"0,2":"S"}},{"name":"ひとつ飛ばし","start":[0,2],"path":"SENESES","size":5,"tag":"すべりの たつじん","tiles":{"1,3":"S","3,2":"R"}},{"name":"まがりかど 04","start":[3,1],"path":"NWESW","size":5,"tag":"すべりの たつじん","tiles":{"3,1":"S"}},{"name":"回ってすべる","start":[4,3],"path":"NWWNSWW","size":5,"tag":"すべりの たつじん","tiles":{"0,2":"L","2,1":"S","3,2":"R"}},{"name":"くるりと 06","start":[0,4],"path":"NESWE","size":5,"tag":"すべりの たつじん","tiles":{"1,3":"S"}},{"name":"ずれた予想","start":[2,3],"path":"NWNESNEE","size":5,"tag":"すべりの たつじん","tiles":{"2,1":"R","1,2":"S"}},{"name":"右と左 08","start":[4,3],"path":"SWENWS","size":5,"tag":"すべりの たつじん","tiles":{"3,3":"S"}},{"name":"ぐるぐるスライド","start":[3,0],"path":"EWESWSEN","size":5,"tag":"すべりの たつじん","tiles":{"3,2":"S","4,0":"L"}},{"name":"角をよむ 10","start":[3,3],"path":"WNENSE","size":5,"tag":"すべりの たつじん","tiles":{"2,3":"S"}},{"name":"一歩先へ","start":[3,0],"path":"WWSWNEWN","size":5,"tag":"すべりの たつじん","tiles":{"0,0":"L","1,1":"S"}},{"name":"小さなかど 12","start":[2,3],"path":"ENWNSE","size":5,"tag":"すべりの たつじん","tiles":{"3,3":"S"}},{"name":"方向が変わる","start":[1,1],"path":"NSWSEWSES","size":5,"tag":"すべりの たつじん","tiles":{"1,0":"R","1,2":"S"}},{"name":"道をたどって 14","start":[2,4],"path":"WNSNEN","size":5,"tag":"すべりの たつじん","tiles":{"1,4":"S"}},{"name":"すべって折り返す","start":[2,0],"path":"SSSNWNEWS","size":5,"tag":"すべりの たつじん","tiles":{"1,3":"L","2,2":"S"}},{"name":"みっつの動き 16","start":[0,1],"path":"SESNWEN","size":5,"tag":"すべりの たつじん","tiles":{"0,2":"S"}},{"name":"二度のすべり","start":[0,3],"path":"NESENENSNE","size":5,"tag":"すべりの たつじん","tiles":{"2,2":"L","3,1":"S"}},{"name":"まがりかど 18","start":[3,1],"path":"WNESWES","size":5,"tag":"すべりの たつじん","tiles":{"3,0":"S"}},{"name":"まわる道の終点","start":[2,2],"path":"NSNWSNSESE","size":5,"tag":"すべりの たつじん","tiles":{"1,2":"S","1,1":"S","2,1":"L","2,3":"R"}},{"name":"くるりと 20","start":[1,1],"path":"SWSEWEN","size":5,"tag":"すべりの たつじん","tiles":{"1,2":"S"}},{"name":"みっつの動き 01","start":[3,1],"path":"WSESN","size":5,"tag":"2つの しかけ","tiles":{"2,1":"S","1,2":"R"}},{"name":"角をよむ 02","start":[2,0],"path":"ESWNE","size":5,"tag":"2つの しかけ","tiles":{"2,1":"S","2,0":"R"}},{"name":"まがりかど 03","start":[2,3],"path":"SNENW","size":5,"tag":"2つの しかけ","tiles":{"3,3":"S","4,2":"L"}},{"name":"小さなかど 04","start":[3,2],"path":"SWNEN","size":5,"tag":"2つの しかけ","tiles":{"2,3":"S","2,2":"R"}},{"name":"くるりと 05","start":[3,0],"path":"SWSEN","size":5,"tag":"2つの しかけ","tiles":{"3,1":"S","2,2":"L"}},{"name":"道をたどって 06","start":[0,4],"path":"NESEW","size":5,"tag":"2つの しかけ","tiles":{"0,3":"S","2,3":"L"}},{"name":"右と左 07","start":[2,2],"path":"ESWNW","size":5,"tag":"2つの しかけ","tiles":{"3,3":"S","2,3":"R"}},{"name":"みっつの動き 08","start":[2,4],"path":"WNSNEN","size":5,"tag":"2つの しかけ","tiles":{"1,4":"S","1,3":"R"}},{"name":"角をよむ 09","start":[0,0],"path":"ESENWE","size":5,"tag":"2つの しかけ","tiles":{"1,0":"S","2,1":"R"}},{"name":"まがりかど 10","start":[0,0],"path":"SENESW","size":5,"tag":"2つの しかけ","tiles":{"0,1":"S","2,1":"R"}},{"name":"小さなかど 11","start":[1,0],"path":"SWNSES","size":5,"tag":"2つの しかけ","tiles":{"1,1":"S","1,3":"R"}},{"name":"くるりと 12","start":[1,3],"path":"ENSENW","size":5,"tag":"2つの しかけ","tiles":{"2,3":"S","4,3":"R"}},{"name":"道をたどって 13","start":[2,3],"path":"ESWNSW","size":5,"tag":"2つの しかけ","tiles":{"2,4":"S","0,4":"L"}},{"name":"右と左 14","start":[3,3],"path":"WNESEN","size":5,"tag":"2つの しかけ","tiles":{"2,2":"S","4,1":"L"}},{"name":"みっつの動き 15","start":[3,1],"path":"NWSEWN","size":5,"tag":"2つの しかけ","tiles":{"2,0":"S","2,1":"R"}},{"name":"角をよむ 16","start":[0,3],"path":"ENWNESN","size":5,"tag":"2つの しかけ","tiles":{"1,3":"S","1,1":"R"}},{"name":"まがりかど 17","start":[4,3],"path":"NWNESNW","size":5,"tag":"2つの しかけ","tiles":{"4,2":"S","3,1":"R"}},{"name":"小さなかど 18","start":[3,1],"path":"WNEWSWS","size":5,"tag":"2つの しかけ","tiles":{"2,1":"S","0,2":"R"}},{"name":"くるりと 19","start":[1,2],"path":"SWENWNE","size":5,"tag":"2つの しかけ","tiles":{"0,1":"S","1,0":"R"}},{"name":"道をたどって 20","start":[1,0],"path":"ESNWSWN","size":5,"tag":"2つの しかけ","tiles":{"1,1":"S","0,2":"R","0,1":"L"}},{"name":"新しい発見 01","start":[2,2],"path":"WE","size":4,"tag":"展開図に であう","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":0,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"ひみつの床 02","start":[2,1],"path":"WE","size":4,"tag":"展開図に であう","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":1,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"床に注目 03","start":[0,3],"path":"NS","size":4,"tag":"展開図に であう","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":2,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"できるかな 04","start":[1,2],"path":"SN","size":4,"tag":"展開図に であう","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":3,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"くるっとコロン 05","start":[3,1],"path":"SN","size":4,"tag":"展開図に であう","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":0,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"新しい発見 06","start":[3,1],"path":"WE","size":4,"tag":"展開図に であう","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":1,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"ひみつの床 07","start":[1,3],"path":"NS","size":4,"tag":"展開図に であう","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":2,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"床に注目 08","start":[0,1],"path":"SEW","size":4,"tag":"展開図に であう","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":3,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"できるかな 09","start":[0,0],"path":"EWS","size":4,"tag":"展開図に であう","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":0,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"くるっとコロン 10","start":[0,2],"path":"SNE","size":4,"tag":"展開図に であう","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":1,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"新しい発見 11","start":[2,1],"path":"WES","size":4,"tag":"展開図に であう","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":2,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"ひみつの床 12","start":[3,3],"path":"NWE","size":4,"tag":"展開図に であう","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":3,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"床に注目 13","start":[3,0],"path":"SNW","size":4,"tag":"展開図に であう","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":0,"givenCount":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"できるかな 14","start":[3,0],"path":"SNW","size":4,"tag":"展開図に であう","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"くるっとコロン 15","start":[3,1],"path":"WNS","size":4,"tag":"展開図に であう","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":2,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"新しい発見 16","start":[3,0],"path":"SNW","size":4,"tag":"展開図に であう","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":3,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"ひみつの床 17","start":[2,1],"path":"EWN","size":4,"tag":"展開図に であう","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":0,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"床に注目 18","start":[0,2],"path":"SEW","size":4,"tag":"展開図に であう","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":1,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"できるかな 19","start":[3,0],"path":"SWE","size":4,"tag":"展開図に であう","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":2,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"くるっとコロン 20","start":[3,3],"path":"NSW","size":4,"tag":"展開図に であう","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":3,"lesson":"展開図をタップして大きくできるよ。頭の中で組み立てよう。"},{"name":"まがりかど 01","start":[3,3],"path":"NWE","size":4,"tag":"頭の中で くみたてる","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":1},{"name":"小さなかど 02","start":[0,3],"path":"EWN","size":4,"tag":"頭の中で くみたてる","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":2},{"name":"くるりと 03","start":[3,0],"path":"SNW","size":4,"tag":"頭の中で くみたてる","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":3},{"name":"道をたどって 04","start":[2,1],"path":"NEW","size":4,"tag":"頭の中で くみたてる","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":0},{"name":"右と左 05","start":[0,3],"path":"NSE","size":4,"tag":"頭の中で くみたてる","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":1},{"name":"みっつの動き 06","start":[1,2],"path":"SWE","size":4,"tag":"頭の中で くみたてる","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":2},{"name":"角をよむ 07","start":[1,2],"path":"WSN","size":4,"tag":"頭の中で くみたてる","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":3},{"name":"まがりかど 08","start":[3,2],"path":"NWES","size":4,"tag":"頭の中で くみたてる","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":0},{"name":"小さなかど 09","start":[3,2],"path":"SWNE","size":4,"tag":"頭の中で くみたてる","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":1},{"name":"くるりと 10","start":[1,1],"path":"NWES","size":4,"tag":"頭の中で くみたてる","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":2},{"name":"道をたどって 11","start":[3,2],"path":"WSNE","size":4,"tag":"頭の中で くみたてる","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":3},{"name":"右と左 12","start":[3,1],"path":"SWNE","size":4,"tag":"頭の中で くみたてる","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":0},{"name":"みっつの動き 13","start":[3,1],"path":"WNES","size":4,"tag":"頭の中で くみたてる","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":1},{"name":"角をよむ 14","start":[0,2],"path":"SEWN","size":4,"tag":"頭の中で くみたてる","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":2},{"name":"まがりかど 15","start":[1,0],"path":"SENW","size":4,"tag":"頭の中で くみたてる","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":3},{"name":"小さなかど 16","start":[2,2],"path":"NWSEW","size":4,"tag":"頭の中で くみたてる","dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":0},{"name":"くるりと 17","start":[0,1],"path":"NESWE","size":4,"tag":"頭の中で くみたてる","dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":1},{"name":"道をたどって 18","start":[3,2],"path":"NSWSE","size":4,"tag":"頭の中で くみたてる","dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":2},{"name":"右と左 19","start":[2,1],"path":"SWENE","size":4,"tag":"頭の中で くみたてる","dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":3},{"name":"みっつの動き 20","start":[1,0],"path":"WESWN","size":4,"tag":"頭の中で くみたてる","dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":0},{"name":"小さなかど 01","start":[4,3],"path":"SWNE","size":5,"tag":"展開図と 回転床","tiles":{"4,3":"R"},"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":2},{"name":"くるりと 02","start":[0,4],"path":"ENSW","size":5,"tag":"展開図と 回転床","tiles":{"1,3":"R"},"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":3},{"name":"道をたどって 03","start":[3,1],"path":"SWNE","size":5,"tag":"展開図と 回転床","tiles":{"3,1":"L"},"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":0},{"name":"右と左 04","start":[2,1],"path":"ESNW","size":5,"tag":"展開図と 回転床","tiles":{"3,2":"R"},"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":1},{"name":"みっつの動き 05","start":[3,4],"path":"ENWS","size":5,"tag":"展開図と 回転床","tiles":{"3,4":"R"},"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":2},{"name":"角をよむ 06","start":[1,2],"path":"WSEN","size":5,"tag":"展開図と 回転床","tiles":{"1,2":"L"},"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":3},{"name":"まがりかど 07","start":[4,0],"path":"SWNE","size":5,"tag":"展開図と 回転床","tiles":{"4,1":"R"},"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":0},{"name":"小さなかど 08","start":[4,3],"path":"SWENW","size":5,"tag":"展開図と 回転床","tiles":{"3,3":"R"},"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":1},{"name":"くるりと 09","start":[2,1],"path":"SENWN","size":5,"tag":"展開図と 回転床","tiles":{"2,1":"L"},"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":2},{"name":"道をたどって 10","start":[3,3],"path":"SWENW","size":5,"tag":"展開図と 回転床","tiles":{"2,3":"L"},"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":3},{"name":"右と左 11","start":[4,1],"path":"SNWSE","size":5,"tag":"展開図と 回転床","tiles":{"3,1":"L"},"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":0},{"name":"みっつの動き 12","start":[4,0],"path":"WSENS","size":5,"tag":"展開図と 回転床","tiles":{"3,0":"L"},"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":1},{"name":"角をよむ 13","start":[3,1],"path":"NSWNE","size":5,"tag":"展開図と 回転床","tiles":{"2,0":"L"},"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":2},{"name":"まがりかど 14","start":[0,0],"path":"SENWS","size":5,"tag":"展開図と 回転床","tiles":{"1,1":"R"},"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":3},{"name":"小さなかど 15","start":[4,3],"path":"SWENW","size":5,"tag":"展開図と 回転床","tiles":{"3,4":"L"},"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":0},{"name":"くるりと 16","start":[2,2],"path":"SNEWNS","size":5,"tag":"展開図と 回転床","tiles":{"2,3":"L"},"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":1},{"name":"道をたどって 17","start":[3,1],"path":"ENWEWS","size":5,"tag":"展開図と 回転床","tiles":{"4,1":"R"},"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":2},{"name":"右と左 18","start":[4,3],"path":"SWNEWS","size":5,"tag":"展開図と 回転床","tiles":{"4,4":"L"},"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":3},{"name":"みっつの動き 19","start":[2,4],"path":"ENESNW","size":5,"tag":"展開図と 回転床","tiles":{"3,4":"R"},"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":0},{"name":"角をよむ 20","start":[1,0],"path":"SWNEWE","size":5,"tag":"展開図と 回転床","tiles":{"0,1":"L"},"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":1},{"name":"くねくねの旅 01","start":[2,1],"path":"ESNSWE","size":5,"tag":"しかけの たつじん","tiles":{"3,1":"S","3,2":"L"},"netId":3},{"name":"重なった道 02","start":[2,2],"path":"ESNSWE","size":5,"tag":"しかけの たつじん","tiles":{"3,2":"S","3,3":"L"},"netId":0},{"name":"交差点 03","start":[2,4],"path":"WNSNEW","size":5,"tag":"しかけの たつじん","tiles":{"1,4":"S","1,3":"L"},"netId":1},{"name":"すれ違う道 04","start":[1,0],"path":"ESNSWE","size":5,"tag":"しかけの たつじん","tiles":{"2,0":"S","2,1":"R"},"netId":2},{"name":"何度も通る 05","start":[2,2],"path":"WSNSEW","size":5,"tag":"しかけの たつじん","tiles":{"1,2":"S","1,3":"L"},"netId":3},{"name":"くねくねの旅 06","start":[3,3],"path":"WSNWEW","size":5,"tag":"しかけの たつじん","tiles":{"2,3":"S","1,4":"R"},"netId":0},{"name":"重なった道 07","start":[0,0],"path":"ESNSEW","size":5,"tag":"しかけの たつじん","tiles":{"1,0":"S","3,1":"R"},"netId":1},{"name":"交差点 08","start":[1,4],"path":"ENSNWES","size":5,"tag":"しかけの たつじん","tiles":{"2,4":"S","2,3":"L"},"netId":2},{"name":"すれ違う道 09","start":[4,2],"path":"NWEWSNE","size":5,"tag":"しかけの たつじん","tiles":{"4,1":"S","3,1":"L"},"netId":3},{"name":"何度も通る 10","start":[1,1],"path":"ENSEWNS","size":5,"tag":"しかけの たつじん","tiles":{"2,1":"S","4,1":"L"},"netId":0},{"name":"くねくねの旅 11","start":[0,2],"path":"ESNEWSN","size":5,"tag":"しかけの たつじん","tiles":{"1,2":"S","3,2":"R"},"netId":1},{"name":"重なった道 12","start":[4,1],"path":"SWESNWE","size":5,"tag":"しかけの たつじん","tiles":{"4,2":"S","4,4":"L"},"netId":2},{"name":"交差点 13","start":[0,2],"path":"ESEWNSN","size":5,"tag":"しかけの たつじん","tiles":{"1,2":"S","3,3":"L"},"netId":3},{"name":"すれ違う道 14","start":[0,4],"path":"ENWESNS","size":5,"tag":"しかけの たつじん","tiles":{"1,4":"S","1,3":"L"},"netId":0},{"name":"何度も通る 15","start":[3,3],"path":"WSEWNSN","size":5,"tag":"しかけの たつじん","tiles":{"2,3":"S","2,4":"L"},"netId":1},{"name":"くねくねの旅 16","start":[2,3],"path":"NEWESNWE","size":5,"tag":"しかけの たつじん","tiles":{"2,2":"S","3,2":"R"},"netId":2},{"name":"重なった道 17","start":[4,3],"path":"WNWESNSN","size":5,"tag":"しかけの たつじん","tiles":{"3,3":"S","1,2":"R"},"netId":3},{"name":"交差点 18","start":[3,2],"path":"NEWESNWE","size":5,"tag":"しかけの たつじん","tiles":{"3,1":"S","4,1":"R"},"netId":0},{"name":"すれ違う道 19","start":[2,0],"path":"WSEWNSNS","size":5,"tag":"しかけの たつじん","tiles":{"1,0":"S","1,1":"L"},"netId":1},{"name":"何度も通る 20","start":[0,3],"path":"ENSNSEWN","size":5,"tag":"しかけの たつじん","tiles":{"1,3":"S","3,3":"R"},"netId":2},{"name":"ひらいたサイコロ","start":[4,4],"path":"NWSWNNE","size":5,"tag":"マスタークラス","tiles":{"2,3":"S","2,4":"R"},"netId":2,"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5}},{"name":"交差点 02","start":[2,4],"path":"WNEWSNSN","size":5,"tag":"マスタークラス","tiles":{"1,4":"S","1,3":"R"},"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":1},{"name":"未知の並び","start":[1,3],"path":"WSNNENES","size":5,"tag":"マスタークラス","tiles":{"1,1":"S","2,0":"L"},"netId":3,"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4}},{"name":"何度も通る 04","start":[1,0],"path":"SESNWEWE","size":5,"tag":"マスタークラス","tiles":{"1,1":"S","2,3":"R"},"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":3},{"name":"展開図の曲がり角","start":[1,1],"path":"ESWENENE","size":5,"tag":"マスタークラス","tiles":{"1,2":"S","3,0":"R"},"netId":0,"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3}},{"name":"重なった道 06","start":[1,0],"path":"SWSNEWEW","size":5,"tag":"マスタークラス","tiles":{"1,1":"S","0,3":"R"},"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":1},{"name":"裏側を読む","start":[1,4],"path":"NENSESWNN","size":5,"tag":"マスタークラス","tiles":{"2,2":"R","3,3":"S"},"netId":1,"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3}},{"name":"すれ違う道 08","start":[0,4],"path":"ENSNWNSES","size":5,"tag":"マスタークラス","tiles":{"1,4":"S","1,2":"R"},"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":3},{"name":"立体の設計図","start":[2,1],"path":"ESWNSESWS","size":5,"tag":"マスタークラス","tiles":{"3,1":"S","4,3":"L"},"netId":2,"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4}},{"name":"くねくねの旅 10","start":[1,3],"path":"WNSNESWEN","size":5,"tag":"マスタークラス","tiles":{"1,2":"S","1,3":"R"},"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":1},{"name":"ちがう6つの面","start":[4,4],"path":"WENWNWSWNE","size":5,"tag":"マスタークラス","tiles":{"1,3":"S","2,2":"L","3,3":"S"},"netId":3,"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4}},{"name":"交差点 12","start":[3,4],"path":"WNWENSWES","size":5,"tag":"マスタークラス","tiles":{"2,4":"S","1,2":"L"},"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3},"netId":3},{"name":"折って、まわして","start":[3,2],"path":"NWWEWSSESN","size":5,"tag":"マスタークラス","tiles":{"0,3":"R","1,1":"S"},"netId":0,"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3}},{"name":"何度も通る 14","start":[0,1],"path":"SEWEWSENW","size":5,"tag":"マスタークラス","tiles":{"0,2":"S","1,4":"L"},"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5},"netId":1},{"name":"二重のひねり","start":[3,0],"path":"ESSWSWNSNE","size":5,"tag":"マスタークラス","tiles":{"2,3":"S","3,2":"L","3,3":"R"},"netId":1,"dice":{"top":6,"bottom":2,"north":4,"south":1,"east":3,"west":5}},{"name":"重なった道 16","start":[3,0],"path":"SESNSWNESN","size":5,"tag":"マスタークラス","tiles":{"3,1":"S","3,3":"L"},"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4},"netId":3},{"name":"見えない面を探せ","start":[1,0],"path":"ESWEESWSEWN","size":5,"tag":"マスタークラス","tiles":{"2,0":"S","3,1":"R","3,3":"S"},"netId":2,"dice":{"top":5,"bottom":1,"north":3,"south":6,"east":2,"west":4}},{"name":"すれ違う道 18","start":[2,2],"path":"NWSEENSWEW","size":5,"tag":"マスタークラス","tiles":{"1,1":"S","0,2":"L"},"dice":{"top":4,"bottom":1,"north":2,"south":6,"east":5,"west":3},"netId":1},{"name":"最終ルート","start":[4,3],"path":"NWSWNSNWWNEW","size":5,"tag":"マスタークラス","tiles":{"1,1":"L","2,2":"S"},"netId":3,"dice":{"top":2,"bottom":5,"north":1,"south":6,"east":4,"west":3}},{"name":"くねくねの旅 20","start":[0,3],"path":"NNSENWSEWE","size":5,"tag":"マスタークラス","tiles":{"0,2":"S","1,0":"L"},"dice":{"top":3,"bottom":6,"north":5,"south":2,"east":1,"west":4},"netId":3}];
+// Generate the 24 physically realizable orientations of one cube.
+// This preserves real die topology; a nonstandard numbered cube keeps its own
+// six labeled faces, just rotated as a rigid body.
+const FACE_KEYS=['top','bottom','north','south','east','west'];
+function orientationMaps(){
+ const start={top:'top',bottom:'bottom',north:'north',south:'south',east:'east',west:'west'};
+ const queue=[start],seen=new Set([FACE_KEYS.map(k=>start[k]).join('/')]);
+ for(let i=0;i<queue.length;i++){
+  for(const r of ['N','E','S','W']){
+   const n=rollFaces(queue[i],r),key=FACE_KEYS.map(k=>n[k]).join('/');
+   if(!seen.has(key)){seen.add(key);queue.push(n)}
+  }
+ }
+ if(queue.length!==24)throw Error('Expected 24 cube orientations, got '+queue.length);
+ return queue;
+}
+const ORIENTATION_MAPS=orientationMaps();
+function orientedDie(base,index){
+ const map=ORIENTATION_MAPS[index];return Object.fromEntries(FACE_KEYS.map(k=>[k,base[map[k]]]));
+}
+const CHAPTERS=['基本の道','交差とループ','回転床','すべる床','展開図'];
+const RAW=[
+{name:'はじめの一歩', start:[0,2],path:'EENN',tag:'THE FIRST TURN'},
+{name:'角を曲がる',start:[0,0],path:'EESSE',tag:'TWO CORNERS'},
+{name:'ジグザグ',start:[0,3],path:'EENEN',tag:'ZIGZAG'},
+{name:'折り返し',start:[0,1],path:'EESWSE',tag:'TURN BACK'},
+{name:'遠回り',start:[1,3],path:'NNEESW',tag:'LONG WAY'},
+{name:'小さな螺旋',start:[0,0],path:'EEESSW',tag:'SPIRAL'},
+{name:'交差する道',start:[3,1],path:'WWSSEEN',tag:'SEVEN ROLLS'},
+{name:'深いカーブ',start:[0,3],path:'ENNEESS',tag:'THREE TURNS'},
+{name:'折り重なる',start:[3,3],path:'WWNNESEN',tag:'EIGHT ROLLS'},
+{name:'ラストルート',start:[0,2],path:'EENNWWSE',tag:'FINAL ROUTE'}
+,
+...[{"name":"ひと筆の道","start":[1,0],"path":"WSESENE","size":4,"tag":"LOOP ROUTES"},{"name":"ぐるっと一周","start":[3,0],"path":"WSNWSWSE","size":4,"tag":"LOOP ROUTES"},{"name":"行って帰って","start":[0,2],"path":"SEWENENE","size":4,"tag":"LOOP ROUTES"},{"name":"小さな八の字","start":[1,0],"path":"SWSESENES","size":4,"tag":"LOOP ROUTES"},{"name":"交差点","start":[0,0],"path":"EWSESNESE","size":4,"tag":"LOOP ROUTES"},{"name":"行き止まりの先","start":[0,2],"path":"SENENENS","size":4,"tag":"LOOP ROUTES"},{"name":"折り返す角","start":[2,0],"path":"ESNSWSESW","size":4,"tag":"LOOP ROUTES"},{"name":"四角い迷路","start":[0,2],"path":"ESESNENEWS","size":5,"tag":"LOOP ROUTES"},{"name":"二度目の道","start":[4,2],"path":"NSWSWSWNWN","size":5,"tag":"LOOP ROUTES"},{"name":"からまるルート","start":[4,3],"path":"NWENWNEWSW","size":5,"tag":"LOOP ROUTES"},{"name":"はじめての回転床","start":[0,2],"path":"NENES","size":5,"tag":"TURN TABLE","tiles":{"2,0":"L"}},{"name":"右回りの罠","start":[2,0],"path":"SWSESW","size":5,"tag":"TURN TABLE","tiles":{"2,2":"R"}},{"name":"もう一度ターン","start":[1,1],"path":"ESNESEN","size":5,"tag":"TURN TABLE","tiles":{"4,2":"R"}},{"name":"カーブの向こう","start":[1,3],"path":"NENESNE","size":5,"tag":"TURN TABLE","tiles":{"3,2":"L"}},{"name":"逆回転","start":[1,1],"path":"SWEWSESE","size":5,"tag":"TURN TABLE","tiles":{"0,2":"R"}},{"name":"同じ場所、違う顔","start":[4,3],"path":"NWSWNENW","size":5,"tag":"TURN TABLE","tiles":{"2,2":"R"}},{"name":"ターンテーブル","start":[2,0],"path":"SESWSWEN","size":5,"tag":"TURN TABLE","tiles":{"2,3":"L"}},{"name":"右と左","start":[3,1],"path":"WSWESEWSW","size":5,"tag":"TURN TABLE","tiles":{"3,3":"R"}},{"name":"ねじれる道","start":[2,3],"path":"NWNWNSNES","size":5,"tag":"TURN TABLE","tiles":{"0,1":"L"}},{"name":"二つの回転床","start":[1,4],"path":"WEWNENSENE","size":5,"tag":"TURN TABLE","tiles":{"1,3":"L"}},{"name":"すべる床","start":[4,3],"path":"WNWNNW","size":5,"tag":"SLIDE TILES","tiles":{"1,1":"R","2,2":"S"}},{"name":"ひとつ飛ばし","start":[0,2],"path":"SENESES","size":5,"tag":"SLIDE TILES","tiles":{"1,3":"S","3,2":"R"}},{"name":"回ってすべる","start":[4,3],"path":"NWWNSWW","size":5,"tag":"SLIDE TILES","tiles":{"0,2":"L","2,1":"S","2,2":"R"}},{"name":"ずれた予想","start":[2,3],"path":"NWNESNEE","size":5,"tag":"SLIDE TILES","tiles":{"1,1":"R","1,2":"S"}},{"name":"ぐるぐるスライド","start":[3,0],"path":"EWESWSEN","size":5,"tag":"SLIDE TILES","tiles":{"3,2":"S","4,0":"L"}},{"name":"一歩先へ","start":[3,0],"path":"WWSWNEWN","size":5,"tag":"SLIDE TILES","tiles":{"0,1":"L","1,1":"S"}},{"name":"方向が変わる","start":[1,1],"path":"NSWSEWSES","size":5,"tag":"SLIDE TILES","tiles":{"1,0":"R","1,2":"S"}},{"name":"すべって折り返す","start":[2,0],"path":"SSSNWNEWS","size":5,"tag":"SLIDE TILES","tiles":{"1,3":"L","2,2":"S"}},{"name":"二度のすべり","start":[0,3],"path":"NESENENSNE","size":5,"tag":"SLIDE TILES","tiles":{"2,2":"L","3,1":"S"}},{"name":"まわる道の終点","start":[2,2],"path":"NSNWSNSESE","size":5,"tag":"SLIDE TILES","tiles":{"0,1":"S","1,1":"S","2,1":"L","2,3":"R"}},{"name":"ひらいたサイコロ","start":[4,4],"path":"NWSWNNE","size":5,"tag":"CUBE NETS","tiles":{"2,3":"S","2,4":"R"},"netId":2},{"name":"未知の並び","start":[1,3],"path":"WSNNENES","size":5,"tag":"CUBE NETS","tiles":{"1,1":"S","2,0":"L"},"netId":3},{"name":"展開図の曲がり角","start":[1,1],"path":"ESWENENE","size":5,"tag":"CUBE NETS","tiles":{"1,2":"S","3,0":"R"},"netId":0},{"name":"裏側を読む","start":[1,4],"path":"NENSESWNN","size":5,"tag":"CUBE NETS","tiles":{"2,2":"R","3,3":"S"},"netId":1},{"name":"立体の設計図","start":[2,1],"path":"ESWNSESWS","size":5,"tag":"CUBE NETS","tiles":{"3,1":"S","3,2":"L"},"netId":2},{"name":"ちがう6つの面","start":[4,4],"path":"WENWNWSWNE","size":5,"tag":"CUBE NETS","tiles":{"1,3":"S","2,2":"L","3,3":"S"},"netId":3},{"name":"折って、まわして","start":[3,2],"path":"NWWEWSSESN","size":5,"tag":"CUBE NETS","tiles":{"0,3":"R","1,1":"S"},"netId":0},{"name":"二重のひねり","start":[3,0],"path":"ESSWSWNSNE","size":5,"tag":"CUBE NETS","tiles":{"2,3":"S","3,2":"L","3,3":"R"},"netId":1},{"name":"見えない面を探せ","start":[1,0],"path":"ESWEESWSEWN","size":5,"tag":"CUBE NETS","tiles":{"2,0":"S","3,2":"R","3,3":"S"},"netId":2},{"name":"最終ルート","start":[4,3],"path":"NWSWNSNWWNEW","size":5,"tag":"CUBE NETS","tiles":{"1,1":"L","2,2":"S"},"netId":3}]
+];
 function nextCell(stage,at,d){
  const dd=DIRS[d],land=[at[0]+dd[0],at[1]+dd[1]];
  if(land.some(n=>n<0||n>=stage.size))return null;
@@ -301,12 +194,16 @@ function nextCell(stage,at,d){
  return {land,to,effect,extra:effect==='S'?[land,to]:[land]};
 }
 function makeStage(raw){
- const stage={...raw,size:raw.size||4,dice:raw.dice?{...raw.dice}:(raw.netId===undefined?{...INITIAL}:DICE_PRESETS[(raw.netId+Math.floor((RAW.indexOf(raw)-40)/4)+5)%DICE_PRESETS.length])};
+ const stageIndex=RAW.indexOf(raw),isPractice=stageIndex<0;
+ const base=raw.netId===undefined?INITIAL:DICE_PRESETS[(raw.netId+Math.floor((stageIndex-40)/4)+5)%DICE_PRESETS.length];
+ // +7 walks all 24 orientations before repeating. First main level and practice
+ // keep the canonical start for a gentle introduction; later starts vary.
+ const orientationIndex=isPractice?0:(stageIndex*7)%24;
+ const stage={...raw,size:raw.size||4,dice:orientedDie(base,orientationIndex),orientationIndex};
  stage.cells=[[...stage.start]];stage.trace=[[...stage.start]];stage.moves=[];
  let pos=[...stage.start];
  for(const key of stage.path){
   const move=nextCell(stage,pos,key);if(!move)throw Error('Invalid route: '+stage.name+' '+key+' @'+pos);
-  if(move.effect==='S' && stage.tiles?.[move.to.join(',')])throw Error('Special floor after slide is ambiguous: '+stage.name);
   stage.moves.push(move);stage.trace.push(...move.extra);stage.cells.push(move.to);pos=move.to;
  }
  stage.steps=stage.path.length;
@@ -314,9 +211,14 @@ function makeStage(raw){
  return stage;
 }
 const STAGES=RAW.map(makeStage);
-const givenFor=stage=>Math.max(0,Math.min(stage.steps-1,stage.givenCount??(stage.demonstrateFirst?1:0)));
-const PRACTICE=[]; // Compatibility with existing test helpers; no separate practice mode.
-const currentStage=()=>STAGES[level];
+
+// Optional, brisk three-question introduction. Original 10 stages remain unchanged.
+const PRACTICE=[
+ {name:'まずは1回',start:[0,2],path:'E',tag:'PRACTICE 01',lesson:'右へ1回。今の右側の面にある数字を入れてみよう。'},
+ {name:'次は2回',start:[0,2],path:'EN',tag:'PRACTICE 02',lesson:'2回分を先に考えよう。曲がると数字の向きも変わるよ。'},
+ {name:'3回の冒険',start:[0,2],path:'ENE',tag:'PRACTICE 03',lesson:'3回分の数字を並べて、一度に転がしてみよう。'}
+].map(makeStage);
+const currentStage=()=>level<0?PRACTICE[level+3]:STAGES[level];
 function yawFaces(f,dir){return dir==='R'?{...f,north:f.west,east:f.north,south:f.east,west:f.south}:{...f,north:f.east,east:f.south,south:f.west,west:f.north}}
 function rollFaces(f,d){switch(d){case'E':return {...f,top:f.west,bottom:f.east,east:f.top,west:f.bottom};case'W':return {...f,top:f.east,bottom:f.west,east:f.bottom,west:f.top};case'S':return {...f,top:f.north,bottom:f.south,south:f.top,north:f.bottom};case'N':return {...f,top:f.south,bottom:f.north,south:f.bottom,north:f.top}}}
 function directionFor(f,n){return Object.keys(SIDE).find(d=>f[SIDE[d]]===n)||null}
@@ -352,13 +254,13 @@ function isoTile(x,y,fill,emphasis=''){
  const z=.004,g=.042,corners=[[x+g,y+g,z],[x+1-g,y+g,z],[x+1-g,y+1-g,z],[x+g,y+1-g,z]].map(xy);
  ctx.save();
  if(emphasis){
-   const cool=emphasis==='focus'||emphasis==='soft-focus',center=xy([x+.5,y+.5,z]);
+   const cool=emphasis==='focus',center=xy([x+.5,y+.5,z]);
    // The destination tile carries the attention; the route never changes width.
    ctx.save();roundPoly(corners,3.3);ctx.shadowColor=cool?'rgba(15,178,158,.40)':'rgba(205,138,104,.33)';ctx.shadowBlur=27;ctx.shadowOffsetY=-2;ctx.fillStyle=cool?'#c9f6ea':'#f8e5dc';ctx.fill();ctx.restore();
    roundPoly(corners,3.3);const grad=ctx.createRadialGradient(center[0],center[1],2,center[0],center[1],54);
    if(cool){grad.addColorStop(0,'#d2fbef');grad.addColorStop(.65,'#dff9ef');grad.addColorStop(1,'#e4f7f0')}
    else{grad.addColorStop(0,'#fbe7df');grad.addColorStop(.65,'#f9ebe5');grad.addColorStop(1,'#f9f0e9')}
-   ctx.fillStyle=grad;ctx.fill();ctx.lineWidth=emphasis==='soft-focus'?1:2.4;ctx.strokeStyle=cool?'rgba(62,188,165,.64)':'rgba(207,149,119,.60)';ctx.stroke();
+   ctx.fillStyle=grad;ctx.fill();ctx.lineWidth=2.4;ctx.strokeStyle=cool?'rgba(62,188,165,.64)':'rgba(207,149,119,.60)';ctx.stroke();
    // An inset hairline gives a quiet, polished edge without a badge/arrow.
    const gi=.14,inner=[[x+gi,y+gi,z+.002],[x+1-gi,y+gi,z+.002],[x+1-gi,y+1-gi,z+.002],[x+gi,y+1-gi,z+.002]].map(xy);
    roundPoly(inner,2);ctx.lineWidth=1;ctx.strokeStyle=cool?'rgba(255,255,255,.65)':'rgba(255,255,255,.48)';ctx.stroke();
@@ -378,45 +280,20 @@ function drawBoard(){
  polygon([[0,n,0],[n,n,0],[n,n,-thick],[0,n,-thick]],'#c7d5d2');
  polygon([[0,0,0],[n,0,0],[n,n,0],[0,n,0]],'#edf2ef');
  const routeCells=new Set(route.map(c=>c.join(',')));
- const focusMove=focusIndex>=0&&focusIndex<stage.steps?stage.moves[focusIndex]:null;
- const target=focusMove?focusMove.to:null;
- const via=focusMove?.effect==='S'?focusMove.land:null;
+ const target=focusIndex>=0&&focusIndex<stage.steps?steps[focusIndex+1]:null;
  for(let sum=0;sum<=2*n-2;sum++)for(let x=0;x<n;x++)for(let y=0;y<n;y++)if(x+y===sum){
   const focus=target&&target[0]===x&&target[1]===y;
-  const slideVia=via&&via[0]===x&&via[1]===y;
-  isoTile(x,y,routeCells.has(x+','+y)?'#f4faf8':'#fbfcfb',focus?(wrongIndex===focusIndex?'error':'focus'):(slideVia?'soft-focus':''));
+  isoTile(x,y,routeCells.has(x+','+y)?'#f4faf8':'#fbfcfb',focus?(wrongIndex===focusIndex?'error':'focus'):'');
+ }
+ // Floor symbols live on the tile itself; the thin cyan route has NO arrows.
+ for(const [key,effect] of Object.entries(stage.tiles||{})){
+  const [x,y]=key.split(',').map(Number),[cx,cy]=xy([x+.5,y+.5,.038]);
+  ctx.save();ctx.beginPath();ctx.arc(cx,cy,14,0,Math.PI*2);ctx.fillStyle=effect==='S'?'rgba(216,231,246,.97)':'rgba(218,237,230,.97)';ctx.fill();
+  ctx.strokeStyle=effect==='S'?'#719dbb':'#519e95';ctx.lineWidth=1.5;ctx.stroke();ctx.font='700 19px -apple-system,BlinkMacSystemFont,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=effect==='S'?'#447eaa':'#208e86';ctx.fillText(effect==='R'?'↻':effect==='L'?'↺':'≈',cx,cy+.4);ctx.restore();
  }
  lineProjected(centers,'rgba(255,255,255,.84)',7);
  lineProjected(centers,'#83b7b3',3.5);
- // One number can cover two squares: the extra segment is a slide, not a roll.
- for(let k=0;k<stage.moves.length;k++)if(stage.moves[k].effect==='S'){const mv=stage.moves[k];ctx.save();ctx.setLineDash([3.5,4.8]);lineProjected([[mv.land[0]+.5,mv.land[1]+.5,.039],[mv.to[0]+.5,mv.to[1]+.5,.039]],'#659fcb',3.1);ctx.restore()}
  if(completed>0){let progress=[[...stage.start]];for(let i=0;i<completed;i++)progress.push(...stage.moves[i].extra);lineProjected(progress.map(([x,y])=>[x+.5,y+.5,.032]),'#239e98',3.5)}
- // Precision machinery: the mechanism's platform physically responds when used.
- for(const [key,effect] of Object.entries(stage.tiles||{})){
-  const [x,y]=key.split(',').map(Number),cx=x+.5,cy=y+.5;
-  const active=floorAnim&&floorAnim.key===key;
-  const angle=active?floorAnim.t*(effect==='R'?Math.PI/2:effect==='L'?-Math.PI/2:0):0;
-  const center=xy([cx,cy,.045]);
-  ctx.save();
-  const circle=(r,z=.046)=>{ctx.beginPath();for(let k=0;k<=72;k++){const a=k*Math.PI*2/72;const q=xy([cx+r*Math.cos(a),cy+r*Math.sin(a),z]);if(k===0)ctx.moveTo(...q);else ctx.lineTo(...q)}ctx.closePath()};
-  circle(.29);ctx.fillStyle=effect==='S'?'rgba(219,235,244,.98)':'rgba(221,240,232,.99)';ctx.fill();ctx.lineWidth=1.7;ctx.strokeStyle=effect==='S'?'#8bb6ca':'#78b9a6';ctx.stroke();
-  circle(.245,.05);ctx.lineWidth=.8;ctx.strokeStyle='rgba(255,255,255,.94)';ctx.stroke();
-  if(effect==='S'){
-    const direction=stage.moves.find(m=>m.land[0]===x&&m.land[1]===y&&m.effect==='S');
-    const d=direction?[direction.to[0]-x,direction.to[1]-y]:[1,0];
-    const lateral=[-d[1],d[0]];
-    for(const offset of [-.10,.10]){
-      let a=xy([cx-d[0]*.17+lateral[0]*offset,cy-d[1]*.17+lateral[1]*offset,.053]);
-      let b=xy([cx+d[0]*.17+lateral[0]*offset,cy+d[1]*.17+lateral[1]*offset,.053]);
-      ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.strokeStyle='#7faabf';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();
-    }
-  }else{
-    for(let i=0;i<4;i++){const a=angle+i*Math.PI/2;const p1=xy([cx+.14*Math.cos(a),cy+.14*Math.sin(a),.055]);const p2=xy([cx+.218*Math.cos(a),cy+.218*Math.sin(a),.055]);ctx.beginPath();ctx.moveTo(...p1);ctx.lineTo(...p2);ctx.strokeStyle='#48a499';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke()}
-    ctx.fillStyle='#399d8f';ctx.font='700 13px -apple-system,BlinkMacSystemFont,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(effect==='R'?'↻':'↺',center[0],center[1]+1);
-  }
-  if(active&&effect==='S'){ctx.beginPath();ctx.arc(...center,17+3*Math.sin(floorAnim.t*Math.PI),0,Math.PI*2);ctx.strokeStyle=`rgba(80,154,189,${.35*(1-floorAnim.t)})`;ctx.lineWidth=2;ctx.stroke()}
-  ctx.restore();
- }
  function marker(p,label,isGoal){
   const [x,y]=xy(p);ctx.save();if(isGoal&&successPulse>0){ctx.beginPath();ctx.arc(x,y,17+successPulse*29,0,Math.PI*2);ctx.fillStyle=`rgba(11,151,140,${.13*(1-successPulse)})`;ctx.fill()}
   ctx.beginPath();ctx.arc(x,y,isGoal?15:13,0,Math.PI*2);ctx.fillStyle=isGoal?'#008d88':'#fff';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.fillStyle=isGoal?'#fff':'#6e9592';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='700 13px -apple-system,BlinkMacSystemFont,sans-serif';ctx.fillText(label,x,y+.7);ctx.restore();
@@ -475,7 +352,7 @@ function dieState(state){
  return {center,orientation};
 }
 function drawDie(state){
- if(!state)return;const {center,orientation}=dieState(state);const [shx,shy]=xy([center[0],center[1],.02]);ctx.save();const airborne=Math.max(0,center[2]-(H+.025));const spread=1+airborne*.8;const shadow=ctx.createRadialGradient(shx,shy+3,1,shx,shy+3,42*spread);shadow.addColorStop(0,`rgba(36,64,58,${Math.max(.08,.25-airborne*.26)})`);shadow.addColorStop(.48,`rgba(46,77,66,${Math.max(.035,.12-airborne*.15)})`);shadow.addColorStop(1,'rgba(55,69,68,0)');ctx.beginPath();ctx.ellipse(shx,shy+3,43*spread,21*spread,0,0,Math.PI*2);ctx.fillStyle=shadow;ctx.fill();ctx.restore();
+ if(!state)return;const {center,orientation}=dieState(state);const [shx,shy]=xy([center[0],center[1],.02]);ctx.save();const shadow=ctx.createRadialGradient(shx,shy+2,2,shx,shy+2,42);shadow.addColorStop(0,'rgba(46,63,66,.24)');shadow.addColorStop(.48,'rgba(55,69,68,.12)');shadow.addColorStop(1,'rgba(55,69,68,0)');ctx.beginPath();ctx.ellipse(shx,shy+2,42,21,0,0,Math.PI*2);ctx.fillStyle=shadow;ctx.fill();ctx.restore();
  const primitives=[];
  for(let idx=0;idx<MODEL.length;idx++){const item=MODEL[idx];const normal=mv(orientation,item.normal);if(dot(normal,camera)<-.015)continue;const points=item.points.map(p=>vec(center,mv(orientation,p)));const depth=points.reduce((sum,p)=>sum+dot(p,camera),0)/points.length;primitives.push({points,normal,depth,part:idx<6?0:idx<150?1:2})}
  primitives.sort((a,b)=>a.part-b.part||a.depth-b.depth);
@@ -501,15 +378,8 @@ function sizeCanvas(){const r=canvas.getBoundingClientRect();if(!r.width)return;
 function draw(){if(!canvas.width)return;ctx.setTransform(canvas.width/600,0,0,canvas.height/446,0,0);drawBoard();drawDie(visual)}
 let level=0,inputs=[],cursor=0,animating=false,result=null,visual=null,seen=new Set();
 let playhead=-1,completedSegments=-1,successPulse=0,soundOn=true,audioCtx=null;
-let replayPrefix=0,lastPlaced=-1,showOrder=false, floorAnim=null;
-try{
- const newest=localStorage.getItem('dice-route-v500-cleared');
- const modern=localStorage.getItem('dice-route-v2-cleared');
- const original=JSON.parse(localStorage.getItem('dice-route-v100-cleared')||'[]');
- const mapped=modern?JSON.parse(modern).filter(Number.isInteger).map(i=>i<20?i:i+30):original.filter(Number.isInteger).map(i=>i+INTRO_COUNT);
- seen=newest?new Set(JSON.parse(newest)):new Set(mapped);
-}catch(e){seen=new Set()}
-
+let replayPrefix=0,lastPlaced=-1,showOrder=true,hintOpen=false;
+try{seen=new Set(JSON.parse(localStorage.getItem('dice-route-v100-cleared')||'[]'))}catch(e){}
 try{soundOn=JSON.parse(localStorage.getItem('dice-route-v110-sound')||'true')}catch(e){}
 const resetVisual=()=>({at:[...currentStage().start],orientation:I()});
 function updateSoundButton(){const b=$('sound');if(!b)return;b.classList.toggle('on',soundOn);b.textContent=soundOn?'♫':'♪';b.setAttribute('aria-label',soundOn?'音をオフにする':'音をオンにする');b.title=soundOn?'音をオフにする':'音をオンにする'}
@@ -532,44 +402,37 @@ function clickSound(volume=.36,delay=0){
  src.connect(low).connect(high).connect(gain).connect(ac.destination);
  src.start(ac.currentTime+delay);src.stop(ac.currentTime+delay+buf.duration+.005);
 }
-// A clear two-step completion signature. The two pitches do NOT overlap:
-// first a short soft wooden note, then a higher, gently ringing resolve.
-// This differs unmistakably from the dry impact clicks without a chord.
-function successSound(){
- const ac=getAudio();if(!ac)return;
- const t0=ac.currentTime+.095; // leave a tiny gap after the final landing click
- clickSound(.34,.085);
- const notes=[
-  {freq:659.25,at:0,dur:.088,volume:.050},
-  {freq:880.00,at:.155,dur:.255,volume:.062}
- ];
- for(const note of notes){
-  const start=t0+note.at;
-  const osc=ac.createOscillator(),amp=ac.createGain();
-  // A soft, pure pluck: no dissonant layers, vibrato, or simultaneous pitches.
-  osc.type='sine';
-  osc.frequency.setValueAtTime(note.freq,start);
-  osc.frequency.exponentialRampToValueAtTime(note.freq*.993,start+note.dur);
-  amp.gain.setValueAtTime(.0001,start);
-  amp.gain.exponentialRampToValueAtTime(note.volume,start+.008);
-  amp.gain.exponentialRampToValueAtTime(.0001,start+note.dur);
-  osc.connect(amp).connect(ac.destination);
-  osc.start(start);osc.stop(start+note.dur+.025);
- }
-}
 function sound(kind){
  if(!soundOn)return;
- if(kind==='tap')clickSound(.23);
- if(kind==='land')clickSound(.52);
- if(kind==='turn')clickSound(.40);
- if(kind==='slide')clickSound(.26);
- if(kind==='error')clickSound(.22);
- if(kind==='success')successSound();
+ if(kind==='tap')clickSound(.28);
+ if(kind==='land')clickSound(.48);
+ if(kind==='error')clickSound(.36);
+ if(kind==='success')clickSound(.65)
  // The dice roll itself is silent; the contact makes one gentle click.
 }
 function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}
 function pulseGoal(){if(reduced){successPulse=0;draw();return}const start=performance.now(),dur=480;function frame(now){const t=Math.min(1,(now-start)/dur);successPulse=t;draw();if(t<1)requestAnimationFrame(frame);else{successPulse=0;draw()}}requestAnimationFrame(frame)}
-function status(message='',kind=''){const node=$('hint');node.textContent=kind==='bad'?'数字をタップして、その手を修正できます。':kind==='good'?'次のステージへ進めます。':kind==='focus'?(message||'光っているマスに置く数字を考えよう。'):(message||'ぜんぶの数字を決めてから、転がそう。');node.className='guidance '+kind;const toast=$('toast');toast.className='toast';toast.textContent='';if(kind==='bad'||kind==='good'){toast.textContent=message;toast.classList.add('show',kind==='bad'?'bad':'good')}}
+function status(message='',kind=''){const node=$('hint');node.textContent=kind==='bad'?'数字をタップして、その手を修正できます。':kind==='good'?(level===STAGES.length-1?'全50問クリア！ また挑戦してみよう。':'次のステージへ進めます。'):kind==='focus'?(message||'光っているマスに置く数字を考えよう。'):(message||'ぜんぶの数字を決めてから、転がそう。');node.className='guidance '+kind;const toast=$('toast');toast.className='toast';toast.textContent='';if(kind==='bad'||kind==='good'){toast.textContent=message;toast.classList.add('show',kind==='bad'?'bad':'good')}}
+const DIR_JP={E:'右',W:'左',N:'奥',S:'手前'};
+function tipForStep(){
+ const stage=currentStage(),step=Math.max(0,Math.min(stage.steps-1,cursor??0));
+ const dir=stage.path[step],prev=step>0?stage.path[step-1]:null;
+ const effect=step>0?stage.moves[step-1].effect:null;
+ const intro=`${step+1}手目は${DIR_JP[dir]}へ。`;
+ if(step===0)return intro+'転がる方向にある側面が、次に底になるよ。上面は底にはできない。';
+ if(effect==='R'||effect==='L')return intro+'直前の丸い床で、サイコロはその場で90°向きを変えたよ。上下はそのまま、周囲の4面を追いかけよう。';
+ if(effect==='S')return intro+'直前の青い床では、位置だけ動いて向きは変わらなかったよ。';
+ if(prev===dir)return intro+'同じ方向への連続回転。ひとつ前に上面・底面がどこへ動いたか思い出そう。';
+ if((prev==='E'&&dir==='W')||(prev==='W'&&dir==='E')||(prev==='N'&&dir==='S')||(prev==='S'&&dir==='N'))return intro+'直前に来た道を戻るとき、サイコロの向きも元に戻るよ。';
+ return intro+'角を曲がるときは、前の回転でどの面がその方向へ来たかを追いかけよう。';
+}
+function updateHint(){
+ const button=$('hintToggle'),detail=$('tipDetail');
+ button.textContent=hintOpen?'ヒントを閉じる':'ヒントを見る';
+ button.setAttribute('aria-expanded',String(hintOpen));
+ detail.hidden=!hintOpen;
+ if(hintOpen)detail.textContent=tipForStep();
+}
 function makeNetView(stage){
  const panel=$('netPanel'),holder=$('netCells');panel.hidden=stage.netId===undefined;holder.replaceChildren();
  if(stage.netId===undefined)return;
@@ -589,91 +452,64 @@ function makeNetView(stage){
  }}
  const normToSide={'0,0,1':'top','0,0,-1':'bottom','1,0,0':'east','-1,0,0':'west','0,1,0':'south','0,-1,0':'north'};
  for(let y=0;y<4;y++)for(let x=0;x<4;x++){
-  const el=document.createElement('span'),side=orientations[[x,y].join(',')];el.className='net-cell'+(!side?' empty':'')+(x===root[0]&&y===root[1]?' net-top':'');el.textContent=side?stage.dice[normToSide[side.n.join(',')]]:'';if(x===root[0]&&y===root[1])el.title='スタート時の上面';holder.append(el);
+  const el=document.createElement('div'),side=orientations[[x,y].join(',')];el.className='net-cell'+(!side?' empty':'');el.textContent=side?stage.dice[normToSide[side.n.join(',')]]:'';holder.append(el);
  }
- $('netBigCells').innerHTML=holder.innerHTML;
 }
 function updateChapter(){
- const grp=Math.floor(level/20);
- $('chapterLabel').textContent=`CH ${String(grp+1).padStart(2,'0')} / ${String(CHAPTERS.length).padStart(2,'0')} · ${CHAPTERS[grp]}`;
+ const grp=level<0?0:Math.floor(level/10);
+ $('chapterLabel').textContent=level<0?'PRACTICE · 練習':`CH ${String(grp+1).padStart(2,'0')} / 05 · ${CHAPTERS[grp]}`;
  $('prevChapter').disabled=animating;$('nextChapter').disabled=animating;
-}
-let hintSteps=0;
-function revealHint(){
- if(animating)return;
- const stage=currentStage(),correct=answerFor(stage);
- hintSteps=Math.min(stage.steps+1,hintSteps+1);
- $('hintDetail').hidden=false;
- if(hintSteps===1){
-  const pairs=stage.dice.top+stage.dice.bottom===7&&stage.dice.north+stage.dice.south===7&&stage.dice.east+stage.dice.west===7;
-  $('hintDetail').textContent=stage.netId!==undefined?'ヒント：展開図をタップして拡大。色のついた面がスタート時の上面だよ。':pairs?'ヒント：うらの数字は 1と6・2と5・3と4 のペアだよ。':'ヒント：上と下は選ばず、横の4面から考えよう。';
- }else{
-  const g=givenFor(stage),count=Math.min(stage.steps,g+hintSteps-1),shown=correct.slice(0,count).join(' → ');
-  $('hintDetail').textContent=count>=stage.steps?`この順番でおしてみよう： ${shown}`:`ここまでは ${shown} 。つづきは考えてみよう！`;
- }
- $('lessonHint').textContent=hintSteps>stage.steps?'わかった！':'もう1つヒント';
- sound('tap');
+ $('prevChapter').style.opacity=level<0?'.4':'1';$('nextChapter').style.opacity=level<0?'.4':'1';
 }
 function changeStage(i){
  if(animating)return;
- level=Math.max(0,Math.min(STAGES.length-1,i));
- const stage=currentStage();const given=givenFor(stage);inputs=Array(stage.steps).fill(null);const key=answerFor(stage);for(let k=0;k<given;k++)inputs[k]=key[k];cursor=given;result=null;visual=resetVisual();
- playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;lastPlaced=-1;floorAnim=null;hintSteps=0;
+ level=i<0?Math.max(-3,Math.min(-1,i)):(i+STAGES.length)%STAGES.length;
+ const stage=currentStage();inputs=Array(stage.steps).fill(null);cursor=0;result=null;visual=resetVisual();
+ playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;lastPlaced=-1;
+ showOrder=stage.ambiguous;hintOpen=false;updateHint();
  updateProjection();
  $('stageTitle').textContent=stage.name;
- $('stageType').textContent=`STEP ${String(level+1).padStart(3,'0')} · ${stage.tag}`;
- $('numStage').textContent=String(level+1).padStart(2,'0');
- $('stageTotal').textContent=String(STAGES.length);
+ $('stageType').textContent=stage.tag+' · '+(level<0?'れんしゅう':String(level+1).padStart(2,'0'));
+ $('numStage').textContent=level<0?'P'+(level+4):String(level+1).padStart(2,'0');
+ $('stageTotal').textContent=level<0?'03':'50';
  $('rollCount').textContent=stage.steps+' 回';
+ $('practiceToggle').textContent=level<0?'本編へ ↗':'練習 3問 ↗';
+ $('lesson').hidden=level>=0&&!(stage.tiles&&Object.keys(stage.tiles).length)&&stage.netId===undefined;
  const types=new Set(Object.values(stage.tiles||{}));
- const lesson=$('lesson'),lessonTag=lesson.querySelector('.lesson-tag'),lessonText=$('lessonText');
- lesson.hidden=false;
- lessonText.replaceChildren();
- $('hintDetail').hidden=true;$('hintDetail').textContent='';
- const lessonHint=$('lessonHint');lessonHint.hidden=false;lessonHint.textContent='ヒントをみる';
- if(stage.lesson){lessonTag.textContent=level<4?'やってみよう':given>0?'おてほん':'ひとこと';lessonText.textContent=stage.lesson}
- else{
-  lessonTag.textContent=stage.netId!==undefined?'展開図と床':'床に乗ると';
-  const rules=[];
-  if(types.has('R'))rules.push(['↻','右90°回転']);
-  if(types.has('L'))rules.push(['↺','左90°回転']);
-  if(types.has('S'))rules.push(['≈','1マスすべる・回転なし']);
-  if(stage.netId!==undefined)rules.unshift(['▦','展開図で6面を確認']);
-  for(const [symbol,label] of rules){const chip=document.createElement('span');chip.className='mechanic-chip';const mark=document.createElement('b');mark.textContent=symbol;chip.append(mark,document.createTextNode(label));lessonText.append(chip)}
- }
- $('orderToggle').hidden=!stage.ambiguous;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',String(showOrder));$('orderToggle').textContent=showOrder?'道順を隠す':'道順を見る';
- makeNetView(stage);updateChapter();$('chapterSummary').textContent=`CH ${String(Math.floor(level/20)+1).padStart(2,'0')} · ${CHAPTERS[Math.floor(level/20)]}`;
- status();sync();draw();
+ $('lesson').querySelector('.lesson-tag').textContent=stage.netId!==undefined?'展開図':types.has('S')?'特殊な床':types.has('R')||types.has('L')?'回転床':'れんしゅう';
+ $('lessonText').textContent=level<0?stage.lesson:stage.netId!==undefined?'展開図で数字の配置を確認。普通のサイコロと並びが違うよ。':types.has('S')?'青い床は、同じ方向へもう1マスすべる（回転しない）。':types.has('R')||types.has('L')?'丸い床に乗ると、サイコロが水平に90°回転する。':'';
+ $('orderToggle').hidden=!stage.ambiguous;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',showOrder?'true':'false');
+ makeNetView(stage);updateChapter();status();sync();draw();
 }
 function sync(){
- const stage=currentStage(),filled=inputs.filter(n=>n!==null).length;updateSoundButton();
+ const stage=currentStage(),filled=inputs.filter(n=>n!==null).length;updateSoundButton();updateHint();
  $('filled').textContent=String(filled).padStart(2,'0')+' / '+String(stage.steps).padStart(2,'0');
  const slots=$('slots');slots.classList.toggle('many',stage.steps>7);slots.replaceChildren();inputs.forEach((n,i)=>{
-  const b=document.createElement('button');b.className='slot'+(n===null?' empty':' filled')+(cursor===i&&!animating?' active':'')+(result?.error===i?' error':'')+(result?.success?' ok':'')+(lastPlaced===i?' placed':'')+(i<givenFor(stage)?' given':'');
-  b.type='button';b.textContent=n===null?'·':n;b.dataset.step=String(i+1);b.setAttribute('aria-label',`${i+1}手目: ${n??'未入力'}`);
-  b.disabled=animating||(i<givenFor(stage));b.addEventListener('click',()=>{if(i>=givenFor(stage))selectStep(i)});slots.append(b);
+  const b=document.createElement('button');b.className='slot'+(n===null?' empty':' filled')+(cursor===i&&!animating?' active':'')+(result?.error===i?' error':'')+(result?.success?' ok':'')+(lastPlaced===i?' placed':'');
+  b.type='button';b.textContent=n===null?'·':n;b.setAttribute('aria-label',`${i+1}手目: ${n??'未入力'}`);
+  b.disabled=animating;b.addEventListener('click',()=>selectStep(i));slots.append(b);
  });lastPlaced=-1;
  const play=$('play');play.className='primary'+(result?.success?' success':'');play.disabled=animating||(!result?.success&&filled!==stage.steps);
- play.textContent=animating?'ころがり中…':result?.success?(level===STAGES.length-1?'さいしょから あそぶ ↗':'つぎへすすむ ↗'):(filled===stage.steps?(replayPrefix>0?'もういちど ころがす ↗':'ころがしてみよう ↗'):'数字をいれよう');
- $('back').disabled=animating||filled<=givenFor(stage);document.querySelectorAll('[data-n]').forEach(b=>{b.disabled=animating;b.classList.toggle('suggested',level===0&&filled===0&&Number(b.dataset.n)===3||level===1&&filled===0&&Number(b.dataset.n)===2)});
- const nav=$('levels');nav.replaceChildren();
- const grp=Math.floor(level/20);
- for(let i=0;i<20;i++){
-  const idx=grp*20+i,passed=seen.has(idx);let b=document.createElement('button');b.type='button';
-  b.className='level'+(level===idx?' current':'')+(passed?' passed':'');b.textContent=passed?'✓':String(idx+1).padStart(2,'0');b.disabled=animating;
-  b.setAttribute('aria-label',`ステージ${idx+1}`);b.addEventListener('click',()=>changeStage(idx));nav.append(b)
+ play.textContent=animating?'転がり中…':result?.success?(level===STAGES.length-1?'最初からプレイ ↗':level===-1?'本編スタート ↗':'次のステージ ↗'):(filled===stage.steps?(replayPrefix>0?'もう一度転がす ↗':'転がしてみる ↗'):'数字を入力する');
+ $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>b.disabled=animating);
+ const nav=$('levels');nav.replaceChildren();const n=level<0?3:10;
+ const grp=level<0?0:Math.floor(level/10);
+ for(let i=0;i<n;i++){
+  const idx=level<0?i-3:grp*10+i,passed=level>=0&&seen.has(idx);let b=document.createElement('button');b.type='button';
+  b.className='level'+(level===idx?' current':'')+(passed?' passed':'');b.textContent=passed?'✓':String(i+1).padStart(2,'0');b.disabled=animating;
+  b.setAttribute('aria-label',`${level<0?'練習':'ステージ'}${level<0?i+1:idx+1}`);b.setAttribute('aria-current',idx===level?'step':'false');b.addEventListener('click',()=>changeStage(idx));nav.append(b)
  }
- const progress=$('progress');progress.replaceChildren();for(let i=0;i<PHASES.length;i++){
-   let p=document.createElement('i');p.className=Math.floor(level/100)===i?'current':Array.from({length:100},(_,j)=>i*100+j).every(j=>seen.has(j))?'past':'';progress.append(p)
+ const progress=$('progress');progress.replaceChildren();for(let i=0;i<5;i++){
+   let p=document.createElement('i');p.className=(level>=0&&Math.floor(level/10)===i?'current':Array.from({length:10},(_,j)=>i*10+j).every(j=>seen.has(j))?'past':'');progress.append(p)
  }
  updateChapter();
 
 }
-function selectStep(i){if(animating||i<givenFor(currentStage()))return;if(result?.success)editAfterResult();cursor=i;sound('tap');status(currentStage().moves[i]?.effect==='S'?'この手は転がってから1マスすべる。入力は1つ。':'光っているマスに置く数字を考えよう。','focus');sync();draw()}
-function editAfterResult(){if(!result)return;floorAnim=null;if(result.error!==undefined)replayPrefix=Math.max(0,result.error);else replayPrefix=0;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;status();draw()}
+function selectStep(i){if(animating)return;if(result?.success)editAfterResult();cursor=i;sound('tap');status('光っているマスに置く数字を考えよう。','focus');sync();draw()}
+function editAfterResult(){if(!result)return;if(result.error!==undefined)replayPrefix=Math.max(0,result.error);else replayPrefix=0;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;status();draw()}
 function inputDigit(n){
  if(animating)return;editAfterResult();
- if(cursor===null){cursor=inputs.findIndex(x=>x===null);if(cursor<0)cursor=inputs.length-1}cursor=Math.max(cursor,givenFor(currentStage()));
+ if(cursor===null){cursor=inputs.findIndex(x=>x===null);if(cursor<0)cursor=inputs.length-1}
  if(cursor<0)return;
  if(cursor<replayPrefix && inputs[cursor]!==n)replayPrefix=cursor;
  const modified=cursor;inputs[cursor]=n;lastPlaced=modified;sound('tap');
@@ -681,29 +517,28 @@ function inputDigit(n){
  cursor=next>=0?next:inputs.findIndex(v=>v===null);
  if(cursor<0)cursor=null;
  const ready=inputs.every(v=>v!==null);
- status(ready?'入力完了。まとめて転がそう。':currentStage().moves[cursor]?.effect==='S'?'この手は1回の入力で2マス進む。':'光っているマスに置く数字を考えよう。',ready?'':'focus');
+ status(ready?'入力完了。まとめて転がそう。':'光っているマスに置く数字を考えよう。',ready?'':'focus');
  sync();draw();
 }
 function deleteDigit(){
  if(animating)return;editAfterResult();
- let i=cursor!==null&&inputs[cursor]!==null?cursor:inputs.findLastIndex((v,j)=>v!==null&&j>=givenFor(currentStage()));if(i<givenFor(currentStage()))return;
+ let i=cursor!==null&&inputs[cursor]!==null?cursor:inputs.findLastIndex(v=>v!==null);if(i<0)return;
  if(i<replayPrefix)replayPrefix=i;
  inputs[i]=null;cursor=i;status('光っているマスに置く数字を考えよう。','focus');sync();draw()
 }
-function restart(){if(animating)return;floorAnim=null;inputs.fill(null);const g=givenFor(currentStage()),key=answerFor(currentStage());for(let k=0;k<g;k++)inputs[k]=key[k];cursor=g;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;status();sync();draw()}
+function restart(){if(animating)return;inputs.fill(null);cursor=0;result=null;visual=resetVisual();playhead=-1;completedSegments=-1;successPulse=0;replayPrefix=0;status();sync();draw()}
 const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
 function animateRoll(at,orientation,dir,options={}){return new Promise(resolve=>{
  if(reduced){visual={at:[at[0]+DIRS[dir][0],at[1]+DIRS[dir][1]],orientation:mm(rm(AXIS[dir],Math.PI/2),orientation)};draw();resolve();return}
- const duration=options.final?365:325;let start=null,contacted=false;
+ const duration=options.final?395:325;let start=null;
  function frame(now){
   if(start===null)start=now;
   const t=Math.min(1,(now-start)/duration);
   const rolling=t<.87?ease(t/.87):1;
   const lift=t>.87?.035*Math.sin(Math.PI*Math.min(1,(t-.87)/.13)):0;
   visual={at,orientation,dir,t:rolling,lift};draw();
-  if(t>=.87&&!contacted){contacted=true;sound('land')}
-  if(t<1)requestAnimationFrame(frame);else resolve()
+  if(t<1)requestAnimationFrame(frame);else{sound('land');resolve()}
  }
  requestAnimationFrame(frame)
 })}
@@ -711,19 +546,19 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
 function animateYaw(at,orientation,effect){return new Promise(resolve=>{
  const angle=effect==='R'?1:-1;
  if(reduced){resolve();return}
- let start=null,duration=350;floorAnim={key:at.join(','),t:0};
- function frame(now){if(start===null)start=now;const t=Math.min(1,(now-start)/duration);floorAnim.t=ease(t);visual={at,orientation,spin:angle*ease(t)};draw();if(t<1)requestAnimationFrame(frame);else{sound('turn');floorAnim=null;resolve()}}
+ let start=null,duration=325;
+ function frame(now){if(start===null)start=now;const t=Math.min(1,(now-start)/duration);visual={at,orientation,spin:angle*ease(t)};draw();if(t<1)requestAnimationFrame(frame);else{sound('land');resolve()}}
  requestAnimationFrame(frame);
 })}
 function animateSlide(at,to,orientation){return new Promise(resolve=>{
  if(reduced){resolve();return}
- let start=null,duration=250;floorAnim={key:at.join(','),t:0};
- function frame(now){if(start===null)start=now;const t=Math.min(1,(now-start)/duration);floorAnim.t=ease(t);visual={at,orientation,slideTo:to,slideT:ease(t)};draw();if(t<1)requestAnimationFrame(frame);else{sound('slide');floorAnim=null;resolve()}}
+ let start=null,duration=225;
+ function frame(now){if(start===null)start=now;const t=Math.min(1,(now-start)/duration);visual={at,orientation,slideTo:to,slideT:ease(t)};draw();if(t<1)requestAnimationFrame(frame);else{sound('land');resolve()}}
  requestAnimationFrame(frame);
 })}
 async function play(){
  if(animating)return;
- if(result?.success){changeStage(level===STAGES.length-1?0:level+1);return}
+ if(result?.success){changeStage(level===-1?0:level===STAGES.length-1?0:level+1);return}
  if(inputs.some(n=>n===null))return;
  const stage=currentStage();
  animating=true;result=null;playhead=-1;completedSegments=-1;successPulse=0;status('');sync();
@@ -750,13 +585,13 @@ async function play(){
   completedSegments=k+1;draw();await wait(reduced?0:Math.max(10,36-k*2));
  }
  result={success:true};replayPrefix=0;
- seen.add(level);try{localStorage.setItem('dice-route-v500-cleared',JSON.stringify([...seen]))}catch(e){}
- sound('success');haptic(12);status(stage.steps<=3?(stage.steps===1?'やったね！ ぴったり！':stage.steps===2?'すごい！ 2つともぴったり！':'やったね！ 3つともできた！'):(level>=480?'MASTER CLEAR · 立体の達人！':'PERFECT · AからBまで通れたよ。'),'good');
+ if(level>=0){seen.add(level);try{localStorage.setItem('dice-route-v100-cleared',JSON.stringify([...seen]))}catch(e){}}
+ sound('success');haptic(12);status(level<0?'できた！ この調子で次へ。':'PERFECT · AからBまで通れたよ。','good');
  animating=false;cursor=null;playhead=-1;pulseGoal();sync();draw();
 }
 function verify(){
  let moves=0;
- for(const s of STAGES){
+ for(const s of [...PRACTICE,...STAGES]){
   let f={...s.dice},m=I(),at=[...s.start];const ans=answerFor(s);
   for(let i=0;i<s.steps;i++){
    const d=s.path[i],n=ans[i];if(directionFor(f,n)!==d)throw Error('Wrong move at '+s.name+' '+i);
@@ -774,27 +609,25 @@ function verify(){
    moves++;
   }
  }
- if(STAGES.length!==500)throw Error('Incorrect stage count');
- if(new Set(STAGES.map(s=>JSON.stringify([s.size,s.start,s.path,s.dice,s.tiles,s.netId]))).size!==STAGES.length)throw Error('Duplicate stages');
+ if(STAGES.length!==50)throw Error('Incorrect stage count');
+ const signatures=new Set(STAGES.slice(0,24).map(s=>FACE_KEYS.map(k=>s.dice[k]).join(',')));
+ if(signatures.size!==24)throw Error('Not enough dice orientation variety: '+signatures.size);
+ for(const s of STAGES.slice(0,40))for(const [a,b] of [['top','bottom'],['east','west'],['north','south']]){
+  if(s.dice[a]+s.dice[b]!==7)throw Error('Nonstandard dice accidentally used: '+s.name);
+ }
  return moves;
 }
 verify();
 for(const b of document.querySelectorAll('[data-n]'))b.addEventListener('click',()=>inputDigit(+b.dataset.n));
-let netOpenBefore=null;
-function openNet(){if($('netPanel').hidden||animating)return;netOpenBefore=document.activeElement;$('netOverlay').hidden=false;$('netClose').focus()}
-function closeNet(){$('netOverlay').hidden=true;if(netOpenBefore?.focus)netOpenBefore.focus()}
-$('netPanel').addEventListener('click',openNet);
-$('netClose').addEventListener('click',closeNet);
-$('netReturn').addEventListener('click',closeNet);
-$('netOverlay').addEventListener('click',e=>{if(e.target===$('netOverlay'))closeNet()});
-$('lessonHint').addEventListener('click',revealHint);
-$('prevChapter').addEventListener('click',()=>changeStage((Math.floor(level/20)+CHAPTERS.length-1)%CHAPTERS.length*20));
-$('nextChapter').addEventListener('click',()=>changeStage((Math.floor(level/20)+1)%CHAPTERS.length*20));
-$('orderToggle').addEventListener('click',()=>{showOrder=!showOrder;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',String(showOrder));$('orderToggle').textContent=showOrder?'道順を隠す':'道順を見る';draw()});
+$('practiceToggle').addEventListener('click',()=>changeStage(level<0?0:-3));
+$('prevChapter').addEventListener('click',()=>{if(level>=0)changeStage((Math.floor(level/10)+4)%5*10)});
+$('nextChapter').addEventListener('click',()=>{if(level>=0)changeStage((Math.floor(level/10)+1)%5*10)});
+$('orderToggle').addEventListener('click',()=>{showOrder=!showOrder;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',String(showOrder));draw()});
+$('hintToggle').addEventListener('click',()=>{if(animating)return;hintOpen=!hintOpen;sound('tap');updateHint()});
 $('play').addEventListener('click',play);$('back').addEventListener('click',deleteDigit);$('restart').addEventListener('click',restart);$('sound').addEventListener('click',()=>{soundOn=!soundOn;try{localStorage.setItem('dice-route-v110-sound',JSON.stringify(soundOn))}catch(e){}updateSoundButton();if(soundOn){sound('tap')}});
 const open=()=>$('scrim').classList.add('open'),close=()=>$('scrim').classList.remove('open');
 $('help').addEventListener('click',open);$('close').addEventListener('click',close);$('scrim').addEventListener('click',e=>{if(e.target===$('scrim'))close()});
-document.addEventListener('keydown',e=>{if(!$('atlas').hidden||!$('freeOverlay').hidden)return;if(!$('netOverlay').hidden){if(e.key==='Escape')closeNet();return}if($('scrim').classList.contains('open')){if(e.key==='Escape')close();return}if(/^[1-6]$/.test(e.key))inputDigit(+e.key);else if(e.key==='Backspace'){e.preventDefault();deleteDigit()}else if(e.key==='Enter'){if(!$('play').disabled)play()}else if(e.key==='ArrowLeft'&&cursor!==null){cursor=Math.max(givenFor(currentStage()),cursor-1);sync();draw()}else if(e.key==='ArrowRight'&&cursor!==null){cursor=Math.min(inputs.length-1,cursor+1);sync();draw()}});
+document.addEventListener('keydown',e=>{if($('scrim').classList.contains('open')){if(e.key==='Escape')close();return}if(/^[1-6]$/.test(e.key))inputDigit(+e.key);else if(e.key==='Backspace'){e.preventDefault();deleteDigit()}else if(e.key==='Enter'){if(!$('play').disabled)play()}else if(e.key==='ArrowLeft'&&cursor!==null){cursor=Math.max(0,cursor-1);sync();draw()}else if(e.key==='ArrowRight'&&cursor!==null){cursor=Math.min(inputs.length-1,cursor+1);sync();draw()}});
 // The route is a second way to select an input slot; no direction is disclosed.
 let downPoint=null;
 canvas.addEventListener('pointerdown',e=>{downPoint=[e.clientX,e.clientY]});
@@ -802,123 +635,27 @@ canvas.addEventListener('pointerup',e=>{
  if(animating||!downPoint||Math.hypot(e.clientX-downPoint[0],e.clientY-downPoint[1])>14){downPoint=null;return}
  downPoint=null;
  const rect=canvas.getBoundingClientRect(),p=[(e.clientX-rect.left)*600/rect.width,(e.clientY-rect.top)*446/rect.height];
- const st=currentStage(),moves=st.moves;
- const candidates=[];
- for(let i=0;i<moves.length;i++){
-  const waypoints=[moves[i].to];
-  if(moves[i].effect==='S')waypoints.push(moves[i].land);
-  for(const [x,y] of waypoints){const c=xy([x+.5,y+.5,.025]),distance=Math.hypot(p[0]-c[0],p[1]-c[1]);if(distance<34)candidates.push({i,distance})}
+ let chosen=-1,best=46;
+ const route=currentStage().cells.map(([x,y])=>xy([x+.5,y+.5,.025]));
+ // Destination tiles get first priority; a tap directly on the line remains valid.
+ for(let i=0;i<route.length-1;i++){
+  const d=route[i+1],dist=Math.hypot(p[0]-d[0],p[1]-d[1]);
+  const score=dist+(cursor===null?0:Math.abs(i-cursor)*.12);
+  if(score<best){best=score;chosen=i}
  }
- if(candidates.length){
-   const nearest=Math.min(...candidates.map(c=>c.distance));
-   const close=[...new Set(candidates.filter(c=>c.distance<=nearest+8).map(c=>c.i))].sort((a,b)=>a-b);
-   const chosen=close.length===1?close[0]:(close.find(i=>i>(cursor??-1))??close[0]);
-   selectStep(chosen);
- }else{
-  let chosen=-1,best=19;
-  for(let i=0;i<st.trace.length-1;i++){
-   const a=xy([st.trace[i][0]+.5,st.trace[i][1]+.5,.025]);
-   const b=xy([st.trace[i+1][0]+.5,st.trace[i+1][1]+.5,.025]);
-   const ab=[b[0]-a[0],b[1]-a[1]],ap=[p[0]-a[0],p[1]-a[1]];
-   const t=Math.max(0,Math.min(1,(ap[0]*ab[0]+ap[1]*ab[1])/(ab[0]**2+ab[1]**2)));
-   const dist=Math.hypot(ap[0]-t*ab[0],ap[1]-t*ab[1]);
-   if(dist<best){best=dist;let traceIndex=0;for(let j=0;j<st.moves.length;j++){traceIndex+=st.moves[j].extra.length;if(i<traceIndex){chosen=j;break}}}
-  }
-  if(chosen>=0)selectStep(chosen);
- }
-});
-
-// ATELIER: all 50 verified puzzles preserved, while browsing stays separate from thinking.
-let atlasChapter=0, atlasPriorFocus=null;
-function buildAtlas(){
- const chapters=$('atlasChapters'),levels=$('atlasLevels'),phases=$('atlasPhases');
- chapters.replaceChildren();levels.replaceChildren();phases.replaceChildren();
- for(let phase=0;phase<PHASES.length;phase++){
-  const b=document.createElement('button');b.type='button';b.className='atlas-phase'+(Math.floor(atlasChapter/5)===phase?' current':'');
-  b.textContent=`${phase+1} · ${PHASES[phase]}`;
-  b.setAttribute('aria-label',`${PHASES[phase]} ステージ${phase*100+1}〜${(phase+1)*100}`);
-  b.addEventListener('click',()=>{atlasChapter=phase*5;sound('tap');buildAtlas()});phases.append(b)
- }
- const icons=['●','◐','◌','◇','⬡'];
- const first=Math.floor(atlasChapter/5)*5;
- for(let c=first;c<first+5;c++){
-  const b=document.createElement('button');b.type='button';b.className='atlas-ch'+(c===atlasChapter?' current':'');
-  const completed=Array.from({length:20},(_,k)=>c*20+k).filter(idx=>seen.has(idx)).length;
-  b.innerHTML=`<span class="symbol" aria-hidden="true">${icons[c%5]}</span><span class="cap">${String(c+1).padStart(2,'0')} · ${completed}/20</span>`;
-  b.setAttribute('aria-label',`チャプター${c+1}：${CHAPTERS[c]}、${completed}問クリア`);
-  b.addEventListener('click',()=>{atlasChapter=c;sound('tap');buildAtlas()});chapters.append(b)
- }
- for(let i=0;i<20;i++){
-  const idx=atlasChapter*20+i,b=document.createElement('button');b.type='button';
-  b.className='atlas-level'+(seen.has(idx)?' passed':'')+(idx===level?' current':'');b.textContent=seen.has(idx)?'✓':String(idx+1).padStart(3,'0');
-  b.title=STAGES[idx].name;b.setAttribute('aria-label',`ステージ${idx+1} ${STAGES[idx].name}${seen.has(idx)?' クリア済み':''}`);
-  b.addEventListener('click',()=>{closeAtlas();changeStage(idx);sound('tap')});levels.append(b)
- }
- $('atlasChapterTitle').textContent=`CH ${String(atlasChapter+1).padStart(2,'0')} · ${CHAPTERS[atlasChapter]}  (${atlasChapter*20+1}〜${atlasChapter*20+20})`;
- $('atlasProgress').textContent=`${seen.size} / ${STAGES.length} COMPLETE`;
+ if(chosen<0){best=29;for(let i=0;i<route.length-1;i++){
+  const a=route[i],b=route[i+1],ab=[b[0]-a[0],b[1]-a[1]],ap=[p[0]-a[0],p[1]-a[1]];
+  const t=Math.max(0,Math.min(1,(ap[0]*ab[0]+ap[1]*ab[1])/(ab[0]*ab[0]+ab[1]*ab[1])));
+  const dist=Math.hypot(p[0]-a[0]-t*ab[0],p[1]-a[1]-t*ab[1]);
+  if(dist<best){best=dist;chosen=i}
+ }}
+ if(chosen>=0){
+  const matched=[];for(let k=0;k<route.length-1;k++)if(Math.hypot(p[0]-route[k+1][0],p[1]-route[k+1][1])<33)matched.push(k);
+  if(matched.length>1){const later=matched.find(k=>k>(cursor??-1));chosen=later??matched[0]}selectStep(chosen);
 }
-function openAtlas(){if(animating)return;atlasChapter=Math.floor(Math.max(0,level)/20);atlasPriorFocus=document.activeElement;buildAtlas();$('atlas').hidden=false;$('atlasClose').focus()}
-function closeAtlas(){$('atlas').hidden=true;atlasPriorFocus?.focus?.()}
-$('openAtlas').addEventListener('click',openAtlas);$('atlasClose').addEventListener('click',closeAtlas);
-$('atlas').addEventListener('click',e=>{if(e.target===$('atlas'))closeAtlas()});
-$('atlasContinue').addEventListener('click',closeAtlas);
-// FREE PLAY is an independent tactile toy; it always uses the standard die and
-// never reveals the active puzzle's hidden state or net-dice solution.
-const freeCanvas=$('freeCanvas'),freeCtx=freeCanvas.getContext('2d');
-let freePriorFocus=null,freeBusy=false,freePose=I(),freePos=[1,1],freeDir=null;
-const freePip=Object.fromEntries(FACES.map(face=>[face.key,INITIAL[face.key]]));
-function freeFit(){const r=freeCanvas.getBoundingClientRect();if(!r.width)return;const scale=Math.min(2.5,devicePixelRatio||1);freeCanvas.width=Math.round(r.width*scale);freeCanvas.height=Math.round(r.height*scale);drawFree()}
-function drawFree(){
- if($('freeOverlay').hidden||!freeCanvas.width)return;
- const c=freeCtx,w=freeCanvas.width,h=freeCanvas.height;
- c.clearRect(0,0,w,h);c.save();c.translate(w*.5,h*.54);
- const scale=Math.min(w,h)*.54;
- const proj=p=>[(p[0]-p[1])*.866*scale,(p[0]+p[1])*.5*scale-p[2]*scale];
- const poly=(pts,fill,stroke)=>{c.beginPath();pts.forEach((p,i)=>{const q=proj(p);if(i)c.lineTo(...q);else c.moveTo(...q)});c.closePath();c.fillStyle=fill;c.fill();if(stroke){c.strokeStyle=stroke;c.lineWidth=.6;c.stroke()}};
- // Grounded porcelain plate; each projected edge represents an equal side.
- const rim=[[-.72,-.72,.0],[.72,-.72,0],[.72,.72,0],[-.72,.72,0]];
- poly([[.72,-.72,0],[.72,.72,0],[.72,.72,-.07],[.72,-.72,-.07]],'#d9e5de');
- poly([[-.72,.72,0],[.72,.72,0],[.72,.72,-.07],[-.72,.72,-.07]],'#c6d8ce');
- poly(rim,'#f3f8f3','#e0eae3');
- // Contact shadow moves with the object; it is never detached from the die.
- const radial=c.createRadialGradient(0,6,0,0,6,scale*.29);radial.addColorStop(0,'rgba(33,69,59,.24)');radial.addColorStop(.58,'rgba(39,85,67,.09)');radial.addColorStop(1,'rgba(39,85,67,0)');c.fillStyle=radial;c.beginPath();c.ellipse(0,5,scale*.35,scale*.16,0,0,Math.PI*2);c.fill();
- const center=[0,0,H+.012];
- const parts=[];
- for(let idx=0;idx<MODEL.length;idx++){
-  const item=MODEL[idx],normal=mv(freePose,item.normal);
-  if(dot(normal,camera)<-.01)continue;
-  const points=item.points.map(p=>vec(center,mv(freePose,p)));
-  const depth=points.reduce((v,p)=>v+dot(p,camera),0)/points.length;
-  parts.push({points,normal,depth,part:idx<6?0:idx<150?1:2});
- }
- parts.sort((a,b)=>a.part-b.part||a.depth-b.depth);
- for(const v of parts)poly(v.points,shade(v.normal));
- // Three visible numbered faces, using the same model and the same pip geometry
- // as the puzzle cube. No substitute square or flattened fake cube.
- for(const spot of PIP_MESH){if(spot.number!==freePip[spot.key])continue;
-  const normal=mv(freePose,spot.normal);if(dot(normal,camera)<.03)continue;
-  poly(spot.points.map(p=>vec(center,mv(freePose,p))),'#29454a');
- }
- c.restore();
-}
-function openFree(){if(animating)return;freePriorFocus=document.activeElement;freePose=I();freePos=[1,1];freeBusy=false;$('freeOverlay').hidden=false;requestAnimationFrame(freeFit);sound('tap');$('freeClose').focus()}
-function closeFree(){if(freeBusy)return;$('freeOverlay').hidden=true;freePriorFocus?.focus?.()}
-$('freeEntry').addEventListener('click',openFree);$('freeClose').addEventListener('click',closeFree);$('freeReturn').addEventListener('click',closeFree);
-$('freeOverlay').addEventListener('click',e=>{if(e.target===$('freeOverlay'))closeFree()});
-let freeDown=null;
-freeCanvas.addEventListener('pointerdown',e=>{freeDown={x:e.clientX,y:e.clientY};freeCanvas.setPointerCapture?.(e.pointerId)});
-freeCanvas.addEventListener('pointerup',async e=>{
- if(!freeDown||freeBusy)return;const dx=e.clientX-freeDown.x,dy=e.clientY-freeDown.y;freeDown=null;
- if(Math.hypot(dx,dy)<19)return;
- const dir=Math.abs(dx)>Math.abs(dy)?(dx>0?'E':'W'):(dy>0?'S':'N');
- freeBusy=true;const from=freePose,to=mm(rm(AXIS[dir],Math.PI/2),from),start=performance.now(),duration=320;
- await new Promise(resolve=>{function frame(now){const t=Math.min(1,(now-start)/duration),easing=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;freePose=mm(rm(AXIS[dir],Math.PI/2*easing),from);drawFree();if(t<1)requestAnimationFrame(frame);else resolve()}requestAnimationFrame(frame)});
- freePose=to;drawFree();sound('land');freeBusy=false
 });
-window.addEventListener('resize',()=>{if(!$('freeOverlay').hidden)freeFit()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('atlas').hidden)closeAtlas();else if(!$('freeOverlay').hidden)closeFree()}});
 window.addEventListener('resize',sizeCanvas);new ResizeObserver(sizeCanvas).observe(canvas);
-window.DiceRouteTest={STAGES,CHAPTERS,PHASES,PRACTICE,INTRO_COUNT,givenFor,INITIAL,answerFor,rollFaces,yawFaces,directionFor,nextCell,verify,changeStage,inputDigit,play,getState:()=>({level,inputs:[...inputs],animating,result,cursor,replayPrefix}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
+window.DiceRouteTest={STAGES,PRACTICE,INITIAL,ORIENTATION_MAPS,answerFor,rollFaces,yawFaces,directionFor,nextCell,verify,changeStage,inputDigit,play,getState:()=>({level,inputs:[...inputs],animating,result,cursor,replayPrefix,hintOpen}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
 changeStage(0);sizeCanvas();
 </script>
 </body>
