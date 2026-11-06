@@ -419,7 +419,7 @@ function clickSound(volume=.36,delay=0){
  const src=ac.createBufferSource(),low=ac.createBiquadFilter(),high=ac.createBiquadFilter(),gain=ac.createGain();
  src.buffer=buf;low.type='lowpass';low.frequency.value=1450;low.Q.value=.5;
  high.type='highpass';high.frequency.value=210;high.Q.value=.6;
- gain.gain.value=.052*volume;
+ gain.gain.value=.125*volume; // 2.4x louder; unchanged click texture and timing
  src.connect(low).connect(high).connect(gain).connect(ac.destination);
  src.start(ac.currentTime+delay);src.stop(ac.currentTime+delay+buf.duration+.005);
 }
