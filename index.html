@@ -231,7 +231,19 @@ function makeStage(raw){
  stage.ambiguous=stage.trace.length>new Set(stage.trace.map(c=>c.join(','))).size;
  return stage;
 }
-const STAGES=RAW.map(makeStage);
+// A damaged course must not prevent the other 499 courses from loading.
+const STAGE_LOAD_ERRORS=[];
+const STAGES=RAW.map((raw,index)=>{
+ try{return makeStage(raw)}
+ catch(error){
+  STAGE_LOAD_ERRORS.push(index+1);
+  console.error('DICE ROUTE stage '+(index+1)+' could not be loaded:',error);
+  // Keep the 3-D board and navigation working without granting progress.
+  return makeStage({name:'読み込みエラー · '+(index+1),tag:'RECOVERY',index:index+1,
+   chapter:Math.floor(index/25),size:3,start:[0,1],path:'E',tiles:{},
+   orientationIndex:0,recovery:true});
+ }
+});
 
 // Optional, brisk three-question introduction. Original 10 stages remain unchanged.
 const PRACTICE=[
@@ -513,7 +525,7 @@ function changeStage(i){
  $('lesson').querySelector('.lesson-tag').textContent=level<0?'練習':`第${Math.floor(level/25)+1}章`;
  $('lessonText').textContent=level<0?stage.lesson:CHAPTER_LESSONS[Math.floor(level/25)]+(types.has('S')?'　青い床は回転せずに1マスすべる。':types.has('R')||types.has('L')?'　丸い床では水平に90°向きが変わる。':'');
  $('orderToggle').hidden=!stage.ambiguous;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',showOrder?'true':'false');
- makeNetView(stage);updateChapter();status();sync();draw();
+ makeNetView(stage);updateChapter();status(stage.recovery?'この問題は読み込めませんでした。次の問題に進んでください。':'');sync();draw();
 }
 function sync(){
  const stage=currentStage(),filled=inputs.filter(n=>n!==null).length;updateSoundButton();updateHint();
@@ -521,11 +533,11 @@ function sync(){
  const slots=$('slots');slots.classList.toggle('many',stage.steps>7);slots.replaceChildren();inputs.forEach((n,i)=>{
   const b=document.createElement('button');b.className='slot'+(n===null?' empty':' filled')+(cursor===i&&!animating?' active':'')+(result?.error===i?' error':'')+(result?.success?' ok':'')+(lastPlaced===i?' placed':'');
   b.type='button';b.textContent=n===null?'·':n;b.setAttribute('aria-label',`${i+1}手目: ${n??'未入力'}`);
-  b.disabled=animating;b.addEventListener('click',()=>selectStep(i));slots.append(b);
+  b.disabled=animating||stage.recovery;b.addEventListener('click',()=>selectStep(i));slots.append(b);
  });lastPlaced=-1;
- const play=$('play');play.className='primary'+(result?.success?' success':'');play.disabled=animating||(!result?.success&&filled!==stage.steps);
- play.textContent=animating?'転がり中…':result?.success?(level===STAGES.length-1?(seen.size===STAGES.length?'マスター達成！ ↗':'未クリアへ進む ↗'):level===-1?'本編スタート ↗':'次のステージ ↗'):(filled===stage.steps?'転がしてみる ↗':'数字を入力する');
- $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>b.disabled=animating);
+ const play=$('play');play.className='primary'+(result?.success?' success':'');play.disabled=animating||(!stage.recovery&&!result?.success&&filled!==stage.steps);
+ play.textContent=stage.recovery?'次の問題へ ↗':animating?'転がり中…':result?.success?(level===STAGES.length-1?(seen.size===STAGES.length?'マスター達成！ ↗':'未クリアへ進む ↗'):level===-1?'本編スタート ↗':'次のステージ ↗'):(filled===stage.steps?'転がしてみる ↗':'数字を入力する');
+ $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>b.disabled=animating||stage.recovery);
  const nav=$('levels');nav.replaceChildren();const n=level<0?3:25;
  const grp=level<0?0:Math.floor(level/25);
  for(let i=0;i<n;i++){
@@ -595,6 +607,7 @@ function animateSlide(at,to,orientation){return new Promise(resolve=>{
 })}
 async function play(){
  if(animating)return;
+ if(currentStage().recovery){changeStage(level+1);return;}
  if(result?.success){changeStage(level===-1?0:level===STAGES.length-1?(STAGES.findIndex((s,i)=>!seen.has(i))<0?0:STAGES.findIndex((s,i)=>!seen.has(i))):level+1);return}
  if(inputs.some(n=>n===null))return;
  const stage=currentStage();
@@ -622,7 +635,7 @@ async function play(){
   completedSegments=k+1;draw();await wait(reduced?0:Math.max(10,36-k*2));
  }
  result={success:true};replayPrefix=0;
- if(level>=0){seen.add(level);try{localStorage.setItem('dice-route-500-cleared',JSON.stringify([...seen]))}catch(e){}}
+ if(level>=0&&!stage.recovery){seen.add(level);try{localStorage.setItem('dice-route-500-cleared',JSON.stringify([...seen]))}catch(e){}}
  sound('success');haptic(12);status(level<0?'できた！ この調子で次へ。':(level%25===24?`CHAPTER CLEAR · 第${Math.floor(level/25)+1}章 修了！`:'PERFECT · AからBまで通れたよ。'),'good');
  animating=false;cursor=null;playhead=-1;pulseGoal();sync();draw();
 }
@@ -696,7 +709,7 @@ canvas.addEventListener('pointerup',e=>{
 }
 });
 window.addEventListener('resize',sizeCanvas);new ResizeObserver(sizeCanvas).observe(canvas);
-window.DiceRouteTest={STAGES,PRACTICE,INITIAL,ORIENTATION_MAPS,answerFor,rollFaces,yawFaces,directionFor,nextCell,verify,changeStage,inputDigit,play,getState:()=>({level,inputs:[...inputs],animating,result,cursor,replayPrefix,hintOpen}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
+window.DiceRouteTest={STAGES,STAGE_LOAD_ERRORS,PRACTICE,INITIAL,ORIENTATION_MAPS,answerFor,rollFaces,yawFaces,directionFor,nextCell,verify,changeStage,inputDigit,play,getState:()=>({level,inputs:[...inputs],animating,result,cursor,replayPrefix,hintOpen}),getGeometry:()=>({EX,EY,EZ,SIDE_LENGTH,meshPieces:MODEL.length})};
 let resume=0;try{const stored=Number(localStorage.getItem('dice-route-500-last'));if(Number.isInteger(stored)&&stored>=0&&stored<500)resume=stored}catch(e){}
 changeStage(resume);sizeCanvas();
 </script>
