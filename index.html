@@ -119,7 +119,7 @@ button:disabled{cursor:default}
 .topright .stage-label{font-variant-numeric:tabular-nums;letter-spacing:.025em}
 .level-nav{display:flex;align-items:center;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-snap-type:none;gap:5px;padding:6px 3px;min-height:46px;overscroll-behavior-x:contain}
 .level-nav::-webkit-scrollbar{display:none}
-.level-nav .level{height:34px;min-width:34px;flex:0 0 34px;scroll-snap-align:center;border-radius:11px}
+.level-nav .level{height:34px;min-width:42px;flex:0 0 42px;scroll-snap-align:center;border-radius:11px;font-size:11px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
 .level-nav .level.current{background:#d7efeb;box-shadow:inset 0 0 0 1px #a8d6d0}
 .chapter-nav{padding:8px 0 2px;gap:6px}
 .chapter-nav button{flex:0 0 37px}
@@ -145,7 +145,7 @@ button:disabled{cursor:default}
 .chapter-choice small{font-size:9px;color:#718e89;line-height:1.45}
 .chapter-choice span{margin-top:auto;font-size:10px;color:#07968b;font-weight:750}
 .chapter-choice.selected{border-color:#76beb7;background:#eaf7f3}
-@media(max-width:390px){.net-cells{grid-template-columns:repeat(5,16px);grid-template-rows:repeat(5,16px)}.net-cell{line-height:14px;font-size:10px}.chapter-dialog{padding:20px 13px}.chapter-nav .chapter-picker{font-size:10px}.level-nav .level{min-width:32px;flex-basis:32px;height:32px}}
+@media(max-width:390px){.net-cells{grid-template-columns:repeat(5,16px);grid-template-rows:repeat(5,16px)}.net-cell{line-height:14px;font-size:10px}.chapter-dialog{padding:20px 13px}.chapter-nav .chapter-picker{font-size:10px}.level-nav .level{min-width:39px;flex-basis:39px;height:32px}}
 @media(max-width:345px){.mini-progress{gap:1px}.mini-progress i{width:3px}.topright .stage-label{font-size:9px}.topright .icon-btn{height:28px;width:28px}.master-meter{font-size:9px}}
 
 </style>
@@ -527,6 +527,15 @@ function changeStage(i){
  $('orderToggle').hidden=!stage.ambiguous;$('orderToggle').classList.toggle('off',!showOrder);$('orderToggle').setAttribute('aria-pressed',showOrder?'true':'false');
  makeNetView(stage);updateChapter();status(stage.recovery?'この問題は読み込めませんでした。次の問題に進んでください。':'');sync();draw();
 }
+// Keep the 500 stages numbered continuously across every chapter boundary.
+function nextStageAfterClear(){
+ if(level===-1)return 0;
+ if(level===STAGES.length-1){
+  const remaining=STAGES.findIndex((stage,index)=>!seen.has(index));
+  return remaining<0?0:remaining;
+ }
+ return level+1;
+}
 function sync(){
  const stage=currentStage(),filled=inputs.filter(n=>n!==null).length;updateSoundButton();updateHint();
  $('filled').textContent=String(filled).padStart(2,'0')+' / '+String(stage.steps).padStart(2,'0');
@@ -536,13 +545,13 @@ function sync(){
   b.disabled=animating||stage.recovery;b.addEventListener('click',()=>selectStep(i));slots.append(b);
  });lastPlaced=-1;
  const play=$('play');play.className='primary'+(result?.success?' success':'');play.disabled=animating||(!stage.recovery&&!result?.success&&filled!==stage.steps);
- play.textContent=stage.recovery?'次の問題へ ↗':animating?'転がり中…':result?.success?(level===STAGES.length-1?(seen.size===STAGES.length?'マスター達成！ ↗':'未クリアへ進む ↗'):level===-1?'本編スタート ↗':'次のステージ ↗'):(filled===stage.steps?'転がしてみる ↗':'数字を入力する');
+ play.textContent=stage.recovery?'次の問題へ ↗':animating?'転がり中…':result?.success?(level===STAGES.length-1?(seen.size===STAGES.length?'マスター達成！ ↗':'未クリアへ進む ↗'):level===-1?'本編 001 へ ↗':level<0?'次の練習へ ↗':`次は ${String(nextStageAfterClear()+1).padStart(3,'0')} へ ↗`):(filled===stage.steps?'転がしてみる ↗':'数字を入力する');
  $('back').disabled=animating||!filled;document.querySelectorAll('[data-n]').forEach(b=>b.disabled=animating||stage.recovery);
  const nav=$('levels');nav.replaceChildren();const n=level<0?3:25;
  const grp=level<0?0:Math.floor(level/25);
  for(let i=0;i<n;i++){
   const idx=level<0?i-3:grp*25+i,passed=level>=0&&seen.has(idx);let b=document.createElement('button');b.type='button';
-  b.className='level'+(level===idx?' current':'')+(passed?' passed':'');b.textContent=passed?'✓':String(i+1).padStart(2,'0');b.disabled=animating;
+  b.className='level'+(level===idx?' current':'')+(passed?' passed':'');b.textContent=passed?'✓':level<0?String(i+1).padStart(2,'0'):String(idx+1).padStart(3,'0');b.disabled=animating;
   b.setAttribute('aria-label',`${level<0?'練習':'ステージ'}${level<0?i+1:idx+1}`);b.setAttribute('aria-current',idx===level?'step':'false');b.addEventListener('click',()=>changeStage(idx));nav.append(b)
  }
  const selected=nav.querySelector('.current');
@@ -607,8 +616,8 @@ function animateSlide(at,to,orientation){return new Promise(resolve=>{
 })}
 async function play(){
  if(animating)return;
- if(currentStage().recovery){changeStage(level+1);return;}
- if(result?.success){changeStage(level===-1?0:level===STAGES.length-1?(STAGES.findIndex((s,i)=>!seen.has(i))<0?0:STAGES.findIndex((s,i)=>!seen.has(i))):level+1);return}
+ if(currentStage().recovery){changeStage(nextStageAfterClear());return;}
+ if(result?.success){changeStage(nextStageAfterClear());return}
  if(inputs.some(n=>n===null))return;
  const stage=currentStage();
  animating=true;result=null;playhead=-1;completedSegments=-1;successPulse=0;status('');sync();
